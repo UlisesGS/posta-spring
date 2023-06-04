@@ -1,7 +1,10 @@
 
 package com.posta.crm.entity;
 
-import com.posta.crm.enums.Role;
+import com.posta.crm.enums.Contracting;
+import com.posta.crm.enums.EthnicGroup;
+import com.posta.crm.enums.Gender;
+import com.posta.crm.enums.StudyLevel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,17 +13,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import java.sql.Timestamp;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 
 @Entity
 @Data
-public class User {
+public class Client {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,29 +28,39 @@ public class User {
     private String name;
     @NotBlank
     private String lastName;
+    @NotNull
+    @Column(unique = true)
+    private Long NIT;
+    @Enumerated(value = EnumType.STRING)
+    private Gender gender;
+    @Enumerated(value = EnumType.STRING)
+    private StudyLevel studyLevel;
+    @Enumerated(value = EnumType.STRING)
+    private EthnicGroup ethnicGroup;
+    @NotNull
+    private Boolean victimPopulation;
+    @NotNull
+    private Boolean disability;
+    @NotNull
+    private Boolean displacement;
     @NotBlank
     @Column(unique = true)
     private String phone;
     @NotBlank
     @Column(unique = true)
-    @Email(message = "El correo electrónico no es válido")
     private String email;
     @NotBlank
-    private String password;
-    @Enumerated(value = EnumType.STRING)
-    private Role role;
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @CreationTimestamp
-    private Timestamp regdate;
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-    @UpdateTimestamp
-    private Timestamp updatedate;
-   
+    private String address;
+    private String remarks;
     private Boolean active;
+    private String type;
     
     @PrePersist
     public void active(){
         this.active=true;
     }
-  
+   
+    
+    //Tipo de cliente hacer extend
+    
 }

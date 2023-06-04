@@ -30,12 +30,7 @@ public class UserServiceImpl implements IUserService{
 
     @Override
     public void activateDeactivate(Long id) {
-        User user =userRepository.getReferenceById(id);
-         if(user.isActive()){
-             user.deactivate();
-         }else{
-             user.reActivate();
-         }
+        
     }
     
 }

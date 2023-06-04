@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,12 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin("*")
 public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
 
-    private ResponseEntity<?> validar(BindingResult result) {
+    private ResponseEntity<?> validation(BindingResult result) {
         Map<String, Object> errores = new HashMap();
         result.getFieldErrors().forEach(e -> {
             errores.put(e.getField(), "el campo " + e.getField() + " " + e.getDefaultMessage());
@@ -56,7 +58,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestBody User user, BindingResult result) {
         if (result.hasErrors()) {
-            return this.validar(result);
+            return this.validation(result);
         }
         User newUser = userService.save(user);
         return ResponseEntity.ok(newUser);
@@ -65,7 +67,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@Valid @RequestBody User user, BindingResult result, @PathVariable Long id) {
         if (result.hasErrors()) {
-            return this.validar(result);
+            return this.validation(result);
         }
         Optional<User> find = userService.findById(id);
         if (find.isPresent()) {
@@ -79,11 +81,23 @@ public class UserController {
         }
         return ResponseEntity.notFound().build();
     }
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deactivate(@PathVariable Long id) {
-        userService.activateDeactivate(id);
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity<?>activateDeactivate(@PathVariable Long id){
+        Optional<User> find = userService.findById(id);
+        if(find.isPresent()){
+            User user=find.get();
+            if(user.getActive()){
+                user.setActive(false);
+                userService.save(user);
+                return ResponseEntity.ok(user);
+            } else {
+                user.setActive(true);
+                userService.save(user);
+                return ResponseEntity.ok(user);
+            }
+        }
+        return ResponseEntity.notFound().build();
     }
+
 
 }

@@ -2,9 +2,12 @@ package com.posta.crm.controller;
 
 import com.posta.crm.entity.Businessman;
 import com.posta.crm.entity.Client;
+import com.posta.crm.entity.Departamentos;
 import com.posta.crm.entity.Entrepreneur;
+import com.posta.crm.entity.Municipios;
 import com.posta.crm.enums.Gender;
 import com.posta.crm.service.ClientServiceImpl;
+import com.posta.crm.service.MunicipiosServiceImpl;
 import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +34,8 @@ public class ClientController {
 
     @Autowired
     private ClientServiceImpl clienteService;
+    @Autowired
+    private MunicipiosServiceImpl municipioService;
 
     private ResponseEntity<?> validation(BindingResult result) {
         Map<String, Object> errores = new HashMap();
@@ -106,6 +111,16 @@ public class ClientController {
         return ResponseEntity.ok(client);
 
     }
+    
+    @GetMapping("/byCity/{idMunicipio}")
+    public ResponseEntity<?>findByCity(@PathVariable Long idMunicipio){
+        List<Client>find=clienteService.findByMunicipio(idMunicipio);
+        if(find.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(find);
+        
+    }
 
     @PutMapping("/businessman/{id}")
     public ResponseEntity<?> updateBusinessman(@Valid @RequestBody Businessman client, BindingResult result, @PathVariable Long id) {
@@ -142,5 +157,18 @@ public class ClientController {
         }
         return ResponseEntity.notFound().build();
     }
+    
+    @GetMapping("/departamentos")
+    public ResponseEntity<?>findCity(){
+        List<Departamentos>findAll=municipioService.findAllDeptos();
+        return ResponseEntity.ok(findAll);
+    }
+    @GetMapping("/municipios/{idDepto}")
+    public ResponseEntity<?>findByDepto(@PathVariable Long idDepto){
+        List<Municipios>findAll=municipioService.findByDeto(idDepto);
+        return ResponseEntity.ok(findAll);
+        
+    }
+    
 
 }

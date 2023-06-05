@@ -71,6 +71,7 @@ public class ClientServiceImpl implements IClientService {
                 updateClient.setEmployeeFullTime(client.getEmployeeFullTime());
                 updateClient.setRegistroMercantil(client.getRegistroMercantil());
                 updateClient.setNumberMercantilRegistry(client.getNumberMercantilRegistry());
+                updateClient.setMunicipio(client.getMunicipio());
 
                 return clientRepository.save(updateClient);
             
@@ -82,8 +83,6 @@ public class ClientServiceImpl implements IClientService {
         Entrepreneur typeClient = (Entrepreneur) clientRepository.findById(id).get();
         
         if(typeClient!=null){
-            
-                
                 Entrepreneur updateClient = (Entrepreneur) typeClient;
                 updateClient.setName(client.getName());
                 updateClient.setLastName(client.getLastName());
@@ -99,6 +98,7 @@ public class ClientServiceImpl implements IClientService {
                 updateClient.setAddress(client.getAddress());
                 updateClient.setBusinessIdea(client.getBusinessIdea());
                 updateClient.setProduct(client.getProduct());
+                updateClient.setMunicipio(client.getMunicipio());
 
                 return clientRepository.save(updateClient);
 
@@ -110,5 +110,10 @@ public class ClientServiceImpl implements IClientService {
     public List<Client> findByActive(Boolean active) {
         
         return clientRepository.findByActive(active);
+    }
+
+    @Override
+    public List<Client> findByMunicipio(Long idMunicipio) {
+        return clientRepository.findByMunicipio(idMunicipio);
     }
 }

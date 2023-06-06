@@ -69,12 +69,12 @@ public class Client {
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm", timezone = "America/Bogota")
     private Timestamp regdate;
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm", timezone = "America/Bogota")
     private Timestamp updatedate;
     
     @PrePersist

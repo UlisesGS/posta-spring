@@ -42,11 +42,11 @@ public class User {
     private Role role;
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @CreationTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm", timezone = "America/Bogota")
     private Timestamp regdate;
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     @UpdateTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm", timezone = "America/Bogota")
     private Timestamp updatedate;
    
     private Boolean active;

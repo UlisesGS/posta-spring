@@ -16,6 +16,8 @@ public interface ClientRepository extends JpaRepository<Client, Long>{
     public List<Client> findByGender(@Param("gender") Gender gender);
     public List<Client> findByType(String type);
     public List<Client>findByActive(Boolean active);
+    @Query("SELECT b FROM Client b WHERE b.municipio.id=?1")
+    public List<Client>findByMunicipio(Long idMunicipio);
     
     
 }

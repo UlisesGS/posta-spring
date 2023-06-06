@@ -16,4 +16,5 @@ public interface IClientService {
     public List<Client> findByGender(Gender gender);
     public List<Client>findByType(String type);
     public List<Client>findByActive(Boolean active);
+    public List<Client>findByMunicipio(Long idMunicipio);
 }

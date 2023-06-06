@@ -1,7 +1,8 @@
 
 package com.posta.crm.entity;
 
-import com.posta.crm.enums.Contracting;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.posta.crm.enums.EthnicGroup;
 import com.posta.crm.enums.Gender;
 import com.posta.crm.enums.StudyLevel;
@@ -12,10 +13,18 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.sql.Timestamp;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Data
@@ -54,6 +63,19 @@ public class Client {
     private String remarks;
     private Boolean active;
     private String type;
+    @ManyToOne
+    @JoinColumn(name = "id_municipio",unique = false)
+    private Municipios municipio;
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm", timezone = "America/Bogota")
+    private Timestamp regdate;
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm", timezone = "America/Bogota")
+    private Timestamp updatedate;
     
     @PrePersist
     public void active(){
@@ -61,6 +83,6 @@ public class Client {
     }
    
     
-    //Tipo de cliente hacer extend
+   
     
 }

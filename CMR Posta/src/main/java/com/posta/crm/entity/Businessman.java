@@ -1,6 +1,7 @@
 
 package com.posta.crm.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.posta.crm.enums.Contracting;
 import com.posta.crm.enums.TypeOfCompany;
 import jakarta.persistence.Entity;
@@ -32,6 +33,7 @@ public class Businessman extends Client{
     @NotBlank
     private String companyName;
     @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date fechaAlta;
     @Enumerated(value = EnumType.STRING)
     private TypeOfCompany typeOfCompany;

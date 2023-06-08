@@ -5,9 +5,12 @@ import com.posta.crm.entity.Client;
 import com.posta.crm.entity.Entrepreneur;
 import com.posta.crm.enums.Gender;
 import com.posta.crm.repository.ClientRepository;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,14 +40,11 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public List<Client> findByGender(Gender gender) {
-        return clientRepository.findByGender(gender);
+    public Page<Client> findByGender(Gender gender, Pageable pageable) {
+        return clientRepository.findByGender(gender, pageable);
     }
 
-    @Override
-    public List<Client> findByType(String type) {
-        return clientRepository.findByType(type);
-    }
+
 
     public Businessman update(Businessman client, Long id) {
         Businessman typeClient = (Businessman) clientRepository.findById(id).get();
@@ -71,7 +71,7 @@ public class ClientServiceImpl implements IClientService {
                 updateClient.setEmployeeFullTime(client.getEmployeeFullTime());
                 updateClient.setRegistroMercantil(client.getRegistroMercantil());
                 updateClient.setNumberMercantilRegistry(client.getNumberMercantilRegistry());
-                updateClient.setMunicipio(client.getMunicipio());
+//                updateClient.setMunicipio(client.getMunicipio());
 
                 return clientRepository.save(updateClient);
             
@@ -98,7 +98,7 @@ public class ClientServiceImpl implements IClientService {
                 updateClient.setAddress(client.getAddress());
                 updateClient.setBusinessIdea(client.getBusinessIdea());
                 updateClient.setProduct(client.getProduct());
-                updateClient.setMunicipio(client.getMunicipio());
+//                updateClient.setMunicipio(client.getMunicipio());
 
                 return clientRepository.save(updateClient);
 
@@ -106,14 +106,31 @@ public class ClientServiceImpl implements IClientService {
         return null;
     }
 
+   
+
+//    @Override
+//    public List<Client> findByMunicipio(Long idMunicipio) {
+//        return clientRepository.findByMunicipio(idMunicipio);
+//    }
+
     @Override
-    public List<Client> findByActive(Boolean active) {
+    public Page<Client> paginacion(Pageable pageable) {
+        return clientRepository.findAll(pageable);
         
-        return clientRepository.findByActive(active);
     }
 
     @Override
-    public List<Client> findByMunicipio(Long idMunicipio) {
-        return clientRepository.findByMunicipio(idMunicipio);
+    public Page<Client> byCreateTime(Pageable pageable) {
+        return clientRepository.findByRegdate(pageable);
+    }
+
+    @Override
+    public Page<Client> findByType(String type, Pageable pageable) {
+        return clientRepository.findByType(type, pageable);
+    }
+
+    @Override
+    public Page<Client> findByActive(Boolean active, Pageable pageable) {
+        return clientRepository.findByActive(active, pageable);
     }
 }

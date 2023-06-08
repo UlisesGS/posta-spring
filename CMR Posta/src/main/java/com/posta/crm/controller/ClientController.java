@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -63,11 +67,12 @@ public class ClientController {
         return new ResponseEntity<>(clienteService.save(entrepreneur), HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<?> findAll() {
-        List<Client> clients = clienteService.findAll();
-        if (clients.isEmpty()) {
-            return ResponseEntity.notFound().build();
+    @GetMapping("/paginar/{page}")
+    public ResponseEntity<?> findAll(@PathVariable Integer page) {
+        Pageable pageable= PageRequest.of(page,10);
+        Page<Client>clients=clienteService.paginacion(pageable);
+        if(clients.isEmpty()){
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(clients);
     }
@@ -81,9 +86,10 @@ public class ClientController {
         return ResponseEntity.ok(client);
     }
 
-    @GetMapping("/gender/{gender}")
-    public ResponseEntity<?> findByGender(@PathVariable Gender gender) {
-        List<Client> genders = clienteService.findByGender(gender);
+    @GetMapping("/gender/{page}")
+    public ResponseEntity<?> findByGender(@RequestParam("gender")Gender gender, @PathVariable Integer page) {
+        Pageable pageable=PageRequest.of(page, 10);
+        Page<Client> genders = clienteService.findByGender(gender, pageable);
         if (genders.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -91,34 +97,44 @@ public class ClientController {
 
     }
 
-    @GetMapping("/type/{type}")
-    public ResponseEntity<?> findByType(@PathVariable String type) {
-
-        List<Client> types = clienteService.findByType(type);
-        if (type.isEmpty()) {
+    
+    @GetMapping("/type/{page}")
+    public ResponseEntity<?> findByType(@RequestParam("type") String type, @PathVariable Integer page) {
+        Pageable pageable=PageRequest.of(page, 10);
+        Page<Client>clients=clienteService.findByType(type, pageable);
+        if(clients.isEmpty()){
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(types);
-
-    }
-
-    @GetMapping("/state/{active}")
-    public ResponseEntity<?> findByState(@PathVariable Boolean active) {
-        List<Client> client = clienteService.findByActive(active);
-        if (client.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(client);
+                
+        return ResponseEntity.ok(clients);
 
     }
     
-    @GetMapping("/byCity/{idMunicipio}")
-    public ResponseEntity<?>findByCity(@PathVariable Long idMunicipio){
-        List<Client>find=clienteService.findByMunicipio(idMunicipio);
-        if(find.isEmpty()){
+    @GetMapping("/state/{page}")
+    public ResponseEntity<?> findByState(@RequestParam("active") Boolean active,@PathVariable Integer page) {
+        Pageable pageable=PageRequest.of(page, 10);
+        Page<Client> clients = clienteService.findByActive(active, pageable);
+        if (clients.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(find);
+        return ResponseEntity.ok(clients);
+
+    }
+    
+//    @GetMapping("/byCity/{idMunicipio}")
+//    public ResponseEntity<?>findByCity(@PathVariable Long idMunicipio){
+//        List<Client>find=clienteService.findByMunicipio(idMunicipio);
+//        if(find.isEmpty()){
+//            return ResponseEntity.noContent().build();
+//        }
+//        return ResponseEntity.ok(find);
+//        
+//    }
+    
+    @GetMapping("/byTime/{page}")
+    public ResponseEntity<?>findByTime(@PathVariable Integer page){
+        Pageable pageable=PageRequest.of(page, 6);
+        return ResponseEntity.ok(clienteService.byCreateTime(pageable));
         
     }
 
@@ -158,17 +174,17 @@ public class ClientController {
         return ResponseEntity.notFound().build();
     }
     
-    @GetMapping("/departamentos")
-    public ResponseEntity<?>findCity(){
-        List<Departamentos>findAll=municipioService.findAllDeptos();
-        return ResponseEntity.ok(findAll);
-    }
-    @GetMapping("/municipios/{idDepto}")
-    public ResponseEntity<?>findByDepto(@PathVariable Long idDepto){
-        List<Municipios>findAll=municipioService.findByDeto(idDepto);
-        return ResponseEntity.ok(findAll);
-        
-    }
+//    @GetMapping("/departamentos")
+//    public ResponseEntity<?>findCity(){
+//        List<Departamentos>findAll=municipioService.findAllDeptos();
+//        return ResponseEntity.ok(findAll);
+//    }
+//    @GetMapping("/municipios/{idDepto}")
+//    public ResponseEntity<?>findByDepto(@PathVariable Long idDepto){
+//        List<Municipios>findAll=municipioService.findByDeto(idDepto);
+//        return ResponseEntity.ok(findAll);
+//        
+//    }
     
 
 }

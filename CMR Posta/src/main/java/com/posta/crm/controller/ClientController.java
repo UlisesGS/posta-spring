@@ -2,12 +2,11 @@ package com.posta.crm.controller;
 
 import com.posta.crm.entity.Businessman;
 import com.posta.crm.entity.Client;
-import com.posta.crm.entity.Departamentos;
 import com.posta.crm.entity.Entrepreneur;
-import com.posta.crm.entity.Municipios;
+import com.posta.crm.entity.Municipio;
 import com.posta.crm.enums.Gender;
 import com.posta.crm.service.ClientServiceImpl;
-import com.posta.crm.service.MunicipiosServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -38,8 +37,7 @@ public class ClientController {
 
     @Autowired
     private ClientServiceImpl clienteService;
-    @Autowired
-    private MunicipiosServiceImpl municipioService;
+   
 
     private ResponseEntity<?> validation(BindingResult result) {
         Map<String, Object> errores = new HashMap();
@@ -49,6 +47,7 @@ public class ClientController {
         return new ResponseEntity<>(errores, HttpStatus.NOT_FOUND);
     }
 
+    @ApiOperation(value = "Guardar usuario tipo Empresario")
     @PostMapping("/businessman")
     public ResponseEntity<?> saveBusinessman(@Valid @RequestBody Businessman businessman, BindingResult result) {
         if (result.hasErrors()) {
@@ -57,7 +56,8 @@ public class ClientController {
         clienteService.save(businessman);
         return new ResponseEntity<>(businessman, HttpStatus.CREATED);
     }
-
+    
+    @ApiOperation(value = "Guardar usuario tipo Emprendedor")
     @PostMapping("/entrepreneur")
     public ResponseEntity<?> saveEntrepreneur(@Valid @RequestBody Entrepreneur entrepreneur, BindingResult result) {
         if (result.hasErrors()) {
@@ -66,7 +66,8 @@ public class ClientController {
 
         return new ResponseEntity<>(clienteService.save(entrepreneur), HttpStatus.CREATED);
     }
-
+    
+    @ApiOperation(value = "Listar todos los Clientes, paginación de 10")
     @GetMapping("/paginar/{page}")
     public ResponseEntity<?> findAll(@PathVariable Integer page) {
         Pageable pageable= PageRequest.of(page,10);
@@ -77,6 +78,7 @@ public class ClientController {
         return ResponseEntity.ok(clients);
     }
 
+    @ApiOperation(value = "Busca cliente por Id")
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Client client = clienteService.findById(id).get();
@@ -86,6 +88,7 @@ public class ClientController {
         return ResponseEntity.ok(client);
     }
 
+    @ApiOperation(value = "Filtra clientes por género, paginación de 10")
     @GetMapping("/gender/{page}")
     public ResponseEntity<?> findByGender(@RequestParam("gender")Gender gender, @PathVariable Integer page) {
         Pageable pageable=PageRequest.of(page, 10);
@@ -97,7 +100,7 @@ public class ClientController {
 
     }
 
-    
+    @ApiOperation(value = "Fltra clientes por tipo, paginacipon de 10")
     @GetMapping("/type/{page}")
     public ResponseEntity<?> findByType(@RequestParam("type") String type, @PathVariable Integer page) {
         Pageable pageable=PageRequest.of(page, 10);
@@ -110,6 +113,7 @@ public class ClientController {
 
     }
     
+    @ApiOperation(value = "Filtra clientes por su estado activo o inactivo, paginación de 10")
     @GetMapping("/state/{page}")
     public ResponseEntity<?> findByState(@RequestParam("active") Boolean active,@PathVariable Integer page) {
         Pageable pageable=PageRequest.of(page, 10);
@@ -120,24 +124,40 @@ public class ClientController {
         return ResponseEntity.ok(clients);
 
     }
-    
-//    @GetMapping("/byCity/{idMunicipio}")
-//    public ResponseEntity<?>findByCity(@PathVariable Long idMunicipio){
-//        List<Client>find=clienteService.findByMunicipio(idMunicipio);
-//        if(find.isEmpty()){
-//            return ResponseEntity.noContent().build();
-//        }
-//        return ResponseEntity.ok(find);
-//        
-//    }
-    
+ 
+    @ApiOperation(value = "Filtra clientes por fecha de creación en forma descendiente, paginación de 6")
     @GetMapping("/byTime/{page}")
     public ResponseEntity<?>findByTime(@PathVariable Integer page){
         Pageable pageable=PageRequest.of(page, 6);
-        return ResponseEntity.ok(clienteService.byCreateTime(pageable));
+        Page<Client>clients=clienteService.byCreateTime(pageable);
+        if(clients.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(clients);
         
     }
+    
+    @ApiOperation(value = "Filtra clientes por ciudad, paginación de 10")
+    @GetMapping("/municipios/{page}")
+    public ResponseEntity<?>findByCity(@RequestParam("idMunicipio") Long idMunicipio, @PathVariable Integer page){
+        Pageable pageable=PageRequest.of(page, 10);
+        Page<Client> clients = clienteService.findByMunicipio(idMunicipio, pageable);
+        if(clients.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(clients);
+    }
+    
+    @GetMapping("/municipios")
+    public ResponseEntity<?>findAllMunicipios(){
+        List<Municipio>municipios=clienteService.findByAllMunicipios();
+        if(municipios.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(municipios);
+    }
 
+    @ApiOperation(value = "Modifica cliente tipo empresario")
     @PutMapping("/businessman/{id}")
     public ResponseEntity<?> updateBusinessman(@Valid @RequestBody Businessman client, BindingResult result, @PathVariable Long id) {
         if (result.hasErrors()) {
@@ -147,6 +167,7 @@ public class ClientController {
         return ResponseEntity.ok(clienteService.update(client, id));
     }
 
+    @ApiOperation(value = "Mnodifica clientes tipo emprendedor")
     @PutMapping("/entrepreneur/{id}")
     public ResponseEntity<?> updateBusinessman(@Valid @RequestBody Entrepreneur client, BindingResult result, @PathVariable Long id) {
         if (result.hasErrors()) {
@@ -156,6 +177,7 @@ public class ClientController {
         return ResponseEntity.ok(clienteService.update(client, id));
     }
 
+    @ApiOperation(value = "Activa o desactiva clientes dependiendo de su condición")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> activateDeactivate(@PathVariable Long id) {
         Optional<Client> find = clienteService.findById(id);
@@ -174,17 +196,9 @@ public class ClientController {
         return ResponseEntity.notFound().build();
     }
     
-//    @GetMapping("/departamentos")
-//    public ResponseEntity<?>findCity(){
-//        List<Departamentos>findAll=municipioService.findAllDeptos();
-//        return ResponseEntity.ok(findAll);
-//    }
-//    @GetMapping("/municipios/{idDepto}")
-//    public ResponseEntity<?>findByDepto(@PathVariable Long idDepto){
-//        List<Municipios>findAll=municipioService.findByDeto(idDepto);
-//        return ResponseEntity.ok(findAll);
-//        
-//    }
+    
+    
+
     
 
 }

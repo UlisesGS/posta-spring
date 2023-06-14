@@ -5,7 +5,7 @@ package com.posta.crm.enums;
 public enum Gender {
     MALE("Masculino"),
     FEMALE("Femenino"),
-    OTHER("Otro");
+    LGBTQ("LGBTQ+");
 
     private String label;
 

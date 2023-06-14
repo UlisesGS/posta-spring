@@ -76,6 +76,9 @@ public class Client {
     @ManyToOne
     @JoinColumn(name = "id_municipio",unique = false)
     private Municipio municipio;
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private User user;
     
     @PrePersist
     public void active(){

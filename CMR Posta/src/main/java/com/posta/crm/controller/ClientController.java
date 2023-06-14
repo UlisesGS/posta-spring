@@ -4,8 +4,10 @@ import com.posta.crm.entity.Businessman;
 import com.posta.crm.entity.Client;
 import com.posta.crm.entity.Entrepreneur;
 import com.posta.crm.entity.Municipio;
+import com.posta.crm.entity.SelfAssessment;
 import com.posta.crm.enums.Gender;
 import com.posta.crm.service.ClientServiceImpl;
+import com.posta.crm.service.SelfAssessmentImpl;
 import io.swagger.annotations.ApiOperation;
 import jakarta.validation.Valid;
 import java.util.HashMap;
@@ -37,6 +39,8 @@ public class ClientController {
 
     @Autowired
     private ClientServiceImpl clienteService;
+    @Autowired
+    private SelfAssessmentImpl selfAssessmentService;
    
 
     private ResponseEntity<?> validation(BindingResult result) {
@@ -196,7 +200,12 @@ public class ClientController {
         return ResponseEntity.notFound().build();
     }
     
-    
+    @PostMapping("/selfAssessment")
+    public ResponseEntity<?>saveSelfAssessment(@RequestBody SelfAssessment selfAssessment){
+        
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(selfAssessmentService.save(selfAssessment));
+    }
     
 
     

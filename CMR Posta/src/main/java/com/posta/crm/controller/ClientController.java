@@ -201,9 +201,10 @@ public class ClientController {
     }
     
     @PostMapping("/selfAssessment")
-    public ResponseEntity<?>saveSelfAssessment(@RequestBody SelfAssessment selfAssessment){
-        
-        
+    public ResponseEntity<?>saveSelfAssessment(@Valid @RequestBody SelfAssessment selfAssessment, BindingResult result){
+        if (result.hasErrors()) {
+            return this.validation(result);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(selfAssessmentService.save(selfAssessment));
     }
     

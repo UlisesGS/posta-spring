@@ -112,7 +112,10 @@ public class UserController {
     }
     
     @PostMapping("/advisory")
-    public ResponseEntity<?>saveAdvisory(@RequestBody Advisory advisory){
+    public ResponseEntity<?>saveAdvisory(@Valid @RequestBody Advisory advisory, BindingResult result){
+        if (result.hasErrors()) {
+            return this.validation(result);
+        }
         Advisory newAdvisory=advisoryService.save(advisory);
         return ResponseEntity.ok(newAdvisory);
     }

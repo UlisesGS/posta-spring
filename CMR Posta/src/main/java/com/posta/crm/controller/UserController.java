@@ -1,6 +1,8 @@
 package com.posta.crm.controller;
 
+import com.posta.crm.entity.Advisory;
 import com.posta.crm.entity.User;
+import com.posta.crm.service.AdvisoryServiceImpl;
 import com.posta.crm.service.UserServiceImpl;
 import jakarta.validation.Valid;
 import java.util.HashMap;
@@ -8,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,6 +34,10 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
+    
+    @Autowired
+    private AdvisoryServiceImpl advisoryService;
+    
 
     private ResponseEntity<?> validation(BindingResult result) {
         Map<String, Object> errores = new HashMap();
@@ -55,6 +65,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestBody User user, BindingResult result) {
         if (result.hasErrors()) {
@@ -76,6 +87,7 @@ public class UserController {
             updateUser.setLastName(user.getLastName());
             updateUser.setEmail(user.getEmail());
             updateUser.setPhone(user.getPhone());
+            updateUser.setRole(user.getRole());
             userService.save(updateUser);
             return ResponseEntity.ok(updateUser);
         }
@@ -98,6 +110,24 @@ public class UserController {
         }
         return ResponseEntity.notFound().build();
     }
+    
+    @PostMapping("/advisory")
+    public ResponseEntity<?>saveAdvisory(@Valid @RequestBody Advisory advisory, BindingResult result){
+        if (result.hasErrors()) {
+            return this.validation(result);
+        }
+        Advisory newAdvisory=advisoryService.save(advisory);
+        return ResponseEntity.ok(newAdvisory);
+    }
 
+    @GetMapping("/byAdvisory/{page}")
+    public ResponseEntity<?>findByAdvisory(@RequestParam("user_id")Long userId, @PathVariable Integer page){
+        Pageable pageable = PageRequest.of(page,10);
+        Page<Advisory> advisoryes=advisoryService.findByUser(userId, pageable);
+        if(advisoryes.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+                return ResponseEntity.ok(advisoryes);
+}
 
 }

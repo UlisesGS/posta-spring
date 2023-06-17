@@ -20,9 +20,17 @@ public class CanvasModelServiceImpl implements ICanvasModel{
 
     @Override
     public void updata(CanvasModel canvasModel) {
+        CanvasModel newCanvasModel=canvasModel;
+        newCanvasModel.setCustomerSegments(canvasModel.getCustomerSegments());
+        newCanvasModel.setValuePropositions(canvasModel.getValuePropositions());
+        newCanvasModel.setCustomerRelationships(canvasModel.getCustomerRelationships());
+        newCanvasModel.setKeyRecources(canvasModel.getKeyRecources());
+        newCanvasModel.setKeyActivities(canvasModel.getKeyActivities());
+        newCanvasModel.setKeyPartners(canvasModel.getKeyPartners());
+        newCanvasModel.setRevenueStreams(canvasModel.getRevenueStreams());
+        newCanvasModel.setCostStructure(canvasModel.getCostStructure());
         
-        
-        canvasModelRepository.save(canvasModel);
+        canvasModelRepository.save(newCanvasModel);
     }
     
 }

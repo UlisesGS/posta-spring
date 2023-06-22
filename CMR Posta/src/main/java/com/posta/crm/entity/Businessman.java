@@ -33,7 +33,7 @@ public class Businessman extends Client{
     @NotBlank
     private String companyName;
     @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "America/Bogota")
     private Date fechaAlta;
     @Enumerated(value = EnumType.STRING)
     private TypeOfCompany typeOfCompany;

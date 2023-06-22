@@ -6,6 +6,7 @@ import com.posta.crm.entity.Entrepreneur;
 import com.posta.crm.entity.Municipio;
 import com.posta.crm.entity.SelfAssessment;
 import com.posta.crm.enums.Gender;
+import com.posta.crm.enums.TypeOfCompany;
 import com.posta.crm.service.ClientServiceImpl;
 import com.posta.crm.service.SelfAssessmentImpl;
 import io.swagger.annotations.ApiOperation;
@@ -208,7 +209,15 @@ public class ClientController {
         return ResponseEntity.status(HttpStatus.CREATED).body(selfAssessmentService.save(selfAssessment));
     }
     
-
+    //GET enums
+    @GetMapping("/enums")
+    public ResponseEntity<?>enums(){
+       
+        TypeOfCompany[] valores= TypeOfCompany.values();
+        
+        return ResponseEntity.ok(valores);
+    
+}
     
 
 }

@@ -12,6 +12,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AdvisoryRepository extends JpaRepository<Advisory, Long>{
     
-    @Query("SELECT a FROM Advisory a WHERE a.user.id=?1")
-    public Page<Advisory>findByUser(@Param("user_id") Long userId, Pageable pageable);
+    @Query("SELECT a FROM Advisory a WHERE a.client.id=?1")
+    public Page<Advisory>findByUser(@Param("client_id") Long client_id, Pageable pageable);
 }

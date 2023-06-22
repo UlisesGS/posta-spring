@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/clients")
-@CrossOrigin("*")
+@CrossOrigin(origins= "*")
 public class ClientController {
 
     @Autowired
@@ -51,6 +51,7 @@ public class ClientController {
         });
         return new ResponseEntity<>(errores, HttpStatus.NOT_FOUND);
     }
+    
     
     @ApiOperation(value = "Guardar usuario tipo Cliente")
     @PostMapping("/save")

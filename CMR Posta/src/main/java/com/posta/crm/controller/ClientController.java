@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/clients")
-@CrossOrigin("*")
+@CrossOrigin(origins= "*")
 public class ClientController {
 
     @Autowired

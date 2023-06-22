@@ -51,6 +51,16 @@ public class ClientController {
         });
         return new ResponseEntity<>(errores, HttpStatus.NOT_FOUND);
     }
+    
+    @ApiOperation(value = "Guardar usuario tipo Cliente")
+    @PostMapping("/save")
+    public ResponseEntity<?> saveClient(@Valid @RequestBody Client client, BindingResult result) {
+        if (result.hasErrors()) {
+            return this.validation(result);
+        }
+        clienteService.save(client);
+        return new ResponseEntity<>(client, HttpStatus.CREATED);
+    }
 
     @ApiOperation(value = "Guardar usuario tipo Empresario")
     @PostMapping("/businessman")
@@ -72,10 +82,10 @@ public class ClientController {
         return new ResponseEntity<>(clienteService.save(entrepreneur), HttpStatus.CREATED);
     }
     
-    @ApiOperation(value = "Listar todos los Clientes, paginación de 10")
+    @ApiOperation(value = "Listar todos los Clientes, paginación de 8")
     @GetMapping("/paginar/{page}")
     public ResponseEntity<?> findAll(@PathVariable Integer page) {
-        Pageable pageable= PageRequest.of(page,10);
+        Pageable pageable= PageRequest.of(page,8);
         Page<Client>clients=clienteService.paginacion(pageable);
         if(clients.isEmpty()){
             return ResponseEntity.noContent().build();

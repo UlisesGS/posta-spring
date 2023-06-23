@@ -132,4 +132,10 @@ public class ClientServiceImpl implements IClientService {
     public List<Municipio>findByAllMunicipios(){
         return municipioService.findAll();
     }
+
+    @Override
+    public List<Client> findByName(String name) {
+        
+        return clientRepository.findByName(name);
+    }
 }

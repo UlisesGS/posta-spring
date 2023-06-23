@@ -22,4 +22,5 @@ public interface IClientService {
     public Page<Client>paginacion(Pageable pageable);
     public Page<Client>byCreateTime(Pageable pageable);
     public Page<Client>findByMunicipio(Long idMunicipio, Pageable pageable);
+    public List<Client>findByName(String name);
 }

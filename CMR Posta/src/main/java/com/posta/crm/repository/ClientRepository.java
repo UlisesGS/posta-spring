@@ -3,6 +3,7 @@ package com.posta.crm.repository;
 
 import com.posta.crm.entity.Client;
 import com.posta.crm.enums.Gender;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,6 +22,9 @@ public interface ClientRepository extends JpaRepository<Client, Long>{
     public Page<Client>findByRegdate(Pageable pageable);
     @Query("SELECT b FROM Client b WHERE b.municipio.id=?1")
     public Page<Client>findByMunicipio(@Param("idMunicipio")Long idMunicipio, Pageable pageable);
+    
+    @Query("SELECt a FROM Client a WHERE a.nombre LIKE %?1%")
+    public List<Client>findByName(String name);
     
     
     

@@ -86,7 +86,7 @@ public class ClientController {
     @ApiOperation(value = "Listar todos los Clientes, paginación de 8")
     @GetMapping("/paginar/{page}")
     public ResponseEntity<?> findAll(@PathVariable Integer page) {
-        Pageable pageable= PageRequest.of(page,8);
+        Pageable pageable= PageRequest.of(page,10);
         Page<Client>clients=clienteService.paginacion(pageable);
         if(clients.isEmpty()){
             return ResponseEntity.noContent().build();
@@ -230,5 +230,13 @@ public class ClientController {
     
 }
     
-
+    //Barra de Busqueda
+    @GetMapping("/search/{name}")
+    public ResponseEntity<?>search(@PathVariable String name){
+        List<Client> found= clienteService.findByName(name);
+        if(found.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(found);
+    }
 }

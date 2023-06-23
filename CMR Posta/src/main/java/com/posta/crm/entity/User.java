@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -29,6 +30,10 @@ public class User {
     private String name;
     @NotBlank
     private String lastName;
+    @NotNull
+    private Long cedula;
+    @NotBlank
+    private String profesion;
     @NotBlank
     @Column(unique = true)
     private String phone;
@@ -54,6 +59,7 @@ public class User {
     @PrePersist
     public void active(){
         this.active=true;
+        
     }
   
 }

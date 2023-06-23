@@ -23,7 +23,7 @@ public interface ClientRepository extends JpaRepository<Client, Long>{
     @Query("SELECT b FROM Client b WHERE b.municipio.id=?1")
     public Page<Client>findByMunicipio(@Param("idMunicipio")Long idMunicipio, Pageable pageable);
     
-    @Query("SELECt a FROM Client a WHERE a.nombre LIKE %?1%")
+    @Query("SELECt a FROM Client a WHERE a.name LIKE %?1%")
     public List<Client>findByName(String name);
     
     

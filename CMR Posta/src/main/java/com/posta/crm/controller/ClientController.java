@@ -1,5 +1,6 @@
 package com.posta.crm.controller;
 
+import com.posta.crm.entity.Actividades;
 import com.posta.crm.entity.Businessman;
 import com.posta.crm.entity.Client;
 import com.posta.crm.entity.Entrepreneur;
@@ -7,6 +8,7 @@ import com.posta.crm.entity.Municipio;
 import com.posta.crm.entity.SelfAssessment;
 import com.posta.crm.enums.Gender;
 import com.posta.crm.enums.TypeOfCompany;
+import com.posta.crm.repository.ActividadesRepository;
 import com.posta.crm.service.ClientServiceImpl;
 import com.posta.crm.service.SelfAssessmentImpl;
 import io.swagger.annotations.ApiOperation;
@@ -42,6 +44,8 @@ public class ClientController {
     private ClientServiceImpl clienteService;
     @Autowired
     private SelfAssessmentImpl selfAssessmentService;
+    @Autowired
+    private ActividadesRepository actividadesRepository;
    
 
     private ResponseEntity<?> validation(BindingResult result) {
@@ -239,4 +243,17 @@ public class ClientController {
         }
         return ResponseEntity.ok(found);
     }
+
+    //GET CIIU
+    @GetMapping("/actividades")
+    public ResponseEntity<?>findCiiu(){
+        
+        List<Actividades>activ=actividadesRepository.findAll();
+        if(activ.isEmpty()){
+            return ResponseEntity.noContent().build();
+            
+        }
+        return ResponseEntity.ok(activ);
+    }
+
 }

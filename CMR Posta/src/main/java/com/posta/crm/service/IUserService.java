@@ -12,5 +12,6 @@ public interface IUserService {
     public Optional<User> findById(Long id);
     public User save(User user);
     public void activateDeactivate(Long id);
+    public Optional<User> findByEmail(String email);
     
 }

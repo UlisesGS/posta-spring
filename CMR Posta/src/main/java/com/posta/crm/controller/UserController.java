@@ -88,6 +88,8 @@ public class UserController {
             updateUser.setEmail(user.getEmail());
             updateUser.setPhone(user.getPhone());
             updateUser.setRole(user.getRole());
+            updateUser.setCedula(user.getCedula());
+            updateUser.setProfesion(user.getProfesion());
             userService.save(updateUser);
             return ResponseEntity.ok(updateUser);
         }
@@ -95,9 +97,12 @@ public class UserController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?>activateDeactivate(@PathVariable Long id){
+        User user=new User();
         Optional<User> find = userService.findById(id);
         if(find.isPresent()){
-            User user=find.get();
+            System.out.println(find);
+            user=find.get();
+            System.out.println(user);
             if(user.getActive()){
                 user.setActive(false);
                 userService.save(user);

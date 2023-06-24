@@ -72,6 +72,7 @@ public class ClientServiceImpl implements IClientService {
             updateClient.setRegistroMercantil(client.getRegistroMercantil());
             updateClient.setNumberMercantilRegistry(client.getNumberMercantilRegistry());
             updateClient.setMunicipio(client.getMunicipio());
+            updateClient.setCiiu(client.getCiiu());
             return clientRepository.save(updateClient);
         }
         return null;

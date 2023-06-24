@@ -7,6 +7,7 @@ import com.posta.crm.enums.TypeOfCompany;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Temporal;
@@ -43,6 +44,8 @@ public class Businessman extends Client{
     private Integer employeeFullTime;
     private Boolean registroMercantil;
     private String numberMercantilRegistry;
+    @ManyToOne
+    private Actividades ciiu;
     
     @PrePersist
     public void types(){

@@ -32,5 +32,10 @@ public class UserServiceImpl implements IUserService{
     public void activateDeactivate(Long id) {
         
     }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
     
 }

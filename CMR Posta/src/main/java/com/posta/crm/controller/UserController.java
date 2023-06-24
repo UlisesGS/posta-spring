@@ -135,4 +135,13 @@ public class UserController {
                 return ResponseEntity.ok(advisoryes);
 }
 
+    @GetMapping("/byEmail/{email}")
+    public ResponseEntity<?>findByEmail(@PathVariable String email){
+        Optional<User>find=userService.findByEmail(email);
+        if(find.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        User user=find.get();
+        return ResponseEntity.ok(user);
+    }
 }

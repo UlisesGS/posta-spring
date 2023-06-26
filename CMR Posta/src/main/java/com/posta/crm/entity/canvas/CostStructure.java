@@ -1,5 +1,3 @@
-
-
 package com.posta.crm.entity.canvas;
 
 import jakarta.persistence.Entity;
@@ -14,7 +12,7 @@ import lombok.Data;
 @Entity
 @Data
 public class CostStructure {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,6 +26,26 @@ public class CostStructure {
     private Double totalfixedCosts;
     @NotNull
     private Double totalCost;
-   
-    
+
+    public void calculo() {
+        double sumVariableCosts = 0.0;
+        for (CostComponent costComponent : variableCosts) {
+            sumVariableCosts += costComponent.getAmount();
+        }
+
+// Asignar la suma a totalVariableCosts
+        totalVariableCosts = sumVariableCosts;
+
+// Sumar los valores de fixedCosts
+        double sumFixedCosts = 0.0;
+        for (CostComponent costComponent : fixedCosts) {
+            sumFixedCosts += costComponent.getAmount();
+        }
+
+// Asignar la suma a totalfixedCosts
+        totalfixedCosts = sumFixedCosts;
+
+// Calcular el totalCost sumando totalfixedCosts y totalVariableCosts
+        totalCost = totalfixedCosts + totalVariableCosts;
+    }
 }

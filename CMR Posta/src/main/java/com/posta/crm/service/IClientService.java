@@ -23,4 +23,5 @@ public interface IClientService {
     public Page<Client>byCreateTime(Pageable pageable);
     public Page<Client>findByMunicipio(Long idMunicipio, Pageable pageable);
     public List<Client>findByName(String name);
+    public Page<Client>findByRegdate(Pageable pageable);
 }

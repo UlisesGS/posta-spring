@@ -144,4 +144,9 @@ public class ClientServiceImpl implements IClientService {
         
         return clientRepository.findByName(name);
     }
+
+    @Override
+    public Page<Client> findByRegdate(Pageable pageable) {
+        return clientRepository.findByRegdate(pageable);
+    }
 }

@@ -94,16 +94,16 @@ public class ClientController {
     @GetMapping("/paginar/{page}")
     public ResponseEntity<?> findAll(@PathVariable Integer page) {
         Pageable pageable= PageRequest.of(page,10);
-        Page<Client>clients=clienteService.paginacion(pageable);
+        Page<Client>clients=clienteService.findByRegdate(pageable);
         
-        List<Client> reversedClients = new ArrayList<>(clients.getContent());
-        Collections.reverse(reversedClients);
-        Page<Client> reversedPage = new PageImpl<>(reversedClients, pageable, clients.getTotalElements());
+//        List<Client> reversedClients = new ArrayList<>(clients.getContent());
+//        Collections.reverse(reversedClients);
+//        Page<Client> reversedPage = new PageImpl<>(reversedClients, pageable, clients.getTotalElements());
         
         if(clients.isEmpty()){
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(reversedPage);
+        return ResponseEntity.ok(clients);
     }
 
     @ApiOperation(value = "Busca cliente por Id")

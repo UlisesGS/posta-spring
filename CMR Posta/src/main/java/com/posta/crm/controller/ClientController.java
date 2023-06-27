@@ -206,8 +206,8 @@ public class ClientController {
     }
 
     @ApiOperation(value = "Modifica cliente tipo empresario")
-    @PutMapping("/businessman/{id}")
-    public ResponseEntity<?> updateBusinessman(@Valid @RequestBody Businessman client, BindingResult result, @PathVariable Long id) {
+    @PutMapping("/client/{id}")
+    public ResponseEntity<?> updateClient(@Valid @RequestBody Client client, BindingResult result, @PathVariable Long id) {
         if (result.hasErrors()) {
             return this.validation(result);
         }
@@ -215,15 +215,15 @@ public class ClientController {
         return ResponseEntity.ok(clienteService.update(client, id));
     }
 
-    @ApiOperation(value = "Mnodifica clientes tipo emprendedor")
-    @PutMapping("/entrepreneur/{id}")
-    public ResponseEntity<?> updateBusinessman(@Valid @RequestBody Entrepreneur client, BindingResult result, @PathVariable Long id) {
-        if (result.hasErrors()) {
-            return this.validation(result);
-        }
-
-        return ResponseEntity.ok(clienteService.update(client, id));
-    }
+//    @ApiOperation(value = "Mnodifica clientes tipo emprendedor")
+//    @PutMapping("/entrepreneur/{id}")
+//    public ResponseEntity<?> updateBusinessman(@Valid @RequestBody Entrepreneur client, BindingResult result, @PathVariable Long id) {
+//        if (result.hasErrors()) {
+//            return this.validation(result);
+//        }
+//
+//        return ResponseEntity.ok(clienteService.update(client, id));
+//    }
 
     @ApiOperation(value = "Activa o desactiva clientes dependiendo de su condición")
     @DeleteMapping("/{id}")

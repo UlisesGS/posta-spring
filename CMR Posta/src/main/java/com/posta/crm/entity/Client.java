@@ -83,6 +83,8 @@ public class Client {
     @JoinColumn(name = "id_user")
     private User user;
     
+    
+    
     //Atributos Empresario
      @Enumerated(value = EnumType.STRING)
     private Contracting contracting;

@@ -75,6 +75,7 @@ public class ClientServiceImpl implements IClientService {
             updateClient.setCiiu(client.getCiiu());
             updateClient.setBusinessIdea(client.getBusinessIdea());
             updateClient.setProduct(client.getProduct());
+            updateClient.setType(client.getType());
             
             
             return clientRepository.save(updateClient);

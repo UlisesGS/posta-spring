@@ -1,8 +1,8 @@
 package com.posta.crm.service;
 
-import com.posta.crm.entity.Businessman;
+
 import com.posta.crm.entity.Client;
-import com.posta.crm.entity.Entrepreneur;
+
 import com.posta.crm.entity.Municipio;
 import com.posta.crm.enums.Gender;
 import com.posta.crm.repository.ClientRepository;
@@ -47,11 +47,11 @@ public class ClientServiceImpl implements IClientService {
         return clientRepository.findByGender(gender, pageable);
     }
 
-    public Businessman update(Businessman client, Long id) {
-        Businessman typeClient = (Businessman) clientRepository.findById(id).get();
+    public Client update(Client client, Long id) {
+        Client typeClient = clientRepository.findById(id).get();
 
         if (typeClient != null) {
-            Businessman updateClient = typeClient;
+            Client updateClient = typeClient;
             updateClient.setName(client.getName());
             updateClient.setLastName(client.getLastName());
             updateClient.setNIT(client.getNIT());
@@ -73,35 +73,39 @@ public class ClientServiceImpl implements IClientService {
             updateClient.setNumberMercantilRegistry(client.getNumberMercantilRegistry());
             updateClient.setMunicipio(client.getMunicipio());
             updateClient.setCiiu(client.getCiiu());
-            return clientRepository.save(updateClient);
-        }
-        return null;
-    }
-
-    public Entrepreneur update(Entrepreneur client, Long id) {
-        Entrepreneur typeClient = (Entrepreneur) clientRepository.findById(id).get();
-
-        if (typeClient != null) {
-            Entrepreneur updateClient = (Entrepreneur) typeClient;
-            updateClient.setName(client.getName());
-            updateClient.setLastName(client.getLastName());
-            updateClient.setNIT(client.getNIT());
-            updateClient.setGender(client.getGender());
-            updateClient.setStudyLevel(client.getStudyLevel());
-            updateClient.setEthnicGroup(client.getEthnicGroup());
-            updateClient.setVictimPopulation(client.getVictimPopulation());
-            updateClient.setDisability(client.getDisability());
-            updateClient.setDisplacement(client.getDisplacement());
-            updateClient.setPhone(client.getPhone());
-            updateClient.setEmail(client.getEmail());
-            updateClient.setAddress(client.getAddress());
             updateClient.setBusinessIdea(client.getBusinessIdea());
             updateClient.setProduct(client.getProduct());
-             updateClient.setMunicipio(client.getMunicipio());
+            
+            
             return clientRepository.save(updateClient);
         }
         return null;
     }
+
+//    public Entrepreneur update(Entrepreneur client, Long id) {
+//        Entrepreneur typeClient = (Entrepreneur) clientRepository.findById(id).get();
+//
+//        if (typeClient != null) {
+//            Entrepreneur updateClient = (Entrepreneur) typeClient;
+//            updateClient.setName(client.getName());
+//            updateClient.setLastName(client.getLastName());
+//            updateClient.setNIT(client.getNIT());
+//            updateClient.setGender(client.getGender());
+//            updateClient.setStudyLevel(client.getStudyLevel());
+//            updateClient.setEthnicGroup(client.getEthnicGroup());
+//            updateClient.setVictimPopulation(client.getVictimPopulation());
+//            updateClient.setDisability(client.getDisability());
+//            updateClient.setDisplacement(client.getDisplacement());
+//            updateClient.setPhone(client.getPhone());
+//            updateClient.setEmail(client.getEmail());
+//            updateClient.setAddress(client.getAddress());
+//            updateClient.setBusinessIdea(client.getBusinessIdea());
+//            updateClient.setProduct(client.getProduct());
+//             updateClient.setMunicipio(client.getMunicipio());
+//            return clientRepository.save(updateClient);
+//        }
+//        return null;
+//    }
 
     @Override
     public Page<Client> paginacion(Pageable pageable) {

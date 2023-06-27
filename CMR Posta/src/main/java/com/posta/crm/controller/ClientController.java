@@ -13,12 +13,15 @@ import com.posta.crm.service.ClientServiceImpl;
 import com.posta.crm.service.SelfAssessmentImpl;
 import io.swagger.annotations.ApiOperation;
 import jakarta.validation.Valid;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -67,35 +70,40 @@ public class ClientController {
         return new ResponseEntity<>(client, HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Guardar usuario tipo Empresario")
-    @PostMapping("/businessman")
-    public ResponseEntity<?> saveBusinessman(@Valid @RequestBody Businessman businessman, BindingResult result) {
-        if (result.hasErrors()) {
-            return this.validation(result);
-        }
-        clienteService.save(businessman);
-        return new ResponseEntity<>(businessman, HttpStatus.CREATED);
-    }
-    
-    @ApiOperation(value = "Guardar usuario tipo Emprendedor")
-    @PostMapping("/entrepreneur")
-    public ResponseEntity<?> saveEntrepreneur(@Valid @RequestBody Entrepreneur entrepreneur, BindingResult result) {
-        if (result.hasErrors()) {
-            return this.validation(result);
-        }
-
-        return new ResponseEntity<>(clienteService.save(entrepreneur), HttpStatus.CREATED);
-    }
+//    @ApiOperation(value = "Guardar usuario tipo Empresario")
+//    @PostMapping("/businessman")
+//    public ResponseEntity<?> saveBusinessman(@Valid @RequestBody Businessman businessman, BindingResult result) {
+//        if (result.hasErrors()) {
+//            return this.validation(result);
+//        }
+//        clienteService.save(businessman);
+//        return new ResponseEntity<>(businessman, HttpStatus.CREATED);
+//    }
+//    
+//    @ApiOperation(value = "Guardar usuario tipo Emprendedor")
+//    @PostMapping("/entrepreneur")
+//    public ResponseEntity<?> saveEntrepreneur(@Valid @RequestBody Entrepreneur entrepreneur, BindingResult result) {
+//        if (result.hasErrors()) {
+//            return this.validation(result);
+//        }
+//
+//        return new ResponseEntity<>(clienteService.save(entrepreneur), HttpStatus.CREATED);
+//    }
     
     @ApiOperation(value = "Listar todos los Clientes, paginación de 8")
     @GetMapping("/paginar/{page}")
     public ResponseEntity<?> findAll(@PathVariable Integer page) {
         Pageable pageable= PageRequest.of(page,10);
         Page<Client>clients=clienteService.paginacion(pageable);
+        
+        List<Client> reversedClients = new ArrayList<>(clients.getContent());
+        Collections.reverse(reversedClients);
+        Page<Client> reversedPage = new PageImpl<>(reversedClients, pageable, clients.getTotalElements());
+        
         if(clients.isEmpty()){
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(clients);
+        return ResponseEntity.ok(reversedPage);
     }
 
     @ApiOperation(value = "Busca cliente por Id")
@@ -113,10 +121,15 @@ public class ClientController {
     public ResponseEntity<?> findByGender(@RequestParam("gender")Gender gender, @PathVariable Integer page) {
         Pageable pageable=PageRequest.of(page, 10);
         Page<Client> genders = clienteService.findByGender(gender, pageable);
+        
+        List<Client> reversedClients = new ArrayList<>(genders.getContent());
+        Collections.reverse(reversedClients);
+        Page<Client> reversedPage = new PageImpl<>(reversedClients, pageable, genders.getTotalElements());
+        
         if (genders.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(genders);
+        return ResponseEntity.ok(reversedPage);
 
     }
 
@@ -125,11 +138,16 @@ public class ClientController {
     public ResponseEntity<?> findByType(@RequestParam("type") String type, @PathVariable Integer page) {
         Pageable pageable=PageRequest.of(page, 10);
         Page<Client>clients=clienteService.findByType(type, pageable);
+        
+        List<Client> reversedClients = new ArrayList<>(clients.getContent());
+        Collections.reverse(reversedClients);
+        Page<Client> reversedPage = new PageImpl<>(reversedClients, pageable, clients.getTotalElements());
+        
         if(clients.isEmpty()){
             return ResponseEntity.noContent().build();
         }
                 
-        return ResponseEntity.ok(clients);
+        return ResponseEntity.ok(reversedPage);
 
     }
     
@@ -150,10 +168,15 @@ public class ClientController {
     public ResponseEntity<?>findByTime(@PathVariable Integer page){
         Pageable pageable=PageRequest.of(page, 6);
         Page<Client>clients=clienteService.byCreateTime(pageable);
+        
+        List<Client> reversedClients = new ArrayList<>(clients.getContent());
+        Collections.reverse(reversedClients);
+        Page<Client> reversedPage = new PageImpl<>(reversedClients, pageable, clients.getTotalElements());
+        
         if(clients.isEmpty()){
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(clients);
+        return ResponseEntity.ok(reversedPage);
         
     }
     
@@ -162,10 +185,15 @@ public class ClientController {
     public ResponseEntity<?>findByCity(@RequestParam("idMunicipio") Long idMunicipio, @PathVariable Integer page){
         Pageable pageable=PageRequest.of(page, 10);
         Page<Client> clients = clienteService.findByMunicipio(idMunicipio, pageable);
+        
+        List<Client> reversedClients = new ArrayList<>(clients.getContent());
+        Collections.reverse(reversedClients);
+        Page<Client> reversedPage = new PageImpl<>(reversedClients, pageable, clients.getTotalElements());
+        
         if(clients.isEmpty()){
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(clients);
+        return ResponseEntity.ok(reversedPage);
     }
     
     @GetMapping("/municipios")

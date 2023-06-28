@@ -1,8 +1,7 @@
-
 package com.posta.crm.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.posta.crm.entity.canvas.CanvasModel;
 import com.posta.crm.enums.Contracting;
 import com.posta.crm.enums.EthnicGroup;
 import com.posta.crm.enums.Gender;
@@ -17,12 +16,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -31,7 +32,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @Data
 public class Client {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -77,47 +78,49 @@ public class Client {
     private Timestamp updatedate;
     @Enumerated(value = EnumType.STRING)
     @ManyToOne
-    @JoinColumn(name = "id_municipio",unique = false)
+    @JoinColumn(name = "id_municipio", unique = false)
     private Municipio municipio;
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;
     
+    private LocalDate fechaNacimiento;
+    private Integer edad;
     
     
+
     //Atributos Empresario
-     @Enumerated(value = EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private Contracting contracting;
-//    @NotBlank
+    //@NotBlank
     private String companyName;
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "America/Bogota")
     private Date fechaAlta;
     @Enumerated(value = EnumType.STRING)
     private TypeOfCompany typeOfCompany;
-//    @NotNull
+    //@NotNull
     private Integer employeePartTime;
-//    @NotNull
+    //@NotNull
     private Integer employeeFullTime;
     private Boolean registroMercantil;
     private String numberMercantilRegistry;
     @ManyToOne
     private Actividades ciiu;
-    
+
     //Atributos Emprededor
-//    @NotBlank
+    //@NotBlank
     private String businessIdea;
-//    @NotBlank
+    //@NotBlank
     private String product;
     
-    
-    
+    //Atributo Modelo Canvas
+    @OneToOne
+    private CanvasModel canvasModel;
+
     @PrePersist
-    public void active(){
-        this.active=true;
+    public void active() {
+        this.active = true;
     }
-   
-    
-   
-    
+
 }

@@ -66,6 +66,7 @@ public class ClientServiceImpl implements IClientService {
             updateClient.setAddress(client.getAddress());
             updateClient.setContracting(client.getContracting());
             updateClient.setFechaAlta(client.getFechaAlta());
+            updateClient.setCompanyName(client.getCompanyName());
             updateClient.setTypeOfCompany(client.getTypeOfCompany());
             updateClient.setEmployeePartTime(client.getEmployeePartTime());
             updateClient.setEmployeeFullTime(client.getEmployeeFullTime());

@@ -25,6 +25,8 @@ public interface ClientRepository extends JpaRepository<Client, Long>{
     
     @Query("SELECt a FROM Client a WHERE a.name LIKE %?1%")
     public List<Client>findByName(String name);
+
+    public List<Client> findByNameContainingIgnoreCase(String term);
     
     
     

@@ -1,11 +1,10 @@
 package com.posta.crm.controller;
 
 import com.posta.crm.entity.Actividades;
-import com.posta.crm.entity.Businessman;
 import com.posta.crm.entity.Client;
-import com.posta.crm.entity.Entrepreneur;
 import com.posta.crm.entity.Municipio;
 import com.posta.crm.entity.SelfAssessment;
+import com.posta.crm.entity.canvas.CanvasModel;
 import com.posta.crm.enums.Gender;
 import com.posta.crm.enums.TypeOfCompany;
 import com.posta.crm.repository.ActividadesRepository;
@@ -13,6 +12,8 @@ import com.posta.crm.service.ClientServiceImpl;
 import com.posta.crm.service.SelfAssessmentImpl;
 import io.swagger.annotations.ApiOperation;
 import jakarta.validation.Valid;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -66,29 +67,18 @@ public class ClientController {
         if (result.hasErrors()) {
             return this.validation(result);
         }
+        if(client.getType().equalsIgnoreCase("entrepreneur")){
+            CanvasModel canvasModel= new CanvasModel();
+            client.setCanvasModel(canvasModel);
+        }
+        LocalDate fechaActual=LocalDate.now();
+        int edad=Period.between(client.getFechaNacimiento(), fechaActual).getYears();
+        client.setEdad(edad);
         clienteService.save(client);
         return new ResponseEntity<>(client, HttpStatus.CREATED);
     }
 
-//    @ApiOperation(value = "Guardar usuario tipo Empresario")
-//    @PostMapping("/businessman")
-//    public ResponseEntity<?> saveBusinessman(@Valid @RequestBody Businessman businessman, BindingResult result) {
-//        if (result.hasErrors()) {
-//            return this.validation(result);
-//        }
-//        clienteService.save(businessman);
-//        return new ResponseEntity<>(businessman, HttpStatus.CREATED);
-//    }
-//    
-//    @ApiOperation(value = "Guardar usuario tipo Emprendedor")
-//    @PostMapping("/entrepreneur")
-//    public ResponseEntity<?> saveEntrepreneur(@Valid @RequestBody Entrepreneur entrepreneur, BindingResult result) {
-//        if (result.hasErrors()) {
-//            return this.validation(result);
-//        }
-//
-//        return new ResponseEntity<>(clienteService.save(entrepreneur), HttpStatus.CREATED);
-//    }
+
     
     @ApiOperation(value = "Listar todos los Clientes, paginación de 8")
     @GetMapping("/paginar/{page}")

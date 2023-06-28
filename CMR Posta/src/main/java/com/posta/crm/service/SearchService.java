@@ -26,7 +26,7 @@ public class SearchService {
     @Autowired
     private UserRepository usuarioRepository;
 
-    public List<String> seacrh(String term) {
+    public List<String> search(String term) {
         List<String> results = new ArrayList<>();
 
         List<Client> clientes = clienteRepository.findByNameContainingIgnoreCase(term);

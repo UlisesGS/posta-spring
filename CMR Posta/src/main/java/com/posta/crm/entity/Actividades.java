@@ -13,7 +13,7 @@ public class Actividades {
     @Id
     @Column(name = "actividad_id")
     private String id;
-    @Column(name = "actividad_titulo")
+    @Column(name = "actividad_titulo", length = 500)
     private String titulo;
     
 }

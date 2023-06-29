@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface ICanvasModel {
     
     public CanvasModel save(CanvasModel canvasModel);
-    public CanvasModel updata(CanvasModel canvasModel, Long id);
+    public CanvasModel update(CanvasModel canvasModel, Long id);
     public Optional<CanvasModel> findById(Long id);
 }

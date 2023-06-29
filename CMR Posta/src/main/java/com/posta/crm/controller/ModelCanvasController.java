@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -81,22 +82,19 @@ public class ModelCanvasController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@Valid @RequestBody CanvasModel canvasModel, BindingResult result) {
-        if (result.hasErrors()) {
-            return this.validation(result);
-        }
+    public ResponseEntity<?> save(@RequestBody CanvasModel canvasModel) {
+        
         canvasModelService.save(canvasModel);
         return new ResponseEntity<>(canvasModel, HttpStatus.CREATED);
     }
     
-//    @PostMapping("/costStructure")
-//    @PostMapping("/channels")
-//    @PostMapping("/customerRelationShips")
-//    @PostMapping("/customerSegment")
-//    @PostMapping("/keyActivities")
-//    @PostMapping("/keyPartnes")
-//    @PostMapping("/keyRecources")
-//    @PostMapping("/revenueStreams")
-//    @PostMapping("/valuePropositions")
+    @PutMapping("/model")
+    public ResponseEntity<?>update(@RequestBody CanvasModel canvasModel, Long id){
+        
+        return ResponseEntity.ok(canvasModelService.update(canvasModel, id));
+    }
+    
+    
+
     
 }

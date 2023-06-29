@@ -20,7 +20,7 @@ public class CanvasModelServiceImpl implements ICanvasModel{
     }
 
     @Override
-    public CanvasModel updata(CanvasModel canvasModel, Long id) {
+    public CanvasModel update(CanvasModel canvasModel, Long id) {
         
         CanvasModel newCanvasModel=canvasModelRepository.findById(id).get();
         

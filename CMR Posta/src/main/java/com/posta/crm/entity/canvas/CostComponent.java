@@ -14,7 +14,6 @@ public class CostComponent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
     private String nameComponent;
     private Double amount;
 }

@@ -1,6 +1,7 @@
 
 package com.posta.crm.entity.canvas;
 
+import com.posta.crm.entity.Client;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,7 +36,8 @@ public class CanvasModel {
     private RevenueStreams revenueStreams;
     @OneToOne
     private CostStructure costStructure;
-    
-    
-    
+    @OneToOne
+    private Client client;
+
+
 }

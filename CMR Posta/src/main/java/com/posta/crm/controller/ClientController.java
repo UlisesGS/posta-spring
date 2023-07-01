@@ -69,7 +69,7 @@ public class ClientController {
         }
         if(client.getType().equalsIgnoreCase("entrepreneur")){
             CanvasModel canvasModel= new CanvasModel();
-            client.setCanvasModel(canvasModel);
+           // client.setCanvasModel(canvasModel);
         }
         LocalDate fechaActual=LocalDate.now();
         int edad=Period.between(client.getFechaNacimiento(), fechaActual).getYears();

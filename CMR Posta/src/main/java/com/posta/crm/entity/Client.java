@@ -115,9 +115,14 @@ public class Client {
     private String product;
     
     //Atributo Modelo Canvas
+//    @OneToOne
+//    private CanvasModel canvasModel;
+    
     @OneToOne
-    private CanvasModel canvasModel;
-
+    private Process process;
+    
+    
+    
     @PrePersist
     public void active() {
         this.active = true;

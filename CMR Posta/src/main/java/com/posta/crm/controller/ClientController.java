@@ -273,5 +273,12 @@ public class ClientController {
         }
         return ResponseEntity.ok(activ);
     }
+    
+    
+    @GetMapping("/listar")
+    public ResponseEntity<?>findLL(){
+
+        return ResponseEntity.ok(clienteService.findAll());
+    }
 
 }

@@ -16,6 +16,7 @@ public class CanvasModelServiceImpl implements ICanvasModel{
 
     @Override
     public CanvasModel save(CanvasModel canvasModel) {
+        System.out.println(canvasModel);
         return canvasModelRepository.save(canvasModel);
     }
 

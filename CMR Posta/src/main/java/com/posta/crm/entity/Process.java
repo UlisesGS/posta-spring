@@ -33,4 +33,5 @@ public class Process {
     
     @ManyToOne
     private User user;
+    private String estado;
 }

@@ -4,10 +4,7 @@
  */
 package com.posta.crm.controller;
 
-import com.posta.crm.entity.canvas.CanvasModel;
-import com.posta.crm.entity.canvas.Channels;
-import com.posta.crm.entity.canvas.CustomerSegments;
-import com.posta.crm.entity.canvas.ValuePropositions;
+import com.posta.crm.entity.canvas.*;
 import com.posta.crm.service.canvas.CanvasModelServiceImpl;
 import com.posta.crm.service.canvas.ChannelsServiceImpl;
 import com.posta.crm.service.canvas.CostStructureServiceImpl;
@@ -99,19 +96,24 @@ public class ModelCanvasController {
     }
     @PostMapping("/segmetento")
     public ResponseEntity<?>save(@RequestBody CustomerSegments customerSegments){
-          ;
+
             return ResponseEntity.status(HttpStatus.CREATED).body(  customerSegmentsService.save(customerSegments));
     }
 
     @PostMapping("/propuestaValor")
     public ResponseEntity<?>save(@RequestBody ValuePropositions valuePropositions){
-        ;
+
         return ResponseEntity.status(HttpStatus.CREATED).body(  valuePropositionsServiceImpl.save(valuePropositions));
     }
     @PostMapping("/canales")
     public ResponseEntity<?>save(@RequestBody Channels channels){
-        ;
+
         return ResponseEntity.status(HttpStatus.CREATED).body(  channelsService.save(channels));
+    }
+    @PostMapping("/relaciones")
+    public ResponseEntity<?>save(@RequestBody CustomerRelationships customerRelationships){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(  customerRelationshipsService.save(customerRelationships));
     }
     
 }

@@ -25,4 +25,9 @@ public class ProcessServiceImpl implements IProcessService{
     public Process save(Process process) {
         return processRepository.save(process);
     }
+
+    @Override
+    public List<Process> findAllUltimo() {
+        return processRepository.findTop6ByOrderByFechaAltaDesc();
+    }
 }

@@ -9,4 +9,5 @@ public interface IProcessService {
     public List<Process> findAll();
     public Optional<Process> findById(Long id);
     public Process save(Process process);
+    public List<Process>findAllUltimo();
 }

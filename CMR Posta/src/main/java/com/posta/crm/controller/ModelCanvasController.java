@@ -5,6 +5,7 @@
 package com.posta.crm.controller;
 
 import com.posta.crm.entity.canvas.CanvasModel;
+import com.posta.crm.entity.canvas.CustomerSegments;
 import com.posta.crm.service.canvas.CanvasModelServiceImpl;
 import com.posta.crm.service.canvas.ChannelsServiceImpl;
 import com.posta.crm.service.canvas.CostStructureServiceImpl;
@@ -88,12 +89,16 @@ public class ModelCanvasController {
         return new ResponseEntity<>(canvasModel, HttpStatus.CREATED);
     }
     
-    @PutMapping("/model")
-    public ResponseEntity<?>update(@RequestBody CanvasModel canvasModel, Long id){
+    @PutMapping("/model/{id}")
+    public ResponseEntity<?>update(@RequestBody CanvasModel canvasModel,@PathVariable Long id){
         
         return ResponseEntity.ok(canvasModelService.update(canvasModel, id));
     }
-    
+    @PostMapping("/segmetento")
+    public ResponseEntity<?>save(@RequestBody CustomerSegments customerSegments){
+          ;
+            return ResponseEntity.status(HttpStatus.CREATED).body(  customerSegmentsService.save(customerSegments));
+    }
     
 
     

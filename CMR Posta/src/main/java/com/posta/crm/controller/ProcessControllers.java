@@ -40,6 +40,7 @@ public class ProcessControllers {
             processDb=optionalProcess.get();
             processDb.setEstado(process.getEstado());
             processDb.setSelfAssessment(process.getSelfAssessment());
+            processDb.setCanvasModel(process.getCanvasModel());
             return ResponseEntity.status(HttpStatus.CREATED).body(processService.save(processDb));
         }
         return ResponseEntity.notFound().build();

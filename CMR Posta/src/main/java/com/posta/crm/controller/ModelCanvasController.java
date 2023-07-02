@@ -115,5 +115,31 @@ public class ModelCanvasController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(  customerRelationshipsService.save(customerRelationships));
     }
+    @PostMapping("/recursosClaves")
+    public ResponseEntity<?>save(@RequestBody KeyRecources keyRecources){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(  keyRecourcesService.save(keyRecources));
+    }
+    @PostMapping("/actividadesClaves")
+    public ResponseEntity<?>save(@RequestBody KeyActivities keyActivities){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(  keyActivitiesService.save(keyActivities));
+    }
+    @PostMapping("/sociosClaves")
+    public ResponseEntity<?>save(@RequestBody KeyPartners keyPartners){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(  keyPartnersService.save(keyPartners));
+    }
+    @PostMapping("/ingresos")
+    public ResponseEntity<?>save(@RequestBody RevenueStreams revenueStreams){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(  revenueStreamsService.save(revenueStreams));
+    }
+    //ver como lo vamos a realizar por ahora lo dejo asi
+    @PostMapping("/estructuraCostos")
+    public ResponseEntity<?>save(@RequestBody CostStructure costStructure){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(costStructureService.save(costStructure));
+    }
     
 }

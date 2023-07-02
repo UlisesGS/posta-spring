@@ -4,14 +4,12 @@
  */
 package com.posta.crm.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.posta.crm.entity.canvas.CanvasModel;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  *
@@ -34,4 +32,14 @@ public class Process {
     @ManyToOne
     private User user;
     private String estado;
+    private boolean terminado;
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "America/Bogota")
+    private Date fechaAlta;
+
+    @PrePersist
+    public void prePersist(){
+        this.terminado=false;
+        this.fechaAlta= new Date();
+    }
 }

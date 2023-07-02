@@ -20,6 +20,10 @@ public class ProcessControllers {
         return ResponseEntity.ok().body(processService.findAll());
 
     }
+    @GetMapping("/ultimo")
+    public ResponseEntity<?>findAllUltimo(){
+        return ResponseEntity.ok().body(processService.findAllUltimo());
+    }
     @GetMapping("/{id}")
     public ResponseEntity<?>findById(@PathVariable Long id){
         Optional<Process> optionalProcess = processService.findById(id);

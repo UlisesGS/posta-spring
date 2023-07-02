@@ -2,6 +2,8 @@ package com.posta.crm.controller;
 
 import com.posta.crm.entity.Process;
 import com.posta.crm.service.canvas.process.IProcessService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +14,12 @@ import java.util.Optional;
 @RestController
 @CrossOrigin(origins = ("*"))
 @RequestMapping("/process")
+@Api(tags = "seccion Procesos")
 public class ProcessControllers {
     @Autowired
     private IProcessService processService;
     @GetMapping
+    @ApiOperation("Listar todos los procesos")
     public ResponseEntity<?>findAll(){
         return ResponseEntity.ok().body(processService.findAll());
 

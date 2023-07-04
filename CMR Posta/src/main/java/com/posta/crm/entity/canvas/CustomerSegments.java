@@ -1,6 +1,7 @@
 
 package com.posta.crm.entity.canvas;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,12 +17,16 @@ public class CustomerSegments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
+    @Column(length = 1000)
     private String  demograficas;
     @NotBlank
+    @Column(length = 1000)
     private String  geograficas;
     @NotBlank
+    @Column(length = 1000)
     private String  psicograficas;
     @NotBlank
+    @Column(length = 1000)
     private String  comportanmiento;
     
     

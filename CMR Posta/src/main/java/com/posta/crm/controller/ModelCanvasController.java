@@ -148,5 +148,59 @@ public class ModelCanvasController {
         return ResponseEntity.ok().body(costComponentService.findAll());
     }
 
+    /* TODOS LOS PUT */
+    @PutMapping("/segmentoPut/{id}")
+    public ResponseEntity<?>updateSegmento(@RequestBody CustomerSegments customerSegments, @PathVariable Long id) {
+
+        return ResponseEntity.ok().body(customerSegmentsService.update(customerSegments, id));
+    }
+
+    @PutMapping("/propuestaValorPut/{id}")
+    public ResponseEntity<?>updatePropuestaValor(@RequestBody ValuePropositions valuePropositions, @PathVariable Long id) {
+
+        return ResponseEntity.ok().body(valuePropositionsServiceImpl.update(valuePropositions, id));
+    }
+
+    @PutMapping("/canalesPut/{id}")
+    public ResponseEntity<?>updateCanales(@RequestBody Channels channels, @PathVariable Long id) {
+
+        return ResponseEntity.ok().body(channelsService.update(channels, id));
+    }
+
+    @PutMapping("/relacionesPut/{id}")
+    public ResponseEntity<?>updateRelaciones(@RequestBody CustomerRelationships customerRelationships, @PathVariable Long id) {
+
+        return ResponseEntity.ok().body(customerRelationshipsService.update(customerRelationships, id));
+    }
+
+    @PutMapping("/recursosClavesPut/{id}")
+    public ResponseEntity<?>updateRecursosClaves(@RequestBody KeyRecources keyRecources, @PathVariable Long id) {
+
+        return ResponseEntity.ok().body(keyRecourcesService.update(keyRecources, id));
+    }
+
+    @PutMapping("/actividadesClavesPut/{id}")
+    public ResponseEntity<?>updateActividadesClaves(@RequestBody KeyActivities keyActivities, @PathVariable Long id) {
+
+        return ResponseEntity.ok().body(keyActivitiesService.update(keyActivities, id));
+    }
+
+    @PutMapping("/sociosClavesPut/{id}")
+    public ResponseEntity<?>updateSociosClaves(@RequestBody KeyPartners keyPartners, @PathVariable Long id) {
+
+        return ResponseEntity.ok().body(keyPartnersService.update(keyPartners, id));
+    }
+
+    @PutMapping("/ingresosPut/{id}")
+    public ResponseEntity<?>updateIngresos(@RequestBody RevenueStreams revenueStreams, @PathVariable Long id) {
+
+        return ResponseEntity.ok().body(revenueStreamsService.update(revenueStreams, id));
+    }
+
+    @PutMapping("/estructuraCostoPut/{id}")
+    public ResponseEntity<?>updateEstructuraCosto(@RequestBody CostStructure costStructure, @PathVariable Long id) {
+
+        return ResponseEntity.ok().body(costStructureService.update(costStructure, id));
+    }
 }
 

@@ -47,6 +47,7 @@ public class ProcessControllers {
         if(optionalProcess.isPresent()){
             processDb=optionalProcess.get();
             processDb.setEstado(process.getEstado());
+            processDb.setTerminado(process.isTerminado());
             processDb.setSelfAssessment(process.getSelfAssessment());
             processDb.setCanvasModel(process.getCanvasModel());
             return ResponseEntity.status(HttpStatus.CREATED).body(processService.save(processDb));

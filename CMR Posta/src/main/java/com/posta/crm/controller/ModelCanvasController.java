@@ -5,16 +5,7 @@
 package com.posta.crm.controller;
 
 import com.posta.crm.entity.canvas.*;
-import com.posta.crm.service.canvas.CanvasModelServiceImpl;
-import com.posta.crm.service.canvas.ChannelsServiceImpl;
-import com.posta.crm.service.canvas.CostStructureServiceImpl;
-import com.posta.crm.service.canvas.CustomerRelationshipsServiceImpl;
-import com.posta.crm.service.canvas.CustomerSegmentsServiceImpl;
-import com.posta.crm.service.canvas.KeyActivitiesServiceImpl;
-import com.posta.crm.service.canvas.KeyPartnersServiceImpl;
-import com.posta.crm.service.canvas.KeyRecourcesServiceImpl;
-import com.posta.crm.service.canvas.RevenueStreamsServiceImpl;
-import com.posta.crm.service.canvas.ValuePropositionsServiceImpl;
+import com.posta.crm.service.canvas.*;
 import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -62,9 +53,11 @@ public class ModelCanvasController {
     private RevenueStreamsServiceImpl revenueStreamsService;
     @Autowired
     private ValuePropositionsServiceImpl valuePropositionsServiceImpl;
-            
-            
-        private ResponseEntity<?> validation(BindingResult result) {
+    @Autowired
+    private CostComponentImpl costComponentService;
+
+
+    private ResponseEntity<?> validation(BindingResult result) {
         Map<String, Object> errores = new HashMap();
         result.getFieldErrors().forEach(e -> {
             errores.put(e.getField(), "el campo " + e.getField() + " " + e.getDefaultMessage());
@@ -84,62 +77,76 @@ public class ModelCanvasController {
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody CanvasModel canvasModel) {
-        
+
         canvasModelService.save(canvasModel);
         return new ResponseEntity<>(canvasModel, HttpStatus.CREATED);
     }
-    
+
     @PutMapping("/model/{id}")
-    public ResponseEntity<?>update(@RequestBody CanvasModel canvasModel,@PathVariable Long id){
-        
+    public ResponseEntity<?> update(@RequestBody CanvasModel canvasModel, @PathVariable Long id) {
+
         return ResponseEntity.ok(canvasModelService.update(canvasModel, id));
     }
-    @PostMapping("/segmetento")
-    public ResponseEntity<?>save(@RequestBody CustomerSegments customerSegments){
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(  customerSegmentsService.save(customerSegments));
+    @PostMapping("/segmetento")
+    public ResponseEntity<?> save(@RequestBody CustomerSegments customerSegments) {
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerSegmentsService.save(customerSegments));
     }
 
     @PostMapping("/propuestaValor")
-    public ResponseEntity<?>save(@RequestBody ValuePropositions valuePropositions){
+    public ResponseEntity<?> save(@RequestBody ValuePropositions valuePropositions) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(  valuePropositionsServiceImpl.save(valuePropositions));
+        return ResponseEntity.status(HttpStatus.CREATED).body(valuePropositionsServiceImpl.save(valuePropositions));
     }
+
     @PostMapping("/canales")
-    public ResponseEntity<?>save(@RequestBody Channels channels){
+    public ResponseEntity<?> save(@RequestBody Channels channels) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(  channelsService.save(channels));
+        return ResponseEntity.status(HttpStatus.CREATED).body(channelsService.save(channels));
     }
+
     @PostMapping("/relaciones")
-    public ResponseEntity<?>save(@RequestBody CustomerRelationships customerRelationships){
+    public ResponseEntity<?> save(@RequestBody CustomerRelationships customerRelationships) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(  customerRelationshipsService.save(customerRelationships));
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerRelationshipsService.save(customerRelationships));
     }
+
     @PostMapping("/recursosClaves")
-    public ResponseEntity<?>save(@RequestBody KeyRecources keyRecources){
+    public ResponseEntity<?> save(@RequestBody KeyRecources keyRecources) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(  keyRecourcesService.save(keyRecources));
+        return ResponseEntity.status(HttpStatus.CREATED).body(keyRecourcesService.save(keyRecources));
     }
+
     @PostMapping("/actividadesClaves")
-    public ResponseEntity<?>save(@RequestBody KeyActivities keyActivities){
+    public ResponseEntity<?> save(@RequestBody KeyActivities keyActivities) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(  keyActivitiesService.save(keyActivities));
+        return ResponseEntity.status(HttpStatus.CREATED).body(keyActivitiesService.save(keyActivities));
     }
+
     @PostMapping("/sociosClaves")
-    public ResponseEntity<?>save(@RequestBody KeyPartners keyPartners){
+    public ResponseEntity<?> save(@RequestBody KeyPartners keyPartners) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(  keyPartnersService.save(keyPartners));
+        return ResponseEntity.status(HttpStatus.CREATED).body(keyPartnersService.save(keyPartners));
     }
+
     @PostMapping("/ingresos")
-    public ResponseEntity<?>save(@RequestBody RevenueStreams revenueStreams){
+    public ResponseEntity<?> save(@RequestBody RevenueStreams revenueStreams) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(  revenueStreamsService.save(revenueStreams));
+        return ResponseEntity.status(HttpStatus.CREATED).body(revenueStreamsService.save(revenueStreams));
     }
+
     //ver como lo vamos a realizar por ahora lo dejo asi
     @PostMapping("/estructuraCostos")
-    public ResponseEntity<?>save(@RequestBody CostStructure costStructure){
+    public ResponseEntity<?> save(@RequestBody CostStructure costStructure) {
+
 
         return ResponseEntity.status(HttpStatus.CREATED).body(costStructureService.save(costStructure));
     }
-    
+    @GetMapping("/listaCostos")
+    public ResponseEntity<?>listarCostos(){
+        return ResponseEntity.ok().body(costComponentService.findAll());
+    }
+
 }
+

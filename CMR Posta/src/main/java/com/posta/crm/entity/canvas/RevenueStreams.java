@@ -1,6 +1,7 @@
 
 package com.posta.crm.entity.canvas;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,5 +25,6 @@ public class RevenueStreams {
     private Integer capitalPrestamo;
     
     @NotBlank
+    @Column(length = 1000)
     private String canalesPago;
 }

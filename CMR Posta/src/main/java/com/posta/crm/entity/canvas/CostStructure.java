@@ -1,11 +1,14 @@
 package com.posta.crm.entity.canvas;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 
@@ -17,15 +20,46 @@ public class CostStructure {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToMany
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private List<CostComponent> variableCosts;
     @OneToMany
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private List<CostComponent> fixedCosts;
-    @NotNull
+    //@NotNull
     private Double totalVariableCosts;
-    @NotNull
+   // @NotNull
     private Double totalfixedCosts;
-    @NotNull
+  //  @NotNull
     private Double totalCost;
+
+
+    public CostStructure() {
+        this.variableCosts= new ArrayList<>();
+        this.fixedCosts = new ArrayList<>();
+    }
+
+    public void calculo() {
+        double sumVariableCosts = 0.0;
+        for (CostComponent costComponent : variableCosts) {
+            sumVariableCosts += costComponent.getAmount();
+        }
+
+// Asignar la suma a totalVariableCosts
+        totalVariableCosts = sumVariableCosts;
+
+// Sumar los valores de fixedCosts
+        double sumFixedCosts = 0.0;
+        for (CostComponent costComponent : fixedCosts) {
+            sumFixedCosts += costComponent.getAmount();
+        }
+
+// Asignar la suma a totalfixedCosts
+        totalfixedCosts = sumFixedCosts;
+
+// Calcular el totalCost sumando totalfixedCosts y totalVariableCosts
+        totalCost = totalfixedCosts + totalVariableCosts;
+    }
+
 }
 //    public void calculo() {
 //        double sumVariableCosts = 0.0;

@@ -1,6 +1,7 @@
 
 package com.posta.crm.entity.canvas;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,9 +18,12 @@ public class CustomerRelationships {
     private Long id;
     
     @NotBlank
+    @Column(length = 1000)
     private String captacion;
     @NotBlank
+    @Column(length = 1000)
     private String fidelizacion;
     @NotBlank
+    @Column(length = 1000)
     private String estimulacion;
 }

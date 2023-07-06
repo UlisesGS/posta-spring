@@ -25,13 +25,13 @@ public class BusinessPlan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @OneToOne(cascade = CascadeType.ALL)
+   @Column(nullable = false, length = 1000)
     private String resumen;
 
-    @OneToOne(cascade = CascadeType.ALL)
+   @Column(nullable = false, length = 1000)
     private String problemas;
 
-    @OneToOne(cascade = CascadeType.ALL)
+   @Column(nullable = false, length = 1000)
     private String objetivos;
 
     @Column(nullable = false, length = 1000)

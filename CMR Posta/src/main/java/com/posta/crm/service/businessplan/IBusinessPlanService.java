@@ -6,6 +6,7 @@ package com.posta.crm.service.businessplan;
 
 import com.posta.crm.entity.businessplan.BusinessPlan;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -15,5 +16,6 @@ public interface IBusinessPlanService {
     
     public BusinessPlan save(BusinessPlan businessPlan);
     public List<BusinessPlan>findAll();
+    public Optional<BusinessPlan> findById(Long id);
     
 }

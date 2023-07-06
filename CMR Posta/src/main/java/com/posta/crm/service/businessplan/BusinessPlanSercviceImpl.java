@@ -7,6 +7,7 @@ package com.posta.crm.service.businessplan;
 import com.posta.crm.entity.businessplan.BusinessPlan;
 import com.posta.crm.repository.businessplan.BusinessPlanRepository;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,11 @@ public class BusinessPlanSercviceImpl implements IBusinessPlanService{
     @Override
     public List<BusinessPlan> findAll() {
        return businessPlanRepository.findAll();
+    }
+
+    @Override
+    public Optional<BusinessPlan> findById(Long id) {
+       return businessPlanRepository.findById(id);
     }
     
 }

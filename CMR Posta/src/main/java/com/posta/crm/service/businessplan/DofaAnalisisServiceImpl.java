@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
  * @author crowl
  */
 @Service
-public class DofaAnalisisServiceImpl implements IDofaAnalisisService{
-    
+public class DofaAnalisisServiceImpl implements IDofaAnalisisService {
+
     @Autowired
     private DofaAnalisisRepository dofaAnalisisRepository;
 
@@ -28,7 +28,7 @@ public class DofaAnalisisServiceImpl implements IDofaAnalisisService{
 
     @Override
     public List<DofaAnalisis> findAll() {
-       return dofaAnalisisRepository.findAll();
+        return dofaAnalisisRepository.findAll();
     }
 
     @Override
@@ -38,7 +38,15 @@ public class DofaAnalisisServiceImpl implements IDofaAnalisisService{
 
     @Override
     public void update(DofaAnalisis dofaAnalisis, Long id) {
-        
+        DofaAnalisis findDofaAnalisis = dofaAnalisisRepository.findById(id).get();
+        if (findDofaAnalisis != null) {
+            findDofaAnalisis.setAmenazas(dofaAnalisis.getAmenazas());
+            findDofaAnalisis.setDebilidades(dofaAnalisis.getDebilidades());
+            findDofaAnalisis.setFotalezas(dofaAnalisis.getFotalezas());
+            findDofaAnalisis.setOportunidades(dofaAnalisis.getOportunidades());
+            dofaAnalisisRepository.save(findDofaAnalisis);
+
+        }
     }
-    
+
 }

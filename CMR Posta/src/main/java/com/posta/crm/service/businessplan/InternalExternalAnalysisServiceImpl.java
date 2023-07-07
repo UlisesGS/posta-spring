@@ -37,7 +37,7 @@ public class InternalExternalAnalysisServiceImpl implements IInternalExternalAna
     }
 
     @Override
-    public void update(InternalExternalAnalysis internalExternalAnalysis, Long id) {
+    public InternalExternalAnalysis update(InternalExternalAnalysis internalExternalAnalysis, Long id) {
         
         InternalExternalAnalysis findInternal=internalExternalAnalysisRepository.findById(id).get();
         
@@ -55,9 +55,9 @@ public class InternalExternalAnalysisServiceImpl implements IInternalExternalAna
             findInternal.setPublicoObjetivo(internalExternalAnalysis.getPublicoObjetivo());
             findInternal.setRecursosNecesarios(internalExternalAnalysis.getRecursosNecesarios());
             
-            internalExternalAnalysisRepository.save(findInternal);
+            return internalExternalAnalysisRepository.save(findInternal);
         }
-        
+        return null;
     }
     
 }

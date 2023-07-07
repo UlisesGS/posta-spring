@@ -17,5 +17,5 @@ public interface IBusinessPlanService {
     public BusinessPlan save(BusinessPlan businessPlan);
     public List<BusinessPlan>findAll();
     public Optional<BusinessPlan> findById(Long id);
-    
+    public  BusinessPlan update(BusinessPlan businessPlan, Long id);
 }

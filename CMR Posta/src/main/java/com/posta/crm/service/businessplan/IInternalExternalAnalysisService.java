@@ -17,7 +17,7 @@ public interface IInternalExternalAnalysisService {
     public InternalExternalAnalysis save(InternalExternalAnalysis internalExternalAnalysis);
     public List<InternalExternalAnalysis>findAll();
     public Optional<InternalExternalAnalysis> findById(Long id);
-    public void update(InternalExternalAnalysis internalExternalAnalysis, Long id);
+    public InternalExternalAnalysis update(InternalExternalAnalysis internalExternalAnalysis, Long id);
     
     
     

@@ -37,16 +37,17 @@ public class DofaAnalisisServiceImpl implements IDofaAnalisisService {
     }
 
     @Override
-    public void update(DofaAnalisis dofaAnalisis, Long id) {
+    public DofaAnalisis update(DofaAnalisis dofaAnalisis, Long id) {
         DofaAnalisis findDofaAnalisis = dofaAnalisisRepository.findById(id).get();
         if (findDofaAnalisis != null) {
             findDofaAnalisis.setAmenazas(dofaAnalisis.getAmenazas());
             findDofaAnalisis.setDebilidades(dofaAnalisis.getDebilidades());
             findDofaAnalisis.setFotalezas(dofaAnalisis.getFotalezas());
             findDofaAnalisis.setOportunidades(dofaAnalisis.getOportunidades());
-            dofaAnalisisRepository.save(findDofaAnalisis);
-
+            return dofaAnalisisRepository.save(findDofaAnalisis);
+            
         }
+        return null;
     }
 
 }

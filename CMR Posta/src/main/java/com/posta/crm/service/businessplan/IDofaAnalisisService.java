@@ -17,5 +17,5 @@ public interface IDofaAnalisisService {
     public DofaAnalisis save(DofaAnalisis dofaAnalisis);
     public List<DofaAnalisis>findAll();
     public Optional<DofaAnalisis> findById(Long id);
-    public void update(DofaAnalisis dofaAnalisis, Long id);
+    public DofaAnalisis update(DofaAnalisis dofaAnalisis, Long id);
 }

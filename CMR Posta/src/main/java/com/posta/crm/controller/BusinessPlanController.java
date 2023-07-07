@@ -5,6 +5,8 @@
 package com.posta.crm.controller;
 
 import com.posta.crm.entity.businessplan.BusinessPlan;
+import com.posta.crm.entity.businessplan.DofaAnalisis;
+import com.posta.crm.entity.businessplan.InternalExternalAnalysis;
 import com.posta.crm.service.businessplan.BusinessPlanSercviceImpl;
 import com.posta.crm.service.businessplan.DofaAnalisisServiceImpl;
 import com.posta.crm.service.businessplan.InternalExternalAnalysisServiceImpl;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,56 +33,79 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/plan")
-@CrossOrigin(origins= "*")
+@CrossOrigin(origins = "*")
 public class BusinessPlanController {
-    
-   @Autowired
-   private DofaAnalisisServiceImpl dofaAnalisisService;
-   @Autowired
-   private BusinessPlanSercviceImpl businessPlanSercvice;
-   @Autowired
-   private InternalExternalAnalysisServiceImpl internalExternalAnalysisService;
-   
-   private ResponseEntity<?> validation(BindingResult result) {
+
+    @Autowired
+    private DofaAnalisisServiceImpl dofaAnalisisService;
+    @Autowired
+    private BusinessPlanSercviceImpl businessPlanSercvice;
+    @Autowired
+    private InternalExternalAnalysisServiceImpl internalExternalAnalysisService;
+
+    private ResponseEntity<?> validation(BindingResult result) {
         Map<String, Object> errores = new HashMap();
         result.getFieldErrors().forEach(e -> {
             errores.put(e.getField(), "el campo " + e.getField() + " " + e.getDefaultMessage());
         });
         return new ResponseEntity<>(errores, HttpStatus.NOT_FOUND);
     }
-   
-   
-   
-   //Metodo Post
+
+    //Metodos POST
     @PostMapping("/save")
-    public ResponseEntity<?>guardarPlan(@Valid @RequestBody BusinessPlan businessPlan, BindingResult result){
-        
+    public ResponseEntity<?> guardarPlan(@Valid @RequestBody BusinessPlan businessPlan, BindingResult result) {
         if (result.hasErrors()) {
             return this.validation(result);
-    }
+        }
         businessPlanSercvice.save(businessPlan);
-        
         return new ResponseEntity<>(businessPlan, HttpStatus.CREATED);
     }
     
+    @PostMapping("/analisis")
+    public ResponseEntity<?>guardarAnalisis(@RequestBody InternalExternalAnalysis internalExternalAnalysis ){
+        return ResponseEntity.status(HttpStatus.CREATED).body(internalExternalAnalysisService.save(internalExternalAnalysis));
+    }
+
+    @PostMapping("/dofa")
+    public ResponseEntity<?>guardarAnalisis(@RequestBody DofaAnalisis dofaAnalisis ){
+        return ResponseEntity.status(HttpStatus.CREATED).body(dofaAnalisisService.save(dofaAnalisis));
+    }
+    
+    
     @GetMapping("/listar")
-    public ResponseEntity<?>listarTodo(){
-        List<BusinessPlan>findAll=businessPlanSercvice.findAll();
-        if(findAll.isEmpty()){
+    public ResponseEntity<?> listarTodo() {
+        List<BusinessPlan> findAll = businessPlanSercvice.findAll();
+        if (findAll.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(findAll);
-        
+    }
+
+    @GetMapping("/buscarId/{id}")
+    public ResponseEntity<?> buscarId(@PathVariable Long id) {
+        BusinessPlan findPlan = businessPlanSercvice.findById(id).get();
+        if (findPlan != null) {
+            return ResponseEntity.ok(findPlan);
+        }
+        return ResponseEntity.notFound().build();
     }
     
-    @GetMapping("/listarId/{id}")
-    public ResponseEntity<?>listarTodo(@PathVariable Long id){
-        BusinessPlan findPlan=businessPlanSercvice.findById(id).get();
-        if(findPlan!=null){
-            return ResponseEntity.ok(findPlan);
-           
-        }
-         return ResponseEntity.notFound().build();
+    //Metodos PUT
+    
+    @PutMapping("/businessPut")
+    public ResponseEntity<?>busineesPut(@RequestBody BusinessPlan businessPlan, @PathVariable Long id){
         
+        return ResponseEntity.ok().body(businessPlanSercvice.update(businessPlan, id));
     }
+    
+    @PutMapping("/analisisPut")
+    public ResponseEntity<?>analisisPut(@RequestBody InternalExternalAnalysis analisis, @PathVariable Long id){
+        return ResponseEntity.ok().body(internalExternalAnalysisService.update(analisis, id));
+    }
+    
+    @PutMapping("/dofaPut")
+    public ResponseEntity<?>dofaPut(@RequestBody DofaAnalisis dofaAnalisis, @PathVariable Long id){
+        return ResponseEntity.ok().body(dofaAnalisisService.update(dofaAnalisis, id));
+    }
+    
 }

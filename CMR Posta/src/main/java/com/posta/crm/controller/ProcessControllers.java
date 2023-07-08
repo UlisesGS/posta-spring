@@ -36,8 +36,24 @@ public class ProcessControllers {
         }
         return  ResponseEntity.notFound().build();
     }
+    @GetMapping("/buscarPorNombre/{termino}")
+    public ResponseEntity<?>buscarPorNombre(@PathVariable String termino){
+        return ResponseEntity.ok().body(processService.findByNombreCliente(termino));
+    }
+    @GetMapping("/buscarPorType/{type}")
+    public ResponseEntity<?>buscarPorTipo(@PathVariable String type){
+        return ResponseEntity.ok().body(processService.findByTypeCliente(type));
+    }
+    @GetMapping("/buscarPorTerminado/{termiando}")
+    public ResponseEntity<?>buscarPorTermiando(@PathVariable Boolean terminado){
+        return ResponseEntity.ok().body(processService.findByTerminado(terminado));
+    }
+    @GetMapping("/buscarPorEstado/{estado}")
+    public ResponseEntity<?>buscarPorEstado(@PathVariable String estado){
+        return ResponseEntity.ok().body(processService.findByEstado(estado));
+    }
     @PostMapping
-    public ResponseEntity<?>save(@RequestBody  Process process){
+    public ResponseEntity<?>save(@RequestBody Process process){
         return ResponseEntity.status(HttpStatus.CREATED).body(processService.save(process));
     }
     @PutMapping("/{id}")

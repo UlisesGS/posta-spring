@@ -10,4 +10,8 @@ public interface IProcessService {
     public Optional<Process> findById(Long id);
     public Process save(Process process);
     public List<Process>findAllUltimo();
+    List<Process>findByNombreCliente(String termino);
+    List<Process>findByTypeCliente(String type);
+    List<Process>findByTerminado(Boolean terminado);
+    List<Process>findByEstado(String estado);
 }

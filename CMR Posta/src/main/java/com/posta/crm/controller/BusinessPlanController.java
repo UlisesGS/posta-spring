@@ -119,7 +119,7 @@ public class BusinessPlanController {
         return ResponseEntity.ok().body(dofaAnalisisService.update(dofaAnalisis, id));
     }
     
-     @PutMapping("/analisisPut")
+     @PutMapping("/informacionPut")
     public ResponseEntity<?>dofaPut(@RequestBody ProyectInformation proyectInformation, @PathVariable Long id){
         return ResponseEntity.ok().body(proyectInformationServiceImpl.update(proyectInformation, id));
     }

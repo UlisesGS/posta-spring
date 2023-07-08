@@ -44,14 +44,8 @@ public class BusinessPlanSercviceImpl implements IBusinessPlanService{
             newBusinessPlan.setAnalisis(businessPlan.getAnalisis());
             newBusinessPlan.setConclusion(businessPlan.getConclusion());
             newBusinessPlan.setDofaAnalisis(businessPlan.getDofaAnalisis());
-            newBusinessPlan.setImpactoAmbiental(businessPlan.getImpactoAmbiental());
-            newBusinessPlan.setImpactoSocial(businessPlan.getImpactoSocial());
-            newBusinessPlan.setMision(businessPlan.getMision());
-            newBusinessPlan.setObjetivos(businessPlan.getObjetivos());
-            newBusinessPlan.setProblemas(businessPlan.getProblemas());
-            newBusinessPlan.setResumen(businessPlan.getResumen());
-            newBusinessPlan.setValoresCorporativos(businessPlan.getValoresCorporativos());
-            newBusinessPlan.setVision(businessPlan.getVision());
+            newBusinessPlan.setProyectInformation(businessPlan.getProyectInformation());
+
             
            return businessPlanRepository.save(newBusinessPlan);
         }

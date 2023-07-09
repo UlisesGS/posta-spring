@@ -44,7 +44,7 @@ public class ProcessControllers {
     public ResponseEntity<?>buscarPorTipo(@PathVariable String type){
         return ResponseEntity.ok().body(processService.findByTypeCliente(type));
     }
-    @GetMapping("/buscarPorTerminado/{termiando}")
+    @GetMapping("/buscarPorTerminado/{terminado}")
     public ResponseEntity<?>buscarPorTermiando(@PathVariable Boolean terminado){
         return ResponseEntity.ok().body(processService.findByTerminado(terminado));
     }

@@ -5,9 +5,13 @@ import com.posta.crm.service.canvas.process.IProcessService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.Optional;
 
@@ -69,5 +73,15 @@ public class ProcessControllers {
             return ResponseEntity.status(HttpStatus.CREATED).body(processService.save(processDb));
         }
         return ResponseEntity.notFound().build();
+    }
+    @GetMapping("/paginar/{page}")
+    public ResponseEntity<?> paginacion(@PathVariable Integer page){
+        Pageable pageable = PageRequest.of(page, 5);
+        Page<Process> processes = processService.paginacion(pageable);
+
+        if(processes.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(processes);
     }
 }

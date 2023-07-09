@@ -5,6 +5,7 @@
 package com.posta.crm.entity.financiero;
 
 
+
 import com.posta.crm.entity.financiero.partes.EstructuraMercado;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,4 +31,24 @@ public class PresupuestoVenta {
     @OneToMany
     private List<EstructuraMercado>estructuraMercado;
     
+    private Integer totalProductos=0;
+    
+    private Double totalCapacidadOperario=0.0;
+    
+    private Double totalCapacidadInstalada=0.0;
+    
+    private Double totalPrecioUnitario=0.0;
+    
+    private Double totalTotal=0.0;
+    
+    public void calcular(){
+        for (EstructuraMercado estructuraMercado1 : this.estructuraMercado) {
+            this.totalProductos+=estructuraMercado1.getCantidad();
+            this.totalCapacidadOperario+=estructuraMercado1.getCapacidadInstaladaPorOperario();
+            this.totalCapacidadInstalada+=estructuraMercado1.getCapacidadInstaladaUnidades();
+            this.totalPrecioUnitario+=estructuraMercado1.getPrecioUnitario();
+            this.totalTotal+=estructuraMercado1.getPrecioTotal();
+        }
+    }
+
 }

@@ -7,9 +7,11 @@ package com.posta.crm.controller;
 import com.posta.crm.entity.businessplan.BusinessPlan;
 import com.posta.crm.entity.businessplan.DofaAnalisis;
 import com.posta.crm.entity.businessplan.InternalExternalAnalysis;
+import com.posta.crm.entity.businessplan.ProyectInformation;
 import com.posta.crm.service.businessplan.BusinessPlanSercviceImpl;
 import com.posta.crm.service.businessplan.DofaAnalisisServiceImpl;
 import com.posta.crm.service.businessplan.InternalExternalAnalysisServiceImpl;
+import com.posta.crm.service.businessplan.ProyectInformationServiceImpl;
 import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +44,9 @@ public class BusinessPlanController {
     private BusinessPlanSercviceImpl businessPlanSercvice;
     @Autowired
     private InternalExternalAnalysisServiceImpl internalExternalAnalysisService;
+    @Autowired
+    private ProyectInformationServiceImpl proyectInformationServiceImpl;
+    
 
     private ResponseEntity<?> validation(BindingResult result) {
         Map<String, Object> errores = new HashMap();
@@ -71,7 +76,13 @@ public class BusinessPlanController {
         return ResponseEntity.status(HttpStatus.CREATED).body(dofaAnalisisService.save(dofaAnalisis));
     }
     
+    @PostMapping("/proyect")
+    public ResponseEntity<?>guardarProyecto(@RequestBody ProyectInformation proyectInformation ){
+        return ResponseEntity.status(HttpStatus.CREATED).body(proyectInformationServiceImpl.save(proyectInformation));
+    }
     
+    
+    //Metodos GET
     @GetMapping("/listar")
     public ResponseEntity<?> listarTodo() {
         List<BusinessPlan> findAll = businessPlanSercvice.findAll();
@@ -108,4 +119,8 @@ public class BusinessPlanController {
         return ResponseEntity.ok().body(dofaAnalisisService.update(dofaAnalisis, id));
     }
     
+     @PutMapping("/informacionPut")
+    public ResponseEntity<?>dofaPut(@RequestBody ProyectInformation proyectInformation, @PathVariable Long id){
+        return ResponseEntity.ok().body(proyectInformationServiceImpl.update(proyectInformation, id));
+    }
 }

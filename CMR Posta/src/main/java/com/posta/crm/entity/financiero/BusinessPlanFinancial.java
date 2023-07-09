@@ -2,10 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.posta.crm.entity.businessplan;
+package com.posta.crm.entity.financiero;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,22 +17,19 @@ import lombok.Data;
  */
 @Entity
 @Data
-public class BusinessPlan {
+public class BusinessPlanFinancial {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-   @OneToOne(cascade = CascadeType.ALL)
-   private ProyectInformation proyectInformation;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private InternalExternalAnalysis analisis;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private DofaAnalisis dofaAnalisis;
+    @OneToOne
+    private PresupuestoVenta presupuestoVenta;
+//    @OneToOne
+//    private PresupuestoCompra presupuestoCompra;
+//    @OneToOne
+//    private GastoCosto gastoCosto;
+//    @OneToOne
+//    private PlanInversion planInversion;
     
-     @Column(nullable = false, length = 1000)
-    private String conclusion;
-
 }

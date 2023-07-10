@@ -6,6 +6,7 @@ package com.posta.crm.entity.financiero;
 
 
 
+import com.posta.crm.entity.financiero.partes.CiclicidadVentas;
 import com.posta.crm.entity.financiero.partes.EstructuraMercado;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,7 +32,7 @@ public class PresupuestoVenta {
     @OneToMany
     private List<EstructuraMercado>estructuraMercado;
     
-    private Integer totalProductos=0;
+    private Double totalProductos=0.0;
     
     private Double totalCapacidadOperario=0.0;
     
@@ -40,6 +41,12 @@ public class PresupuestoVenta {
     private Double totalPrecioUnitario=0.0;
     
     private Double totalTotal=0.0;
+    
+    private List<CiclicidadVentas> ciclicidadVentas;
+    
+    private Double totalCalificacion = 0.0;
+    
+    
     
     public void calcular(){
         for (EstructuraMercado estructuraMercado1 : this.estructuraMercado) {
@@ -50,5 +57,18 @@ public class PresupuestoVenta {
             this.totalTotal+=estructuraMercado1.getPrecioTotal();
         }
     }
+    
+    public void calculosCiclicidad(){
+        for (CiclicidadVentas ciclicidadVenta : ciclicidadVentas) {
+            this.totalCalificacion+=ciclicidadVenta.getCalificacion();
+        }
+        
+        for (CiclicidadVentas ciclicidadVenta : ciclicidadVentas) {
+            ciclicidadVenta.setUnidadesAño((ciclicidadVenta.getCalificacion()/this.totalCalificacion)*this.totalProductos);
+            ciclicidadVenta.setVentasAño((this.totalTotal*ciclicidadVenta.getUnidadesAño())/this.totalProductos);
+        }
+        
+    }
+    
 
 }

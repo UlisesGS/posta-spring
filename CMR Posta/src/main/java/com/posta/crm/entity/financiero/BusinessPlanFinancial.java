@@ -8,7 +8,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -25,11 +27,19 @@ public class BusinessPlanFinancial {
     
     @OneToOne
     private PresupuestoVenta presupuestoVenta;
-//    @OneToOne
-//    private PresupuestoCompra presupuestoCompra;
-//    @OneToOne
-//    private GastoCosto gastoCosto;
+    @OneToMany
+    private List<PresupuestoCompra> presupuestoCompra;
+    
+    private Double totalPresupuestoCompra=0.0;
+    
+    @OneToOne
+    private GastoCosto gastoCosto;
 //    @OneToOne
 //    private PlanInversion planInversion;
     
+    public void cuentas(){
+        for (PresupuestoCompra presupuestoCompra1 : presupuestoCompra) {
+            this.totalPresupuestoCompra+=presupuestoCompra1.getTotalAnual();
+        }
+    }
 }

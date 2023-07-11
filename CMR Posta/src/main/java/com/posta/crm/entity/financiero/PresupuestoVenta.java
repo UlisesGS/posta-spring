@@ -42,6 +42,7 @@ public class PresupuestoVenta {
     
     private Double totalTotal=0.0;
     
+    @OneToMany
     private List<CiclicidadVentas> ciclicidadVentas;
     
     private Double totalCalificacion = 0.0;

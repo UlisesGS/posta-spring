@@ -23,7 +23,7 @@ public class EstructuraMercado {
     
     private String producto;
     
-    private Integer cantidad;
+    private Double cantidad;
     
     @Enumerated(value = EnumType.STRING)
     private Financiero tipo;

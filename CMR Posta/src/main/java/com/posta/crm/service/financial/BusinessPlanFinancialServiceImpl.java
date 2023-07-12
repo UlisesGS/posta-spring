@@ -6,6 +6,7 @@ package com.posta.crm.service.financial;
 
 import com.posta.crm.entity.financiero.BusinessPlanFinancial;
 import com.posta.crm.entity.financiero.GastoCosto;
+import com.posta.crm.entity.financiero.PlanInversion;
 import com.posta.crm.entity.financiero.PresupuestoCompra;
 import com.posta.crm.entity.financiero.PresupuestoVenta;
 import com.posta.crm.entity.financiero.partes.CiclicidadVentas;
@@ -23,6 +24,7 @@ import com.posta.crm.repository.financial.GastoCostoRepository;
 import com.posta.crm.repository.financial.InversionRepository;
 import com.posta.crm.repository.financial.OtrosCostosRepository;
 import com.posta.crm.repository.financial.PersonalRepository;
+import com.posta.crm.repository.financial.PlanInversionRepository;
 import com.posta.crm.repository.financial.PresupuestoCompraRepository;
 import com.posta.crm.repository.financial.PresupuestoVentaRepository;
 import com.posta.crm.repository.financial.RequerimientosPersonalRepository;
@@ -67,6 +69,8 @@ public class BusinessPlanFinancialServiceImpl implements IBusinessPlanFinancialS
     //Plan Inversion
     @Autowired
     private InversionRepository inversionRepository;
+    @Autowired
+    private PlanInversionRepository planInversionRepository;
     
     
     
@@ -240,6 +244,8 @@ public class BusinessPlanFinancialServiceImpl implements IBusinessPlanFinancialS
         List<Inversion>muebleUpdate=new ArrayList();
         List<Inversion>vehiculoUpdate=new ArrayList();
         
+        PlanInversion planInversionUpdate=new PlanInversion();
+        
         for (Inversion activo : activoFijo) {
             activo.totalCredito();
             activoFijoUpdate.add(inversionRepository.save(activo));
@@ -257,8 +263,19 @@ public class BusinessPlanFinancialServiceImpl implements IBusinessPlanFinancialS
             vehiculoUpdate.add(inversionRepository.save(activo));
         }
           
+          planInversionUpdate.setActivoFijo(activoFijoUpdate);
+          planInversionUpdate.setMaquinariaEquipo(maquinariaUpdate);
+          planInversionUpdate.setMueblesEnseres(muebleUpdate);
+          planInversionUpdate.setVehiculos(vehiculoUpdate);
+          planInversionUpdate.fijo();
+          planInversionUpdate.maquinaria();
+          planInversionUpdate.muebles();
+          planInversionUpdate.vehiculos();
+          planInversionUpdate.calculoTotal();
+          planInversionRepository.save(planInversionUpdate);
           
-        return null;
+          businessPlanFinancialUpdate.setPlanInversion(planInversionUpdate);
+         return businessPlanFinancialRepository.save(businessPlanFinancialUpdate);
     }
 
 }

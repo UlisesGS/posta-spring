@@ -22,36 +22,36 @@ public class InternalExternalAnalysis {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String publicoObjetivo;
 
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String actividadPrincipal;
 
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String propuestaValor;
 
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String comercializacion;
 
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String operacion;
-    
-    @Column(nullable = false, length = 1000)
+
+    @Column( length = 1000)
     private String equipoTrabajo;
 
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String competencias;
 
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String mediosDigitales;
 
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String recursosNecesarios;
 
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String legal;
 
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String fuenteFinanciacion;
 }

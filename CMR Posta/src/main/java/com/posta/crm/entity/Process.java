@@ -5,6 +5,7 @@
 package com.posta.crm.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.posta.crm.entity.businessplan.BusinessPlan;
 import com.posta.crm.entity.canvas.CanvasModel;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -27,6 +28,8 @@ public class Process {
     private SelfAssessment selfAssessment;
     @OneToOne
     private CanvasModel canvasModel;
+    @OneToOne
+    private BusinessPlan businessPlan;
     
     
     @ManyToOne

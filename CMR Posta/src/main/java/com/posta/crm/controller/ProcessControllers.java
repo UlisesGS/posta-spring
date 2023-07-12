@@ -70,6 +70,7 @@ public class ProcessControllers {
             processDb.setTerminado(process.isTerminado());
             processDb.setSelfAssessment(process.getSelfAssessment());
             processDb.setCanvasModel(process.getCanvasModel());
+            processDb.setBusinessPlan(process.getBusinessPlan());
             return ResponseEntity.status(HttpStatus.CREATED).body(processService.save(processDb));
         }
         return ResponseEntity.notFound().build();

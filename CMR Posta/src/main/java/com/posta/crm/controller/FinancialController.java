@@ -56,6 +56,6 @@ public class FinancialController {
     @PutMapping("/inversion/{id}")
     public ResponseEntity<?>updateInversion(@RequestBody BusinessPlanFinancial businessPlanFinancial,@PathVariable Long id ){
         
-        return new ResponseEntity<>(businessPlanFinancialServiceImpl.updateGastos(businessPlanFinancial, id), HttpStatus.CREATED);
+        return new ResponseEntity<>(businessPlanFinancialServiceImpl.updateInversion(businessPlanFinancial, id), HttpStatus.CREATED);
     }
 }

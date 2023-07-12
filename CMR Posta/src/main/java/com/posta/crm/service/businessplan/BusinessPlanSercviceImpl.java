@@ -38,9 +38,11 @@ public class BusinessPlanSercviceImpl implements IBusinessPlanService{
 
     @Override
     public BusinessPlan update(BusinessPlan businessPlan, Long id) {
+        System.out.println(businessPlan);
         BusinessPlan newBusinessPlan=businessPlanRepository.findById(id).get();
         
         if(newBusinessPlan!=null){
+            System.out.println("entro");
             newBusinessPlan.setAnalisis(businessPlan.getAnalisis());
             newBusinessPlan.setConclusion(businessPlan.getConclusion());
             newBusinessPlan.setDofaAnalisis(businessPlan.getDofaAnalisis());

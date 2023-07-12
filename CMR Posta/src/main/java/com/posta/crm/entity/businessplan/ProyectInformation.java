@@ -22,29 +22,29 @@ public class ProyectInformation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(nullable = false, length = 1000)
+
+    @Column( length = 1000)
     private String resumen;
 
-   @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String problemas;
 
-   @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String objetivos;
 
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String mision;
 
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String vision;
 
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String valoresCorporativos;
 
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String impactoAmbiental;
 
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String impactoSocial;
     
 }

@@ -25,16 +25,16 @@ public class BusinessPlan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-   @OneToOne(cascade = CascadeType.ALL)
+   @OneToOne
    private ProyectInformation proyectInformation;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private InternalExternalAnalysis analisis;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private DofaAnalisis dofaAnalisis;
     
-     @Column(nullable = false, length = 1000)
+     @Column(length = 1000)
     private String conclusion;
 
 }

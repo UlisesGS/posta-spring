@@ -21,13 +21,13 @@ public class DofaAnalisis {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String debilidades;
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String oportunidades;
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String fotalezas;
-    @Column(nullable = false, length = 1000)
+    @Column( length = 1000)
     private String amenazas;
     
 }

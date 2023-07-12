@@ -11,6 +11,7 @@ import com.posta.crm.entity.financiero.PresupuestoVenta;
 import com.posta.crm.entity.financiero.partes.CiclicidadVentas;
 import com.posta.crm.entity.financiero.partes.EstructuraCompras;
 import com.posta.crm.entity.financiero.partes.EstructuraMercado;
+import com.posta.crm.entity.financiero.partes.Inversion;
 import com.posta.crm.entity.financiero.partes.OtrosCostos;
 import com.posta.crm.entity.financiero.partes.Personal;
 import com.posta.crm.entity.financiero.partes.RequerimientosPersonal;
@@ -19,6 +20,7 @@ import com.posta.crm.repository.financial.CiclicidadVentasRepository;
 import com.posta.crm.repository.financial.EstructuraComprasRepository;
 import com.posta.crm.repository.financial.EstructuraMercadoRepository;
 import com.posta.crm.repository.financial.GastoCostoRepository;
+import com.posta.crm.repository.financial.InversionRepository;
 import com.posta.crm.repository.financial.OtrosCostosRepository;
 import com.posta.crm.repository.financial.PersonalRepository;
 import com.posta.crm.repository.financial.PresupuestoCompraRepository;
@@ -62,6 +64,9 @@ public class BusinessPlanFinancialServiceImpl implements IBusinessPlanFinancialS
     //Otros Gastos
     @Autowired
     private OtrosCostosRepository otrosCostosRepository;
+    //Plan Inversion
+    @Autowired
+    private InversionRepository inversionRepository;
     
     
     
@@ -219,6 +224,41 @@ public class BusinessPlanFinancialServiceImpl implements IBusinessPlanFinancialS
         
         businessPlanFinancialUpdate.setGastoCosto(gastoCostoUpdate);
         return businessPlanFinancialRepository.save(businessPlanFinancialUpdate);
+    }
+
+    @Override
+    public BusinessPlanFinancial updateInversion(BusinessPlanFinancial businessPlanFinancial, Long id) {
+        BusinessPlanFinancial businessPlanFinancialUpdate = businessPlanFinancialRepository.findById(id).get();
+        //Listas traidas del Front
+        List<Inversion>activoFijo=businessPlanFinancial.getPlanInversion().getActivoFijo();
+        List<Inversion>maquinaria=businessPlanFinancial.getPlanInversion().getMaquinariaEquipo();
+        List<Inversion>muebles=businessPlanFinancial.getPlanInversion().getMueblesEnseres();
+        List<Inversion>vehiculo=businessPlanFinancial.getPlanInversion().getVehiculos();
+        //Listas nuevas
+        List<Inversion>activoFijoUpdate=new ArrayList();
+        List<Inversion>maquinariaUpdate=new ArrayList();
+        List<Inversion>muebleUpdate=new ArrayList();
+        List<Inversion>vehiculoUpdate=new ArrayList();
+        
+        for (Inversion activo : activoFijo) {
+            activo.totalCredito();
+            activoFijoUpdate.add(inversionRepository.save(activo));
+        }
+         for (Inversion activo : maquinaria) {
+            activo.totalCredito();
+            maquinariaUpdate.add(inversionRepository.save(activo));
+        }
+          for (Inversion activo : muebles) {
+            activo.totalCredito();
+            muebleUpdate.add(inversionRepository.save(activo));
+        }
+          for (Inversion activo : vehiculo) {
+            activo.totalCredito();
+            vehiculoUpdate.add(inversionRepository.save(activo));
+        }
+          
+          
+        return null;
     }
 
 }

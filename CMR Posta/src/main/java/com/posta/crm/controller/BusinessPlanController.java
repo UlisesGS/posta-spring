@@ -103,23 +103,23 @@ public class BusinessPlanController {
     
     //Metodos PUT
     
-    @PutMapping("/businessPut")
+    @PutMapping("/businessPut/{id}")
     public ResponseEntity<?>busineesPut(@RequestBody BusinessPlan businessPlan, @PathVariable Long id){
         
         return ResponseEntity.ok().body(businessPlanSercvice.update(businessPlan, id));
     }
     
-    @PutMapping("/analisisPut")
+    @PutMapping("/analisisPut/{id}")
     public ResponseEntity<?>analisisPut(@RequestBody InternalExternalAnalysis analisis, @PathVariable Long id){
         return ResponseEntity.ok().body(internalExternalAnalysisService.update(analisis, id));
     }
     
-    @PutMapping("/dofaPut")
+    @PutMapping("/dofaPut/{id}")
     public ResponseEntity<?>dofaPut(@RequestBody DofaAnalisis dofaAnalisis, @PathVariable Long id){
         return ResponseEntity.ok().body(dofaAnalisisService.update(dofaAnalisis, id));
     }
     
-     @PutMapping("/informacionPut")
+     @PutMapping("/informacionPut/{id}")
     public ResponseEntity<?>dofaPut(@RequestBody ProyectInformation proyectInformation, @PathVariable Long id){
         return ResponseEntity.ok().body(proyectInformationServiceImpl.update(proyectInformation, id));
     }

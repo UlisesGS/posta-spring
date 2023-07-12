@@ -17,5 +17,6 @@ public interface IBusinessPlanFinancialService {
     public Optional<BusinessPlanFinancial> findByID(Long id);
     public BusinessPlanFinancial updateCompras(BusinessPlanFinancial businessPlanFinancial, Long id);
     public BusinessPlanFinancial updateGastos(BusinessPlanFinancial businessPlanFinancial, Long id);
+    public BusinessPlanFinancial updateInversion(BusinessPlanFinancial businessPlanFinancial, Long id);
     
 }

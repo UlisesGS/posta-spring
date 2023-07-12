@@ -52,4 +52,10 @@ public class FinancialController {
         
         return new ResponseEntity<>(businessPlanFinancialServiceImpl.updateGastos(businessPlanFinancial, id), HttpStatus.CREATED);
     }
+    
+    @PutMapping("/inversion/{id}")
+    public ResponseEntity<?>updateInversion(@RequestBody BusinessPlanFinancial businessPlanFinancial,@PathVariable Long id ){
+        
+        return new ResponseEntity<>(businessPlanFinancialServiceImpl.updateGastos(businessPlanFinancial, id), HttpStatus.CREATED);
+    }
 }

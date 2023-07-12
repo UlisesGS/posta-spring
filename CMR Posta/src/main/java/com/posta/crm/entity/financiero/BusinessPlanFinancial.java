@@ -34,8 +34,9 @@ public class BusinessPlanFinancial {
     
     @OneToOne
     private GastoCosto gastoCosto;
-//    @OneToOne
-//    private PlanInversion planInversion;
+    
+    @OneToOne
+    private PlanInversion planInversion;
     
     public void cuentas(){
         for (PresupuestoCompra presupuestoCompra1 : presupuestoCompra) {

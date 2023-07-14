@@ -24,9 +24,9 @@ public class CiclicidadVentas {
     
     private Double calificacion;
     
-    private Double unidadesAño = 0.0;
+    private Double unidadesAnio = 0.0;
 
-    private Double ventasAño = 0.0;
+    private Double ventasAnio = 0.0;
     
     
 

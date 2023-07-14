@@ -65,8 +65,8 @@ public class PresupuestoVenta {
         }
         
         for (CiclicidadVentas ciclicidadVenta : ciclicidadVentas) {
-            ciclicidadVenta.setUnidadesAño((ciclicidadVenta.getCalificacion()/this.totalCalificacion)*this.totalProductos);
-            ciclicidadVenta.setVentasAño((this.totalTotal*ciclicidadVenta.getUnidadesAño())/this.totalProductos);
+            ciclicidadVenta.setUnidadesAnio((ciclicidadVenta.getCalificacion()/this.totalCalificacion)*this.totalProductos);
+            ciclicidadVenta.setVentasAnio((this.totalTotal*ciclicidadVenta.getUnidadesAnio())/this.totalProductos);
         }
         
     }

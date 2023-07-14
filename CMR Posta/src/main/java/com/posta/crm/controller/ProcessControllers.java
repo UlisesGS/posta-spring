@@ -71,6 +71,7 @@ public class ProcessControllers {
             processDb.setSelfAssessment(process.getSelfAssessment());
             processDb.setCanvasModel(process.getCanvasModel());
             processDb.setBusinessPlan(process.getBusinessPlan());
+            processDb.setBusinessPlanFinancial(process.getBusinessPlanFinancial());
             return ResponseEntity.status(HttpStatus.CREATED).body(processService.save(processDb));
         }
         return ResponseEntity.notFound().build();

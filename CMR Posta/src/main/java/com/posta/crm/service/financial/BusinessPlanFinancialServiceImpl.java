@@ -77,6 +77,7 @@ public class BusinessPlanFinancialServiceImpl implements IBusinessPlanFinancialS
 
     @Override
     public BusinessPlanFinancial save(BusinessPlanFinancial businessPlanFinancial) {
+        System.out.println(businessPlanFinancial);
         List<EstructuraMercado> estructuraSave = businessPlanFinancial.getPresupuestoVenta().getEstructuraMercado();
         List<EstructuraMercado> estructuraUpdate = new ArrayList();
         List<CiclicidadVentas> ciclicidadVentas = businessPlanFinancial.getPresupuestoVenta().getCiclicidadVentas();

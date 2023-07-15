@@ -44,7 +44,7 @@ public class PresupuestoVenta {
     
     @OneToMany
     private List<CiclicidadVentas> ciclicidadVentas;
-    
+    //agrego para push de mi puta rama
     private Double totalCalificacion = 0.0;
     
     

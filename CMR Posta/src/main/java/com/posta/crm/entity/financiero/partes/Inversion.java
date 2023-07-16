@@ -23,11 +23,11 @@ public class Inversion {
     
     private String tipo;
     
-    private Double aportesPropios;
+    private Double aportesPropios=0.0;
     
-    private Double inversionRequerida;
+    private Double inversionRequerida=0.0;
     
-    private Double creditoRequerido;
+    private Double creditoRequerido=0.0;
     
     public void totalCredito(){
         this.creditoRequerido=this.inversionRequerida-this.aportesPropios;

@@ -33,12 +33,8 @@ public class FinancialController {
     //Metodos POST
     @PostMapping()
     public ResponseEntity<?>save(@RequestBody BusinessPlanFinancial businessPlanFinancial){
-        
-        
         return new ResponseEntity<>(businessPlanFinancialServiceImpl.save(businessPlanFinancial), HttpStatus.CREATED);
     }
-    
-    
     //Todos los PUT
     
     @PutMapping("/compras/{id}")
@@ -52,7 +48,6 @@ public class FinancialController {
         
         return new ResponseEntity<>(businessPlanFinancialServiceImpl.updateGastos(businessPlanFinancial, id), HttpStatus.CREATED);
     }
-    
     @PutMapping("/inversion/{id}")
     public ResponseEntity<?>updateInversion(@RequestBody BusinessPlanFinancial businessPlanFinancial,@PathVariable Long id ){
         

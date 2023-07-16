@@ -38,6 +38,8 @@ public class BusinessPlanFinancial {
     @OneToOne
     private PlanInversion planInversion;
     
+    private Double IPC;
+    
     public void cuentas(){
         for (PresupuestoCompra presupuestoCompra1 : presupuestoCompra) {
             this.totalPresupuestoCompra+=presupuestoCompra1.getTotalAnual();

@@ -23,28 +23,28 @@ public class ProyectInformation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( length = 1000)
+    @Column( length = 5000)
     private String resumen;
 
-    @Column( length = 1000)
+    @Column( length = 5000)
     private String problemas;
 
-    @Column( length = 1000)
+    @Column( length = 5000)
     private String objetivos;
 
-    @Column( length = 1000)
+    @Column( length = 5000)
     private String mision;
 
-    @Column( length = 1000)
+    @Column( length = 5000)
     private String vision;
 
-    @Column( length = 1000)
+    @Column( length = 5000)
     private String valoresCorporativos;
 
-    @Column( length = 1000)
+    @Column( length = 5000)
     private String impactoAmbiental;
 
-    @Column( length = 1000)
+    @Column( length = 5000)
     private String impactoSocial;
     
 }

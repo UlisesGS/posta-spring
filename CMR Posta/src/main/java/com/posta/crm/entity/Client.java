@@ -63,6 +63,7 @@ public class Client {
     private String email;
     @NotBlank
     private String address;
+    @Column(length = 5000)
     private String remarks;
     private Boolean active;
     private String type;

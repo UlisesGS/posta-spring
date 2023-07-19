@@ -8,7 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -17,15 +18,13 @@ import lombok.Data;
  */
 @Entity
 @Data
-public class DiagnosticoEmpresarial {
+public class AnalisisEconomico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
-    private Diagnostico diagnostico;
-    @OneToOne
-    private AnalisisResultados analisisResultados;
-    @OneToOne
-    private AnalisisEconomico analisisEconomico;
-   
+    
+    @OneToMany
+    private List<Indicador> indicadores;
+    
+    private List<String> observaciones;
 }

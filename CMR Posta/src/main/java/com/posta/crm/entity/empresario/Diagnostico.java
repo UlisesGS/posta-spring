@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 
@@ -49,5 +50,62 @@ public class Diagnostico {
     
     private List<Integer> totales;
     
+    
+    public void calcularTotales(){
+        Integer totalAux=0;
+        this.totales=new ArrayList();
+        
+            for (Integer integer : this.gestionEstrategica) {
+            totalAux+=integer;
+        }
+            this.totales.add(totalAux);
+            totalAux=0;
+            for (Integer integer : this.gestionProductividad) {
+                totalAux+=integer;
+            }
+            this.totales.add(totalAux);
+            totalAux=0;
+            for (Integer integer : this.gestionOperacional) {
+                totalAux+=integer;
+            }
+            this.totales.add(totalAux);
+            totalAux=0;
+            for (Integer integer : this.gestionCalidad) {
+                totalAux+=integer;
+            }
+            this.totales.add(totalAux);
+            totalAux=0;
+            for (Integer integer : this.gestionInnovacion) {
+                totalAux+=integer;
+            }
+            this.totales.add(totalAux);
+            totalAux=0;
+            for (Integer integer : this.gestionFinanciera) {
+                totalAux+=integer;
+            }
+            this.totales.add(totalAux);
+            totalAux=0;
+            for (Integer integer : this.gestionLogistica) {
+                totalAux+=integer;
+            }
+            this.totales.add(totalAux);
+            totalAux=0;
+            for (Integer integer : this.gestionDigital) {
+                totalAux+=integer;
+            }
+            this.totales.add(totalAux);
+            totalAux=0;
+            for (Integer integer : this.gestionAmbiental) {
+                totalAux+=integer;
+            }
+            this.totales.add(totalAux);
+            totalAux=0;
+            for (Integer integer : this.gestionIntelectual) {
+                totalAux+=integer;
+            }
+            this.totales.add(totalAux);
+            totalAux=0;
+        
+    }
     
 }

@@ -38,7 +38,10 @@ public class BusinessPlanFinancial {
     @OneToOne
     private PlanInversion planInversion;
     
-    private Double IPC;
+    private Double IPC1;
+    private Double IPC2;
+    private Double IPC3;
+    private Double IPC4;
     
     public void cuentas(){
         for (PresupuestoCompra presupuestoCompra1 : presupuestoCompra) {

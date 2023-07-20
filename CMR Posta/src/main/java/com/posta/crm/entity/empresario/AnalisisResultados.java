@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import lombok.Data;
 
 /**
@@ -18,28 +19,39 @@ import lombok.Data;
 @Entity
 @Data
 public class AnalisisResultados {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Lob
     @Column(length = 5000)
     private String gestionEstrategica;
+    @Lob
     @Column(length = 5000)
     private String gestionProductividad;
+    @Lob
     @Column(length = 5000)
     private String gestionOperacional;
+    @Lob
     @Column(length = 5000)
     private String gestionCalidad;
+    @Lob
     @Column(length = 5000)
     private String gestionInnovacion;
+    @Lob
     @Column(length = 5000)
     private String gestionFinanciera;
+    @Lob
     @Column(length = 5000)
     private String gestionLogistica;
+    @Lob
     @Column(length = 5000)
     private String gestionDigital;
+    @Lob
     @Column(length = 5000)
     private String gestionAmbiental;
+    @Lob
     @Column(length = 5000)
     private String gestionIntelectual;
     

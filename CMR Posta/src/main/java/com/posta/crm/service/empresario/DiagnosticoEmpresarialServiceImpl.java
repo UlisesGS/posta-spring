@@ -9,11 +9,13 @@ import com.posta.crm.entity.empresario.AnalisisResultados;
 import com.posta.crm.entity.empresario.ConceptosGenerales;
 import com.posta.crm.entity.empresario.Diagnostico;
 import com.posta.crm.entity.empresario.DiagnosticoEmpresarial;
+import com.posta.crm.entity.empresario.Indicador;
 import com.posta.crm.repository.empresario.AnalisisEconomicoRepository;
 import com.posta.crm.repository.empresario.AnalisisResultadosRepository;
 import com.posta.crm.repository.empresario.ConceptosGeneralesRepository;
 import com.posta.crm.repository.empresario.DiagnosticoEmpresarialRepository;
 import com.posta.crm.repository.empresario.DiagnosticoRepository;
+import com.posta.crm.repository.empresario.IndicadorRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +39,8 @@ public class DiagnosticoEmpresarialServiceImpl implements IDiagnosticoEmpresaria
     private AnalisisResultadosRepository analisisResultadosRepository;
     @Autowired
     private AnalisisEconomicoRepository analisisEconomicoRepository;
+    @Autowired
+    private IndicadorRepository indicadorRepository;
     
     
 
@@ -74,7 +78,22 @@ public class DiagnosticoEmpresarialServiceImpl implements IDiagnosticoEmpresaria
     public DiagnosticoEmpresarial updateEconomico(DiagnosticoEmpresarial diagnosticoEmpresarial, Long id) {
         DiagnosticoEmpresarial diagnosticoEmpresarialUpdate=diagnosticoEmpresarialRepository.findById(id).get();
         AnalisisEconomico analisisEconomico=diagnosticoEmpresarial.getAnalisisEconomico();
-        diagnosticoEmpresarialUpdate.setAnalisisEconomico(analisisEconomicoRepository.save(analisisEconomico));
+        List<Indicador>indicador=diagnosticoEmpresarial.getAnalisisEconomico().getIndicadores();
+        
+        AnalisisEconomico analisisEconomicoUpdate=new AnalisisEconomico();
+        
+        List<Indicador>indicadorUpdate=new ArrayList();
+        
+        for (Indicador indicador1 : indicador) {
+            indicadorUpdate.add(indicadorRepository.save(indicador1));
+        }
+        for (Indicador indicador1 : indicadorUpdate) {
+            
+        }
+        analisisEconomicoUpdate.setIndicadores(indicador);
+        analisisEconomicoUpdate.setObservaciones(analisisEconomico.getObservaciones());
+        
+        diagnosticoEmpresarialUpdate.setAnalisisEconomico(analisisEconomicoRepository.save(analisisEconomicoUpdate));
 
                                 
         return diagnosticoEmpresarialRepository.save(diagnosticoEmpresarialUpdate);

@@ -12,6 +12,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import java.util.List;
 import lombok.Data;
 
@@ -29,6 +30,7 @@ public class ConceptosGenerales {
     
     @Enumerated(value = EnumType.STRING)
     private DiagEmpr diagEmpr;
+    @Lob
     @Column(length = 5000)
     private String observaciones;
     

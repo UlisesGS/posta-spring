@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import lombok.Data;
 
 /**
@@ -23,28 +24,36 @@ public class ProyectInformation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String resumen;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String problemas;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String objetivos;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String mision;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String vision;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String valoresCorporativos;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String impactoAmbiental;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String impactoSocial;
     
 }

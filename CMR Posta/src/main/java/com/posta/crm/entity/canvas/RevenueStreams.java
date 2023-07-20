@@ -19,10 +19,10 @@ public class RevenueStreams {
     private Long id;
     
     @NotNull
-    private Integer capitalPorpio;
+    private String capitalPorpio;
     
     @NotNull
-    private Integer capitalPrestamo;
+    private String capitalPrestamo;
     
     @NotBlank
     @Column(length = 1000)

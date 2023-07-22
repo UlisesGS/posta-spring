@@ -27,6 +27,9 @@ public class CostStructure {
     
     
     public void calcularTotales(){
+            this.totalCostosFijos=0.0;
+             this.totalCostosVariables=0.0;
+              this.totalCostos=0.0;
         
         for (CostComponent costosFijo : costosFijos) {
             this.totalCostosFijos+=costosFijo.getAmount();

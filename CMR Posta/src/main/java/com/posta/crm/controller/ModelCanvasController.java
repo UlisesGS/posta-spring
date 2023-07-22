@@ -57,13 +57,7 @@ public class ModelCanvasController {
     private CostComponentImpl costComponentService;
 
 
-    private ResponseEntity<?> validation(BindingResult result) {
-        Map<String, Object> errores = new HashMap();
-        result.getFieldErrors().forEach(e -> {
-            errores.put(e.getField(), "el campo " + e.getField() + " " + e.getDefaultMessage());
-        });
-        return new ResponseEntity<>(errores, HttpStatus.NOT_FOUND);
-    }
+   
 
     @GetMapping("/buscar/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
@@ -139,8 +133,6 @@ public class ModelCanvasController {
     //ver como lo vamos a realizar por ahora lo dejo asi
     @PostMapping("/estructuraCostos")
     public ResponseEntity<?> save(@RequestBody CostStructure costStructure) {
-
-
         return ResponseEntity.status(HttpStatus.CREATED).body(costStructureService.save(costStructure));
     }
     @GetMapping("/listaCostos")

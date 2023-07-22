@@ -41,7 +41,7 @@ public class CostStructureServiceImpl implements ICostStructureService {
         }
 
         costStructure.setCostosFijos(fijosFrontUpdate);
-        costStructure.setCostosFijos(variablesFrontUpdate);
+        costStructure.setCostosVariables(variablesFrontUpdate);
         costStructure.calcularTotales();
         return costStructureRepository.save(costStructure);
     }

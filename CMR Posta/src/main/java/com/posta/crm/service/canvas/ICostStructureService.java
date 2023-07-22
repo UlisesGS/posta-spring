@@ -5,6 +5,7 @@
 package com.posta.crm.service.canvas;
 
 import com.posta.crm.entity.canvas.CostStructure;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -12,8 +13,9 @@ import java.util.Optional;
  * @author crowl
  */
 public interface ICostStructureService {
-     public CostStructure save(CostStructure costStructure);
+    public CostStructure save(CostStructure costStructure);
     public CostStructure update(CostStructure costStructure, Long id);
     public Optional<CostStructure> findById(Long id);
+    public List<CostStructure>finAll();
     
 }

@@ -194,5 +194,14 @@ public class ModelCanvasController {
 
         return ResponseEntity.ok().body(costStructureService.update(costStructure, id));
     }
+    
+    
+    //GET para probar Estructura de costos
+    @GetMapping("/estructuraCosto")
+    public ResponseEntity<?>findAllCostos(){
+        return ResponseEntity.ok(costStructureService.finAll());
+    }
+    
+    
 }
 

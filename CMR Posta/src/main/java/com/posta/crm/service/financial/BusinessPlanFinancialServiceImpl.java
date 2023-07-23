@@ -107,6 +107,13 @@ public class BusinessPlanFinancialServiceImpl implements IBusinessPlanFinancialS
     }
 
     @Override
+    public BusinessPlanFinancial updateFinancial(BusinessPlanFinancial businessPlanFinancial, Long id) {
+        BusinessPlanFinancial businessPlanFinancialUpdate = businessPlanFinancialRepository.findById(id).get();
+        businessPlanFinancialUpdate= businessPlanFinancial;
+        return businessPlanFinancialRepository.save(businessPlanFinancialUpdate);
+    }
+
+    @Override
     public BusinessPlanFinancial updateCompras(BusinessPlanFinancial businessPlanFinancial, Long id) {
         BusinessPlanFinancial businessPlanFinancialUpdate = businessPlanFinancialRepository.findById(id).get();
         List<PresupuestoCompra> presupuestoCompra = businessPlanFinancial.getPresupuestoCompra();

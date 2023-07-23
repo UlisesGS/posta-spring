@@ -55,20 +55,28 @@ public class CostStructureServiceImpl implements ICostStructureService {
         List<CostComponent> variablesFrontUpdate = new ArrayList();
         if (fijosFront != null) {
             for (CostComponent costComponent : fijosFront) {
-                fijosFrontUpdate.add(costComponentRepository.save(costComponent));
+                if (costComponent.getId() != null) {
+                    fijosFrontUpdate.add(costComponent);
+                } else {
+                    fijosFrontUpdate.add(costComponentRepository.save(costComponent));
+                }
 
             }
             newCostStructure.setCostosFijos(fijosFrontUpdate);
         }
+
         if (variablesFront != null) {
             for (CostComponent costComponent : variablesFront) {
-                variablesFrontUpdate.add(costComponentRepository.save(costComponent));
+                if (costComponent.getId() != null) {
+                    variablesFrontUpdate.add(costComponent);
+                } else {
+                    variablesFrontUpdate.add(costComponentRepository.save(costComponent));
+                }
+
             }
-             newCostStructure.setCostosFijos(variablesFrontUpdate);
+            newCostStructure.setCostosVariables(variablesFrontUpdate);
         }
 
-        
-       
         newCostStructure.calcularTotales();
         return costStructureRepository.save(newCostStructure);
     }

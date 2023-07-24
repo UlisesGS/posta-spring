@@ -42,6 +42,10 @@ public class Process {
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "America/Bogota")
     private Date fechaAlta;
+    
+    private String documentoCompromiso;
+    private String encuestaSatisfaccion;
+    private String actaCierre;
 
     @PrePersist
     public void prePersist(){

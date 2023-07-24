@@ -82,7 +82,7 @@ PlanInversion {
     public void calculoTotal(){
         this.totalPropio=(this.maquinariaPropio+this.mueblesPropio+this.vehiculosPropio);
         this.totalInversion=(this.maquinariaInversion+this.mueblesInversion+this.vehiculosInversion);
-        this.totalCredito=(this.activoCredito+this.totalPropio+this.totalInversion+this.totalCredito);
+        this.totalCredito=(this.activoCredito+this.totalPropio);
     }
     
 }

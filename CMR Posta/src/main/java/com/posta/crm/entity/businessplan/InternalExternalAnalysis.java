@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import lombok.Data;
 
 /**
@@ -22,36 +23,47 @@ public class InternalExternalAnalysis {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String publicoObjetivo;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String actividadPrincipal;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String propuestaValor;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String comercializacion;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String operacion;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String equipoTrabajo;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String competencias;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String mediosDigitales;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String recursosNecesarios;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String legal;
 
-    @Column( length = 5000)
+    @Lob
+    @Column(length = 5000)
     private String fuenteFinanciacion;
 }

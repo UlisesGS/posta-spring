@@ -25,6 +25,7 @@ public class DiagnosticoEmpresarial {
     private Diagnostico diagnostico;
     @OneToOne
     private AnalisisResultados analisisResultados;
-    
+    @OneToOne
+    private AnalisisEconomico analisisEconomico;
    
 }

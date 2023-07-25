@@ -13,17 +13,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.posta.crm.entity.Process;
+import java.time.Instant;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 @CrossOrigin(origins = "*")
 @RestController
 public class ImageController {
 //    @Value("${S3_BUCKET_URL}")
 //    private String S3BucketUrl;
-    
-    //private static final String UPLOAD_DIR = "img/";
-    private static final String UPLOAD_DIR = System.getenv("UPLOAD_DIR");
+
+    private static final String UPLOAD_DIR = "img/";
+//    private static final String UPLOAD_DIR = System.getenv("UPLOAD_DIR");
 
     @Autowired
     private ProcessServiceImpl processServiceImpl;
@@ -32,12 +36,14 @@ public class ImageController {
     public String uploadImage(@RequestParam("file") MultipartFile file, @PathVariable Long id) {
 
         Process nuevoProceso = processServiceImpl.findById(id).get();
-        System.out.println(UPLOAD_DIR);
+
         try {
             byte[] bytes = file.getBytes();
-            String fileName = file.getOriginalFilename();
-            String fullPath = UPLOAD_DIR + fileName;
-           nuevoProceso.setDocumentoCompromiso(fullPath);
+            
+            String uniqueFileName=generateUniqueFileName(file.getOriginalFilename());
+            Path path = Paths.get(UPLOAD_DIR + uniqueFileName);
+            Files.write(path, bytes);
+            nuevoProceso.setDocumentoCompromiso(path.toString());
             processServiceImpl.save(nuevoProceso);
             return "Imagen subida exitosamente!";
         } catch (IOException e) {
@@ -45,13 +51,12 @@ public class ImageController {
             return "Error al subir la imagen";
         }
     }
-    
-    
+
     @GetMapping(value = "/imagenCompromiso/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public @ResponseBody byte[] getImage(@PathVariable Long id) throws IOException {
+    public @ResponseBody
+    byte[] getImage(@PathVariable Long id) throws IOException {
         Process nuevoProceso = processServiceImpl.findById(id).get();
-        
-        
+
         if (nuevoProceso != null) {
             String rutaImagen = nuevoProceso.getDocumentoCompromiso();
             Path path = Paths.get(rutaImagen);
@@ -59,7 +64,9 @@ public class ImageController {
         }
         return null;
     }
+
     
+
     @PostMapping("/uploadEncuesta/{id}")
     public String uploadImage1(@RequestParam("file") MultipartFile file, @PathVariable Long id) {
 
@@ -67,9 +74,10 @@ public class ImageController {
 
         try {
             byte[] bytes = file.getBytes();
-            String fileName = file.getOriginalFilename();
-            String fullPath = UPLOAD_DIR + fileName;
-           nuevoProceso.setEncuestaSatisfaccion(fullPath);
+            String uniqueFileName=generateUniqueFileName(file.getOriginalFilename());
+            Path path = Paths.get(UPLOAD_DIR + uniqueFileName);
+            Files.write(path, bytes);
+            nuevoProceso.setEncuestaSatisfaccion(path.toString());
             processServiceImpl.save(nuevoProceso);
             return "Imagen subida exitosamente!";
         } catch (IOException e) {
@@ -77,13 +85,12 @@ public class ImageController {
             return "Error al subir la imagen";
         }
     }
-    
-    
+
     @GetMapping(value = "/imagenEncuesta/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public @ResponseBody byte[] getImage1(@PathVariable Long id) throws IOException {
+    public @ResponseBody
+    byte[] getImage1(@PathVariable Long id) throws IOException {
         Process nuevoProceso = processServiceImpl.findById(id).get();
-        
-        
+
         if (nuevoProceso != null) {
             String rutaImagen = nuevoProceso.getEncuestaSatisfaccion();
             Path path = Paths.get(rutaImagen);
@@ -91,7 +98,7 @@ public class ImageController {
         }
         return null;
     }
-    
+
     @PostMapping("/uploadCierre/{id}")
     public String uploadImage2(@RequestParam("file") MultipartFile file, @PathVariable Long id) {
 
@@ -99,9 +106,10 @@ public class ImageController {
 
         try {
             byte[] bytes = file.getBytes();
-            String fileName = file.getOriginalFilename();
-            String fullPath = UPLOAD_DIR + fileName;
-           nuevoProceso.setActaCierre(fullPath);
+           String uniqueFileName=generateUniqueFileName(file.getOriginalFilename());
+            Path path = Paths.get(UPLOAD_DIR + uniqueFileName);
+            Files.write(path, bytes);
+            nuevoProceso.setActaCierre(path.toString());
             processServiceImpl.save(nuevoProceso);
             return "Imagen subida exitosamente!";
         } catch (IOException e) {
@@ -109,18 +117,28 @@ public class ImageController {
             return "Error al subir la imagen";
         }
     }
-    
-    
+
     @GetMapping(value = "/imagenCierre/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public @ResponseBody byte[] getImage2(@PathVariable Long id) throws IOException {
+    public @ResponseBody
+    byte[] getImage2(@PathVariable Long id) throws IOException {
         Process nuevoProceso = processServiceImpl.findById(id).get();
-        
-        
+
         if (nuevoProceso != null) {
             String rutaImagen = nuevoProceso.getActaCierre();
             Path path = Paths.get(rutaImagen);
             return Files.readAllBytes(path);
         }
         return null;
+    }
+    
+    //Metodo para modificar el nombre del archivo
+    private String generateUniqueFileName(String originalFileName) {
+        String extension = "";
+        int dotIndex = originalFileName.lastIndexOf(".");
+        if (dotIndex >= 0) {
+            extension = originalFileName.substring(dotIndex);
+        }
+        String uniquePart = Instant.now().toEpochMilli() + "-" + UUID.randomUUID().toString();
+        return uniquePart + extension;
     }
 }

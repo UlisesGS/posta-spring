@@ -40,7 +40,8 @@ public class PresupuestoCompra {
     private Double totalAnual=0.0;
    
     public void sacarTotales(){
-        
+        total=0.0;
+        totalAnual=0.0;
         for (EstructuraCompras estructuraCompra : estructuraCompras) {
             this.total+=estructuraCompra.getTotalUnitario();
         }

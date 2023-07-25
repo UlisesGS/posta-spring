@@ -50,6 +50,12 @@ public class PresupuestoVenta {
     
     
     public void calcular(){
+        this.totalProductos=0.0;
+        this.totalCapacidadOperario=0.0;
+        this.totalCapacidadInstalada=0.0;
+        this.totalPrecioUnitario=0.0;
+        this.totalTotal=0.0;
+        
         for (EstructuraMercado estructuraMercado1 : this.estructuraMercado) {
             this.totalProductos+=estructuraMercado1.getCantidad();
             this.totalCapacidadOperario+=estructuraMercado1.getCapacidadInstaladaPorOperario();
@@ -60,6 +66,7 @@ public class PresupuestoVenta {
     }
     
     public void calculosCiclicidad(){
+        this.totalCalificacion = 0.0;
         for (CiclicidadVentas ciclicidadVenta : ciclicidadVentas) {
             this.totalCalificacion+=ciclicidadVenta.getCalificacion();
         }

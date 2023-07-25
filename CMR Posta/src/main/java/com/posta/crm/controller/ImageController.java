@@ -13,13 +13,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.posta.crm.entity.Process;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 
 @CrossOrigin(origins = "*")
 @RestController
 public class ImageController {
-
-    private static final String UPLOAD_DIR = "img//";
+//    @Value("${S3_BUCKET_URL}")
+//    private String S3BucketUrl;
+    
+    //private static final String UPLOAD_DIR = "img/";
+    private static final String UPLOAD_DIR = System.getenv("UPLOAD_DIR");
 
     @Autowired
     private ProcessServiceImpl processServiceImpl;
@@ -28,12 +32,12 @@ public class ImageController {
     public String uploadImage(@RequestParam("file") MultipartFile file, @PathVariable Long id) {
 
         Process nuevoProceso = processServiceImpl.findById(id).get();
-
+        System.out.println(UPLOAD_DIR);
         try {
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOAD_DIR + file.getOriginalFilename());
-            Files.write(path, bytes);
-            nuevoProceso.setDocumentoCompromiso(path.toString());
+            String fileName = file.getOriginalFilename();
+            String fullPath = UPLOAD_DIR + fileName;
+           nuevoProceso.setDocumentoCompromiso(fullPath);
             processServiceImpl.save(nuevoProceso);
             return "Imagen subida exitosamente!";
         } catch (IOException e) {
@@ -63,9 +67,9 @@ public class ImageController {
 
         try {
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOAD_DIR + file.getOriginalFilename());
-            Files.write(path, bytes);
-            nuevoProceso.setEncuestaSatisfaccion(path.toString());
+            String fileName = file.getOriginalFilename();
+            String fullPath = UPLOAD_DIR + fileName;
+           nuevoProceso.setEncuestaSatisfaccion(fullPath);
             processServiceImpl.save(nuevoProceso);
             return "Imagen subida exitosamente!";
         } catch (IOException e) {
@@ -95,9 +99,9 @@ public class ImageController {
 
         try {
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOAD_DIR + file.getOriginalFilename());
-            Files.write(path, bytes);
-            nuevoProceso.setActaCierre(path.toString());
+            String fileName = file.getOriginalFilename();
+            String fullPath = UPLOAD_DIR + fileName;
+           nuevoProceso.setActaCierre(fullPath);
             processServiceImpl.save(nuevoProceso);
             return "Imagen subida exitosamente!";
         } catch (IOException e) {

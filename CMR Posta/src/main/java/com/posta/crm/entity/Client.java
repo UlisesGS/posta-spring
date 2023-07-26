@@ -121,8 +121,7 @@ public class Client {
 //    @OneToOne
 //    private CanvasModel canvasModel;
     
-    @OneToOne
-    private Process process;
+   
     
     
     

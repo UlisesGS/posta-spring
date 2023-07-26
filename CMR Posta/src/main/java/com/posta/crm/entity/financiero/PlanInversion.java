@@ -5,11 +5,8 @@
 package com.posta.crm.entity.financiero;
 
 import com.posta.crm.entity.financiero.partes.Inversion;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+
 import java.util.List;
 import lombok.Data;
 
@@ -25,23 +22,23 @@ public class PlanInversion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany
+    @ManyToMany
     private List<Inversion> activoFijo;
     private Double activoCredito=0.0;
-    
-    @OneToMany
+
+    @ManyToMany
     private List<Inversion> maquinariaEquipo;
     private Double maquinariaPropio=0.0;
     private Double maquinariaInversion=0.0;
     private Double maquinariaCredito=0.0;
 
-    @OneToMany
+    @ManyToMany
     private List<Inversion> mueblesEnseres;
     private Double mueblesPropio=0.0;
     private Double mueblesInversion=0.0;
     private Double muebleCredito=0.0;
 
-    @OneToMany
+    @ManyToMany
     private List<Inversion> vehiculos;
     private Double vehiculosPropio=0.0;
     private Double vehiculosInversion=0.0;

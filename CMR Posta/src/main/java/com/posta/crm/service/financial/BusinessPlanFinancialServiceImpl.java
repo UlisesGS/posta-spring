@@ -272,18 +272,30 @@ public class BusinessPlanFinancialServiceImpl implements IBusinessPlanFinancialS
         PlanInversion planInversionUpdate=new PlanInversion();
         
         for (Inversion activo : activoFijo) {
+            if(!activoFijo.contains(activo)){
+                activoFijoUpdate.add(activo);
+            }
             activo.totalCredito();
             activoFijoUpdate.add(inversionRepository.save(activo));
         }
          for (Inversion activo : maquinaria) {
+             if(!maquinaria.contains(activo)){
+                 maquinariaUpdate.add(activo);
+             }
             activo.totalCredito();
             maquinariaUpdate.add(inversionRepository.save(activo));
         }
           for (Inversion activo : muebles) {
+              if(!muebles.contains(activo)){
+                  muebleUpdate.add(activo);
+              }
             activo.totalCredito();
             muebleUpdate.add(inversionRepository.save(activo));
         }
           for (Inversion activo : vehiculo) {
+              if(!vehiculo.contains(activo)){
+                  vehiculoUpdate.add(activo);
+              }
             activo.totalCredito();
             vehiculoUpdate.add(inversionRepository.save(activo));
         }

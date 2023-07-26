@@ -15,19 +15,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.posta.crm.entity.Process;
 import java.time.Instant;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+
 
 @CrossOrigin(origins = "*")
 @RestController
 public class ImageController {
-//    @Value("${S3_BUCKET_URL}")
-//    private String S3BucketUrl;
 
-    private static final String UPLOAD_DIR = "img/";
-//    private static final String UPLOAD_DIR = System.getenv("UPLOAD_DIR");
+
+    //private static final String UPLOAD_DIR = "img/";
+    private static final String UPLOAD_DIR = System.getenv("UPLOAD_DIR");
 
     @Autowired
     private ProcessServiceImpl processServiceImpl;

@@ -52,6 +52,7 @@ public class Diagnostico {
     
     
     public void calcularTotales(){
+        
         Integer totalAux=0;
         this.totales=new ArrayList();
         

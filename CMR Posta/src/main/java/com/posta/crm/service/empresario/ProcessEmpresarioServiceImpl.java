@@ -5,6 +5,8 @@
 package com.posta.crm.service.empresario;
 
 import com.posta.crm.entity.ProcessEmpresario;
+import com.posta.crm.entity.empresario.Diagnostico;
+import com.posta.crm.entity.empresario.DiagnosticoEmpresarial;
 import com.posta.crm.repository.empresario.ProcessEmpresarioRepository;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +24,29 @@ public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService{
     
     @Autowired
     private ProcessEmpresarioRepository processEmpresarioRepository;
+    @Autowired
+    private DiagnosticoEmpresarialServiceImpl diagnosticoEmpresarialServiceImpl;
+    
+    
+    
+    
+    @Override
+    public ProcessEmpresario save(ProcessEmpresario process) {
+        ProcessEmpresario processUpdate=process;
+        DiagnosticoEmpresarial diagnosticoEmpresarialUpdate=processUpdate.getDiagnosticoEmpresarial();
+        if(diagnosticoEmpresarialUpdate.getId()==null){
+            diagnosticoEmpresarialServiceImpl.save(diagnosticoEmpresarialUpdate);
+        }
+//        if(diagnosticoEmpresarialUpdate.getAnalisisEconomico().getId()==null){
+//             diagnosticoEmpresarialServiceImpl.updateEconomico(diagnosticoEmpresarialUpdate,diagnosticoEmpresarialUpdate.getId());
+//        }
+//       if(diagnosticoEmpresarialUpdate.getAnalisisResultados().getId()==null){
+//           diagnosticoEmpresarialServiceImpl.updateResultados(diagnosticoEmpresarialUpdate, diagnosticoEmpresarialUpdate.getId());
+//       }
+        
+        processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialUpdate);
+        return processEmpresarioRepository.save(process);
+    }
 
     @Override
     public List<ProcessEmpresario> findAll() {
@@ -33,10 +58,7 @@ public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService{
         return processEmpresarioRepository.findById(id);
     }
 
-    @Override
-    public ProcessEmpresario save(ProcessEmpresario process) {
-        return processEmpresarioRepository.save(process);
-    }
+    
 
     @Override
     public List<ProcessEmpresario> findAllUltimo() {

@@ -25,20 +25,20 @@ public class Indicador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    private Integer ventasMes;
+    private String ventasMes;
     
-    private Integer aumentoventas;
+    private String aumentoventas;
     
-    private Integer empleosFormales;
+    private String empleosFormales;
     
-    private Integer empleosInformales;
+    private String empleosInformales;
     
-    private Integer empleosNuevos;
+    private String empleosNuevos;
     
     @Enumerated(value = EnumType.STRING)
     private DiagEmpr empresasExportando;
     
-    private Integer ventasExportacion;
+    private String ventasExportacion;
     
     @Enumerated(value = EnumType.STRING)
     private DiagEmpr diversificacionProductos;

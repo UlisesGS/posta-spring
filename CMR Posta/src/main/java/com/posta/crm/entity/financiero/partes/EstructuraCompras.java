@@ -32,6 +32,7 @@ public class EstructuraCompras {
     private Double totalUnitario;
     
    public void calculoTotal(){
+       this.totalUnitario=0.0;
        this.totalUnitario=(this.valorUnitario*this.cantidadUbnidad);
    }
     

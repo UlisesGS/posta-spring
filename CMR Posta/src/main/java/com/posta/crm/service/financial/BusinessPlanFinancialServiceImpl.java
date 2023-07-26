@@ -170,14 +170,23 @@ public class BusinessPlanFinancialServiceImpl implements IBusinessPlanFinancialS
         List<Personal>comercialUpdate= new ArrayList();
         
         for (Personal personal : personalOperativo) {
+            if(!personalOperativo.contains(personal)){
+                operativoUpdate.add(personal);        
+            }
             personal.anual();
             operativoUpdate.add(personalRepository.save(personal));
         }
         for (Personal personal : personalAdministrativo) {
+            if(!personalAdministrativo.contains(personal)){
+                administrativoUpdate.add(personal);        
+            }
             personal.anual();
             administrativoUpdate.add(personalRepository.save(personal));
         }
         for (Personal personal : personalComercial) {
+            if(!personalComercial.contains(personal)){
+                comercialUpdate.add(personal);        
+            }
             personal.anual();
             comercialUpdate.add(personalRepository.save(personal));
         }
@@ -196,14 +205,23 @@ public class BusinessPlanFinancialServiceImpl implements IBusinessPlanFinancialS
         
         
         for (OtrosCostos costosOperativo : costosOperativos) {
+            if(!costosOperativos.contains(costosOperativo)){
+                costosOperativosUpdate.add(costosOperativo);        
+            }
             costosOperativo.anual();
             costosOperativosUpdate.add(otrosCostosRepository.save(costosOperativo));
         }
         for (OtrosCostos costosAdministrativo : costosAdministrativos) {
+            if(!costosAdministrativos.contains(costosAdministrativo)){
+                costosAdministrativosUpdate.add(costosAdministrativo);        
+            }
             costosAdministrativo.anual();
             costosAdministrativosUpdate.add(otrosCostosRepository.save(costosAdministrativo));
         }
         for (OtrosCostos costoComercial : costosComercial) {
+            if(!costosComercial.contains(costoComercial)){
+                costosComercialUpdate.add(costoComercial);        
+            }
             costoComercial.anual();
             costosComercialUpdate.add(otrosCostosRepository.save(costoComercial));
         }

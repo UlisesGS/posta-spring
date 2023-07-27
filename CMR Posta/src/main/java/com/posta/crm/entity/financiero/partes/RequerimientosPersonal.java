@@ -4,11 +4,8 @@
  */
 package com.posta.crm.entity.financiero.partes;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+
 import java.util.List;
 import lombok.Data;
 
@@ -25,7 +22,7 @@ public class  RequerimientosPersonal {
     private Long id;
     
     //Personal
-    @OneToMany
+    @ManyToMany
     private List<Personal> personal;
 
     private Double subTotal = 0.0;
@@ -53,7 +50,7 @@ public class  RequerimientosPersonal {
     private Double totalAnual;
     
     //Costos
-    @OneToMany
+    @ManyToMany
     private List<OtrosCostos> costos;
     
     private Double totalCostoMensual=0.0;

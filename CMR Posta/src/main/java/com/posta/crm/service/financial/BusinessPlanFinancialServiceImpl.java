@@ -108,6 +108,13 @@ public class BusinessPlanFinancialServiceImpl implements IBusinessPlanFinancialS
     }
 
     @Override
+    public BusinessPlanFinancial updateFinancial(BusinessPlanFinancial businessPlanFinancial, Long id) {
+        BusinessPlanFinancial businessPlanFinancialUpdate = businessPlanFinancialRepository.findById(id).get();
+        businessPlanFinancialUpdate= businessPlanFinancial;
+        return businessPlanFinancialRepository.save(businessPlanFinancialUpdate);
+    }
+
+    @Override
     public BusinessPlanFinancial updateCompras(BusinessPlanFinancial businessPlanFinancial, Long id) {
         BusinessPlanFinancial businessPlanFinancialUpdate = businessPlanFinancialRepository.findById(id).get();
         List<PresupuestoCompra> presupuestoCompra = businessPlanFinancial.getPresupuestoCompra();
@@ -164,14 +171,23 @@ public class BusinessPlanFinancialServiceImpl implements IBusinessPlanFinancialS
         List<Personal>comercialUpdate= new ArrayList();
         
         for (Personal personal : personalOperativo) {
+            if(!personalOperativo.contains(personal)){
+                operativoUpdate.add(personal);        
+            }
             personal.anual();
             operativoUpdate.add(personalRepository.save(personal));
         }
         for (Personal personal : personalAdministrativo) {
+            if(!personalAdministrativo.contains(personal)){
+                administrativoUpdate.add(personal);        
+            }
             personal.anual();
             administrativoUpdate.add(personalRepository.save(personal));
         }
         for (Personal personal : personalComercial) {
+            if(!personalComercial.contains(personal)){
+                comercialUpdate.add(personal);        
+            }
             personal.anual();
             comercialUpdate.add(personalRepository.save(personal));
         }
@@ -190,14 +206,23 @@ public class BusinessPlanFinancialServiceImpl implements IBusinessPlanFinancialS
         
         
         for (OtrosCostos costosOperativo : costosOperativos) {
+            if(!costosOperativos.contains(costosOperativo)){
+                costosOperativosUpdate.add(costosOperativo);        
+            }
             costosOperativo.anual();
             costosOperativosUpdate.add(otrosCostosRepository.save(costosOperativo));
         }
         for (OtrosCostos costosAdministrativo : costosAdministrativos) {
+            if(!costosAdministrativos.contains(costosAdministrativo)){
+                costosAdministrativosUpdate.add(costosAdministrativo);        
+            }
             costosAdministrativo.anual();
             costosAdministrativosUpdate.add(otrosCostosRepository.save(costosAdministrativo));
         }
         for (OtrosCostos costoComercial : costosComercial) {
+            if(!costosComercial.contains(costoComercial)){
+                costosComercialUpdate.add(costoComercial);        
+            }
             costoComercial.anual();
             costosComercialUpdate.add(otrosCostosRepository.save(costoComercial));
         }
@@ -248,18 +273,30 @@ public class BusinessPlanFinancialServiceImpl implements IBusinessPlanFinancialS
         PlanInversion planInversionUpdate=new PlanInversion();
         
         for (Inversion activo : activoFijo) {
+            if(!activoFijo.contains(activo)){
+                activoFijoUpdate.add(activo);
+            }
             activo.totalCredito();
             activoFijoUpdate.add(inversionRepository.save(activo));
         }
          for (Inversion activo : maquinaria) {
+             if(!maquinaria.contains(activo)){
+                 maquinariaUpdate.add(activo);
+             }
             activo.totalCredito();
             maquinariaUpdate.add(inversionRepository.save(activo));
         }
           for (Inversion activo : muebles) {
+              if(!muebles.contains(activo)){
+                  muebleUpdate.add(activo);
+              }
             activo.totalCredito();
             muebleUpdate.add(inversionRepository.save(activo));
         }
           for (Inversion activo : vehiculo) {
+              if(!vehiculo.contains(activo)){
+                  vehiculoUpdate.add(activo);
+              }
             activo.totalCredito();
             vehiculoUpdate.add(inversionRepository.save(activo));
         }

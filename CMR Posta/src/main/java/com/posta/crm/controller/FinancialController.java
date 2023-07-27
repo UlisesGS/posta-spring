@@ -42,6 +42,7 @@ public class FinancialController {
         
         return new ResponseEntity<>(businessPlanFinancialServiceImpl.updateCompras(businessPlanFinancial, id), HttpStatus.CREATED);
     }
+
     
     @PutMapping("/gastos/{id}")
     public ResponseEntity<?>updateGastos(@RequestBody BusinessPlanFinancial businessPlanFinancial,@PathVariable Long id ){

@@ -46,17 +46,23 @@ public class DiagnosticoEmpresarialServiceImpl implements IDiagnosticoEmpresaria
 
     @Override
     public DiagnosticoEmpresarial save(DiagnosticoEmpresarial diagnosticoEmpresarial) {
+        
         Diagnostico diagnostico=diagnosticoEmpresarial.getDiagnostico();
         List<ConceptosGenerales> conceptosGenerales=diagnostico.getConceptosGenerales();
         List<ConceptosGenerales> conceptosGeneralesUpdate=new ArrayList();
         
         for (ConceptosGenerales conceptosGenerale : conceptosGenerales) {
+            if(!conceptosGenerales.contains(conceptosGenerale)){
+                conceptosGeneralesUpdate.add(conceptosGenerale);
+            }
             conceptosGeneralesUpdate.add(conceptosGeneralesRepository.save(conceptosGenerale));
         }
         diagnostico.setConceptosGenerales(conceptosGeneralesUpdate);
         diagnosticoEmpresarial.getDiagnostico().calcularTotales();
         diagnosticoEmpresarial.setDiagnostico(diagnosticoRepository.save(diagnostico));
-        
+        if(diagnosticoEmpresarial.getId()!=null){
+            return diagnosticoEmpresarial;
+        }
         return diagnosticoEmpresarialRepository.save(diagnosticoEmpresarial);
     }
 

@@ -99,7 +99,7 @@ public class DiagnosticoEmpresarialServiceImpl implements IDiagnosticoEmpresaria
             
         }
         analisisEconomicoUpdate.setIndicadores(indicador);
-        analisisEconomicoUpdate.setObservaciones(analisisEconomico.getObservaciones());
+        
         
         diagnosticoEmpresarialUpdate.setAnalisisEconomico(analisisEconomicoRepository.save(analisisEconomicoUpdate));
 

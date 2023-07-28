@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 
 
 @CrossOrigin(origins = "*")
+@RequestMapping("/image")
 @RestController
 public class ImageController {
 

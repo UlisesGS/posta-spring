@@ -33,7 +33,8 @@ public class Process {
     private BusinessPlan businessPlan;
     @OneToOne
     private BusinessPlanFinancial businessPlanFinancial;
-    
+    @OneToOne
+    private ProcessEmpresario processEmpresario;
     
     @ManyToOne
     private User user;

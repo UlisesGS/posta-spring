@@ -15,6 +15,7 @@ public interface IDiagnosticoEmpresarialService {
     
     public DiagnosticoEmpresarial save(DiagnosticoEmpresarial diagnosticoEmpresarial);
     public Optional<DiagnosticoEmpresarial>findById(Long id);
+
     public DiagnosticoEmpresarial updateResultados(DiagnosticoEmpresarial diagnosticoEmpresarial, Long id);
     public DiagnosticoEmpresarial updateEconomico(DiagnosticoEmpresarial diagnosticoEmpresarial, Long id);
 }

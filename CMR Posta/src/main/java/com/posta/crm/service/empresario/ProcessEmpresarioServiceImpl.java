@@ -4,6 +4,7 @@
  */
 package com.posta.crm.service.empresario;
 
+import com.posta.crm.entity.Process;
 import com.posta.crm.entity.ProcessEmpresario;
 import com.posta.crm.entity.empresario.Diagnostico;
 import com.posta.crm.entity.empresario.DiagnosticoEmpresarial;
@@ -31,24 +32,30 @@ public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService{
     
     
     @Override
-    public ProcessEmpresario save(ProcessEmpresario process) {
-        ProcessEmpresario processUpdate=process;
+    public ProcessEmpresario save(Process process) {
+        ProcessEmpresario processUpdate=process.getProcessEmpresario();
         DiagnosticoEmpresarial diagnosticoEmpresarialUpdate=processUpdate.getDiagnosticoEmpresarial();
-        if(diagnosticoEmpresarialUpdate.getId()==null){
-            diagnosticoEmpresarialServiceImpl.save(diagnosticoEmpresarialUpdate);
+        if(diagnosticoEmpresarialUpdate.getId()==null) {
+            System.out.println("diagnositco empresarial");
+
+            processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialServiceImpl.save(diagnosticoEmpresarialUpdate));
+        }   else if(diagnosticoEmpresarialUpdate.getAnalisisResultados().getId()==null){
+                System.out.println("diagnositco resultado");
+                diagnosticoEmpresarialUpdate=  diagnosticoEmpresarialServiceImpl.updateResultados(diagnosticoEmpresarialUpdate, diagnosticoEmpresarialUpdate.getId());
+        }else if(diagnosticoEmpresarialUpdate.getAnalisisEconomico().getId()==null && diagnosticoEmpresarialUpdate.getAnalisisResultados().getId()!=null ){
+            System.out.println("diagnositco economico");
+            diagnosticoEmpresarialUpdate= diagnosticoEmpresarialServiceImpl.updateEconomico(diagnosticoEmpresarialUpdate,diagnosticoEmpresarialUpdate.getId());
+
         }
 
 
- //     if(diagnosticoEmpresarialUpdate.getAnalisisEconomico().getId()==null){
- //         diagnosticoEmpresarialUpdate=    diagnosticoEmpresarialServiceImpl.updateEconomico(diagnosticoEmpresarialUpdate,diagnosticoEmpresarialUpdate.getId());
- //    }
-   //  if(diagnosticoEmpresarialUpdate.getAnalisisResultados().getId()==null){
-     //    diagnosticoEmpresarialUpdate=  diagnosticoEmpresarialServiceImpl.updateResultados(diagnosticoEmpresarialUpdate, diagnosticoEmpresarialUpdate.getId());
-   //    }
+
+
+
 
         processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialUpdate);
 
-        return processEmpresarioRepository.save(process);
+        return processEmpresarioRepository.save(processUpdate);
     }
 
     @Override

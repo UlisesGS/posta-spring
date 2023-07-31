@@ -5,6 +5,8 @@
 package com.posta.crm.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.posta.crm.entity.empresario.AnalisisEconomico;
+import com.posta.crm.entity.empresario.AnalisisResultados;
 import com.posta.crm.entity.empresario.DiagnosticoEmpresarial;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,7 +43,7 @@ public class ProcessEmpresario {
     
     @OneToOne
     private DiagnosticoEmpresarial diagnosticoEmpresarial;
-    
+
     @PrePersist
     public void prePersist(){
         this.terminado=false;

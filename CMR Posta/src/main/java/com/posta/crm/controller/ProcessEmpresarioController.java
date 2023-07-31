@@ -47,6 +47,7 @@ public class ProcessEmpresarioController {
         
         return ResponseEntity.status(HttpStatus.CREATED).body(ProcessEmpresario.save(process));
     }
+
     
     @GetMapping("/ultimo")
     public ResponseEntity<?>findAllUltimo(){

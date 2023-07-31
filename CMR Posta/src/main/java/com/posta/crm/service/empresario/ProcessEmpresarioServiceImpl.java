@@ -37,14 +37,17 @@ public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService{
         if(diagnosticoEmpresarialUpdate.getId()==null){
             diagnosticoEmpresarialServiceImpl.save(diagnosticoEmpresarialUpdate);
         }
-//        if(diagnosticoEmpresarialUpdate.getAnalisisEconomico().getId()==null){
-//             diagnosticoEmpresarialServiceImpl.updateEconomico(diagnosticoEmpresarialUpdate,diagnosticoEmpresarialUpdate.getId());
-//        }
-//       if(diagnosticoEmpresarialUpdate.getAnalisisResultados().getId()==null){
-//           diagnosticoEmpresarialServiceImpl.updateResultados(diagnosticoEmpresarialUpdate, diagnosticoEmpresarialUpdate.getId());
-//       }
-        
+
+
+ //     if(diagnosticoEmpresarialUpdate.getAnalisisEconomico().getId()==null){
+ //         diagnosticoEmpresarialUpdate=    diagnosticoEmpresarialServiceImpl.updateEconomico(diagnosticoEmpresarialUpdate,diagnosticoEmpresarialUpdate.getId());
+ //    }
+   //  if(diagnosticoEmpresarialUpdate.getAnalisisResultados().getId()==null){
+     //    diagnosticoEmpresarialUpdate=  diagnosticoEmpresarialServiceImpl.updateResultados(diagnosticoEmpresarialUpdate, diagnosticoEmpresarialUpdate.getId());
+   //    }
+
         processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialUpdate);
+
         return processEmpresarioRepository.save(process);
     }
 

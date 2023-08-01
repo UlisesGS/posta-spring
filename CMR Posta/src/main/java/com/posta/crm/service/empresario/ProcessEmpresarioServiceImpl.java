@@ -35,7 +35,7 @@ public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService{
     public ProcessEmpresario save(Process process) {
         ProcessEmpresario processUpdate=process.getProcessEmpresario();
         DiagnosticoEmpresarial diagnosticoEmpresarialUpdate=processUpdate.getDiagnosticoEmpresarial();
-        if(diagnosticoEmpresarialUpdate.getId()==null) {
+        if(diagnosticoEmpresarialUpdate.getDiagnostico().getId()==null) {
             System.out.println("diagnositco empresarial");
 
             processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialServiceImpl.save(diagnosticoEmpresarialUpdate));
@@ -47,12 +47,6 @@ public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService{
             diagnosticoEmpresarialUpdate= diagnosticoEmpresarialServiceImpl.updateEconomico(diagnosticoEmpresarialUpdate,diagnosticoEmpresarialUpdate.getId());
 
         }
-
-
-
-
-
-
         processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialUpdate);
 
         return processEmpresarioRepository.save(processUpdate);

@@ -4,6 +4,7 @@
  */
 package com.posta.crm.controller;
 
+import com.posta.crm.entity.Process;
 import com.posta.crm.entity.ProcessEmpresario;
 import com.posta.crm.service.empresario.ProcessEmpresarioServiceImpl;
 import java.util.Optional;

@@ -8,11 +8,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.posta.crm.entity.empresario.AnalisisEconomico;
 import com.posta.crm.entity.empresario.AnalisisResultados;
 import com.posta.crm.entity.empresario.DiagnosticoEmpresarial;
+import com.posta.crm.entity.empresario.PlanDeAccion;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Temporal;
@@ -43,6 +45,9 @@ public class ProcessEmpresario {
     
     @OneToOne
     private DiagnosticoEmpresarial diagnosticoEmpresarial;
+    @OneToOne
+    private PlanDeAccion planDeAccion;
+    
 
     @PrePersist
     public void prePersist(){

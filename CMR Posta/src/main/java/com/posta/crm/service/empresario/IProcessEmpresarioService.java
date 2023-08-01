@@ -17,7 +17,7 @@ import org.springframework.data.domain.Pageable;
  */
 public interface IProcessEmpresarioService {
     
-     public List<ProcessEmpresario> findAll();
+    public List<ProcessEmpresario> findAll();
     public Optional<ProcessEmpresario> findById(Long id);
     public ProcessEmpresario save(Process process);
     public List<ProcessEmpresario>findAllUltimo();

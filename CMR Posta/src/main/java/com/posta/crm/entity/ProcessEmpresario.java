@@ -53,5 +53,6 @@ public class ProcessEmpresario {
     public void prePersist(){
         this.terminado=false;
         this.fechaAlta= new Date();
+        
     }
 }

@@ -39,6 +39,9 @@ public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService {
 
     @Override
     public ProcessEmpresario save(Process process) {
+
+         
+
         ProcessEmpresario processUpdate = process.getProcessEmpresario();
         DiagnosticoEmpresarial diagnosticoEmpresarialUpdate = processUpdate.getDiagnosticoEmpresarial();
         PlanDeAccion planAccionUpdate=processUpdate.getPlanDeAccion();
@@ -55,7 +58,7 @@ public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService {
         List<AreaIntervenir>talentoHumano=planAccionUpdate.getTalentoHumano();
         List<AreaIntervenir>talentoHumanoUpdate=new ArrayList();
         
-        if (diagnosticoEmpresarialUpdate.getId() == null) {
+       if(diagnosticoEmpresarialUpdate.getDiagnostico().getId()==null) {
             System.out.println("diagnositco empresarial");
             processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialServiceImpl.save(diagnosticoEmpresarialUpdate));
         } else if (diagnosticoEmpresarialUpdate.getAnalisisResultados().getId() == null) {

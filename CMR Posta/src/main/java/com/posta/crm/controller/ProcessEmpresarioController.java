@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.posta.crm.entity.Process;
 
 /**
  *
@@ -32,6 +33,7 @@ public class ProcessEmpresarioController {
     @Autowired
     private ProcessEmpresarioServiceImpl ProcessEmpresario;
     
+    //Todos los POST y PUT para cada parte del Preceso empresario
     @PostMapping
     public ResponseEntity<?>save(@RequestBody Process process){
         
@@ -49,6 +51,11 @@ public class ProcessEmpresarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ProcessEmpresario.save(process));
     }
 
+    @PutMapping("/planAccion")
+    public ResponseEntity<?>updateAccion(@RequestBody Process process){
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(ProcessEmpresario.save(process));
+    }
     
     @GetMapping("/ultimo")
     public ResponseEntity<?>findAllUltimo(){

@@ -28,35 +28,19 @@ public class Indicador {
     private Long id;
     @Lob
     @Column(length = 5000)
-    private String ventasMes;
+    private String mes1;
     @Lob
     @Column(length = 5000)
-    private String aumentoventas;
+    private String mes2;
     @Lob
     @Column(length = 5000)
-    private String empleosFormales;
+    private String mes3;
     @Lob
     @Column(length = 5000)
-    private String empleosInformales;
+    private String mes4;
     @Lob
     @Column(length = 5000)
-    private String empleosNuevos;
-    @Lob
-    @Column(length = 5000)
-    @Enumerated(value = EnumType.STRING)
-    private DiagEmpr empresasExportando;
-    @Lob
-    @Column(length = 5000)
-    private String ventasExportacion;
-    
-    @Enumerated(value = EnumType.STRING)
-    private DiagEmpr diversificacionProductos;
-    
-    @Enumerated(value = EnumType.STRING)
-    private DiagEmpr aperturaNuevosMercados;
-    
-    @Enumerated(value = EnumType.STRING)
-    private DiagEmpr accesoOtrasFuentes;
+    private String mes5;
     @Lob
     @Column(length = 5000)
     private String observaciones;

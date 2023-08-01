@@ -4,6 +4,7 @@
  */
 package com.posta.crm.controller;
 
+import com.posta.crm.entity.Process;
 import com.posta.crm.entity.ProcessEmpresario;
 import com.posta.crm.service.empresario.ProcessEmpresarioServiceImpl;
 import java.util.Optional;
@@ -32,18 +33,18 @@ public class ProcessEmpresarioController {
     private ProcessEmpresarioServiceImpl ProcessEmpresario;
     
     @PostMapping
-    public ResponseEntity<?>save(@RequestBody ProcessEmpresario process){
+    public ResponseEntity<?>save(@RequestBody Process process){
         
         return ResponseEntity.status(HttpStatus.CREATED).body(ProcessEmpresario.save(process));
     }
     @PutMapping("/diagnostico")
-    public ResponseEntity<?>updateDiagnostico(@RequestBody ProcessEmpresario process){
+    public ResponseEntity<?>updateDiagnostico(@RequestBody Process process){
         
         return ResponseEntity.status(HttpStatus.CREATED).body(ProcessEmpresario.save(process));
     }
     
     @PutMapping("/economico")
-    public ResponseEntity<?>updateEconomico(@RequestBody ProcessEmpresario process){
+    public ResponseEntity<?>updateEconomico(@RequestBody Process process){
         
         return ResponseEntity.status(HttpStatus.CREATED).body(ProcessEmpresario.save(process));
     }

@@ -17,9 +17,11 @@ import lombok.Data;
 @Entity
 @Data
 public class AnalisisEconomico {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     
     @OneToOne
     private Indicador ventasMes;
@@ -42,4 +44,5 @@ public class AnalisisEconomico {
     private Indicador aperturaNuevosMercados;
     @OneToOne
     private Indicador accesoOtrasFuentes;
+
 }

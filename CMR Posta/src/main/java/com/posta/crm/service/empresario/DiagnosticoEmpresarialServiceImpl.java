@@ -17,14 +17,15 @@ import com.posta.crm.repository.empresario.ConceptosGeneralesRepository;
 import com.posta.crm.repository.empresario.DiagnosticoEmpresarialRepository;
 import com.posta.crm.repository.empresario.DiagnosticoRepository;
 import com.posta.crm.repository.empresario.IndicadorRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
  * @author crowl
  */
 @Service
@@ -78,100 +79,40 @@ public class DiagnosticoEmpresarialServiceImpl implements IDiagnosticoEmpresaria
 
     @Override
     public DiagnosticoEmpresarial updateEconomico(DiagnosticoEmpresarial diagnosticoEmpresarial, Long id) {
+        System.out.println(diagnosticoEmpresarial);
         DiagnosticoEmpresarial diagnosticoEmpresarialUpdate = diagnosticoEmpresarialRepository.findById(id).get();
         AnalisisEconomico analisisEconomico = diagnosticoEmpresarial.getAnalisisEconomico();
         AnalisisEconomico analisisEconomicoUpdate = new AnalisisEconomico();
-        
-        List<Indicador> ventasMes=analisisEconomico.getVentasMes();
-        List<Indicador> ventasMesUpdate=new ArrayList();
+        Indicador indicador = new Indicador();
+        // analisisEconomicoUpdate.setVentasMes(analisisEconomico.getVentasMes());
+        indicador = indicadorRepository.save(analisisEconomico.getVentasMes());
+        analisisEconomicoUpdate.setVentasMes(indicador);
 
-        List<Indicador> aumentoVentas=analisisEconomico.getAumentoVentas();
-        List<Indicador> aumentoVentasUpdate=new ArrayList();
+        indicador = indicadorRepository.save(analisisEconomico.getAumentoVentas());
+        analisisEconomicoUpdate.setAumentoVentas(indicador);
+        indicador = indicadorRepository.save(analisisEconomico.getEmpleosInformales());
+        analisisEconomicoUpdate.setEmpleosInformales(indicador);
 
-        List<Indicador> empleosFormales=analisisEconomico.getEmpleosFormales();
-        List<Indicador> empleosFormalesUpdate=new ArrayList();
+        indicador = indicadorRepository.save(analisisEconomico.getEmpleosFormales());
+        analisisEconomicoUpdate.setEmpleosFormales(indicador);
 
-        List<Indicador> empleosInformales=analisisEconomico.getEmpleosInformales();
-         List<Indicador> empleosInformalesUpdate=new ArrayList();
+        indicador = indicadorRepository.save(analisisEconomico.getEmpleosNuevos());
+        analisisEconomicoUpdate.setEmpleosNuevos(indicador);
+        indicador = indicadorRepository.save(analisisEconomico.getEmpresaExportando());
+        analisisEconomicoUpdate.setEmpresaExportando(indicador);
 
-        List<Indicador> empleosNuevos=analisisEconomico.getEmpleosNuevos();
-        List<Indicador> empleosNuevosUpdate=new ArrayList();
+        indicador = indicadorRepository.save(analisisEconomico.getVentassExportacion());
+        analisisEconomicoUpdate.setVentassExportacion(indicador);
 
-        List<DiagEmpr> empresaExportando=analisisEconomico.getEmpresaExportando();
-        List<DiagEmpr> empresaExportandoUpdate=new ArrayList();
+        indicador = indicadorRepository.save(analisisEconomico.getDiversificacionProductos());
+        analisisEconomicoUpdate.setDiversificacionProductos(indicador);
 
-        List<Indicador> VentasExportacion=analisisEconomico.getVentassExportacion();
-        List<Indicador> VentasExportacionUpdate=new ArrayList();
+        indicador = indicadorRepository.save(analisisEconomico.getAperturaNuevosMercados());
+        analisisEconomicoUpdate.setAperturaNuevosMercados(indicador);
 
-        List<DiagEmpr> diversificacionProductos=analisisEconomico.getDiversificacionProductos();
-        List<DiagEmpr> diversificacionProductosUpdate=new ArrayList();
+       indicador=indicadorRepository.save(analisisEconomico.getAccesoOtrasFuentes());
+        analisisEconomicoUpdate.setAccesoOtrasFuentes(indicador);
 
-        List<DiagEmpr> aperturaNuevosMercados=analisisEconomico.getAperturaNuevosMercados();
-        List<DiagEmpr> aperturaNuevosMercadosUpdate=new ArrayList();
-
-        List<DiagEmpr> accesoOtrasFuentes=analisisEconomico.getAccesoOtrasFuentes();
-        List<DiagEmpr> accesoOtrasFuentesUpdate=new ArrayList();
-        
-        for (Indicador ventasMe : ventasMes) {
-            if(!ventasMes.contains(ventasMe)){
-                ventasMesUpdate.add(ventasMe);
-            }
-            ventasMesUpdate.add(indicadorRepository.save(ventasMe));
-        }
-        for (Indicador aumentoVenta : aumentoVentas) {
-            if(!aumentoVentas.contains(aumentoVenta)){
-                aumentoVentasUpdate.add(aumentoVenta);
-            }
-            aumentoVentasUpdate.add(indicadorRepository.save(aumentoVenta));
-        }
-        for (Indicador empleosFormale : empleosFormales) {
-            if(!empleosFormales.contains(empleosFormale)){
-                empleosFormalesUpdate.add(empleosFormale);
-            }
-            empleosFormalesUpdate.add(indicadorRepository.save(empleosFormale));
-        }
-        for (Indicador empleosInformale : empleosInformales) {
-            if(!empleosInformales.contains(empleosInformale)){
-                empleosInformalesUpdate.add(empleosInformale);
-            }
-            empleosInformalesUpdate.add(indicadorRepository.save(empleosInformale));
-        }
-        for (Indicador empleosNuevo : empleosNuevos) {
-            if(!empleosNuevos.contains(empleosNuevo)){
-                empleosNuevosUpdate.add(empleosNuevo);
-            }
-            empleosNuevosUpdate.add(indicadorRepository.save(empleosNuevo));
-        }
-        for (DiagEmpr diagEmpr : empresaExportando) {
-                empresaExportandoUpdate.add(diagEmpr);  
-        }
-        for (Indicador indicador : VentasExportacion) {
-            if(!VentasExportacion.add(indicador)){
-                VentasExportacionUpdate.add(indicador);
-            }
-            VentasExportacionUpdate.add(indicadorRepository.save(indicador));
-        }
-         for (DiagEmpr diagEmpr : diversificacionProductos) {
-                diversificacionProductosUpdate.add(diagEmpr);  
-        }
-        for (DiagEmpr diagEmpr : aperturaNuevosMercados) {
-                aperturaNuevosMercadosUpdate.add(diagEmpr);  
-        }
-        for (DiagEmpr diagEmpr : accesoOtrasFuentes) {
-                accesoOtrasFuentesUpdate.add(diagEmpr);  
-        }
-        
-        analisisEconomicoUpdate.setVentasMes(ventasMesUpdate);
-        analisisEconomicoUpdate.setAumentoVentas(aumentoVentasUpdate);
-        analisisEconomicoUpdate.setEmpleosFormales(empleosFormalesUpdate);
-        analisisEconomicoUpdate.setEmpleosInformales(empleosInformalesUpdate);
-        analisisEconomicoUpdate.setEmpleosNuevos(empleosNuevosUpdate);
-        analisisEconomicoUpdate.setEmpresaExportando(empresaExportandoUpdate);
-        analisisEconomicoUpdate.setVentassExportacion(VentasExportacionUpdate);
-        analisisEconomicoUpdate.setDiversificacionProductos(diversificacionProductosUpdate);
-        analisisEconomicoUpdate.setAperturaNuevosMercados(aperturaNuevosMercadosUpdate);
-        analisisEconomicoUpdate.setAccesoOtrasFuentes(accesoOtrasFuentesUpdate);
-        
         diagnosticoEmpresarialUpdate.setAnalisisEconomico(analisisEconomicoRepository.save(analisisEconomicoUpdate));
         return diagnosticoEmpresarialRepository.save(diagnosticoEmpresarialUpdate);
     }

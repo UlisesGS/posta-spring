@@ -24,10 +24,11 @@ import lombok.Data;
 @Entity
 @Data
 public class AnalisisEconomico {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @OneToMany
     private List<Indicador> ventasMes;
     @OneToMany
@@ -38,12 +39,11 @@ public class AnalisisEconomico {
     private List<Indicador> empleosInformales;
     @OneToMany
     private List<Indicador> empleosNuevos;
-    
     @Enumerated(value = EnumType.STRING)
     private List<DiagEmpr> empresaExportando;
     @OneToMany
     private List<Indicador> ventassExportacion;
-   @Enumerated(value = EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private List<DiagEmpr> diversificacionProductos;
     @Enumerated(value = EnumType.STRING)
     private List<DiagEmpr> aperturaNuevosMercados;

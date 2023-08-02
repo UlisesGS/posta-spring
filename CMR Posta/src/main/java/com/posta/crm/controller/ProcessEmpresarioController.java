@@ -41,6 +41,7 @@ public class ProcessEmpresarioController {
     }
     @PutMapping("/diagnostico")
     public ResponseEntity<?>updateDiagnostico(@RequestBody Process process){
+
         
         return ResponseEntity.status(HttpStatus.CREATED).body(ProcessEmpresario.save(process));
     }

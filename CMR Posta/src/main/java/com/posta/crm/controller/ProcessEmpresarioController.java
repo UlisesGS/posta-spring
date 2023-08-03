@@ -119,33 +119,44 @@ public class ProcessEmpresarioController {
             analisisEconomico = optionalAnalisisEconomico.get();
             //para otras fuentes
             indicador = indicadorRepository.findById(analisisEconomico.getVentasMes().getId()).get();
+            indicadorRepository.save(indicador);
             analisisEconomico.setVentasMes(indicador);
 
+
             indicador = indicadorRepository.findById(analisisEconomico.getAumentoVentas().getId()).get();
+            indicadorRepository.save(indicador);
             analisisEconomico.setAumentoVentas(indicador);
 
             indicador = indicadorRepository.findById(analisisEconomico.getAccesoOtrasFuentes().getId()).get();
+            indicadorRepository.save(indicador);
             analisisEconomico.setAccesoOtrasFuentes(indicador);
 
             indicador = indicadorRepository.findById(analisisEconomico.getEmpleosFormales().getId()).get();
+            indicadorRepository.save(indicador);
             analisisEconomico.setEmpleosFormales(indicador);
 
             indicador = indicadorRepository.findById(analisisEconomico.getEmpleosInformales().getId()).get();
+            indicadorRepository.save(indicador);
             analisisEconomico.setEmpleosInformales(indicador);
 
             indicador = indicadorRepository.findById(analisisEconomico.getEmpleosNuevos().getId()).get();
+            indicadorRepository.save(indicador);
             analisisEconomico.setEmpleosNuevos(indicador);
 
             indicador = indicadorRepository.findById(analisisEconomico.getEmpresaExportando().getId()).get();
+            indicadorRepository.save(indicador);
             analisisEconomico.setEmpresaExportando(indicador);
 
             indicador = indicadorRepository.findById(analisisEconomico.getVentassExportacion().getId()).get();
+            indicadorRepository.save(indicador);
             analisisEconomico.setVentassExportacion(indicador);
 
             indicador = indicadorRepository.findById(analisisEconomico.getDiversificacionProductos().getId()).get();
+            indicadorRepository.save(indicador);
             analisisEconomico.setDiversificacionProductos(indicador);
 
             indicador= indicadorRepository.findById(analisisEconomico.getAperturaNuevosMercados().getId()).get();
+            indicadorRepository.save(indicador);
             analisisEconomico.setAperturaNuevosMercados(indicador);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(analisisEconomicoRepository.save(analisisEconomico));

@@ -6,13 +6,8 @@ package com.posta.crm.controller;
 
 import com.posta.crm.entity.Process;
 import com.posta.crm.entity.ProcessEmpresario;
-import com.posta.crm.entity.empresario.AnalisisResultados;
-import com.posta.crm.entity.empresario.ConceptosGenerales;
-import com.posta.crm.entity.empresario.Diagnostico;
-import com.posta.crm.entity.empresario.DiagnosticoEmpresarial;
-import com.posta.crm.repository.empresario.AnalisisResultadosRepository;
-import com.posta.crm.repository.empresario.ConceptosGeneralesRepository;
-import com.posta.crm.repository.empresario.DiagnosticoRepository;
+import com.posta.crm.entity.empresario.*;
+import com.posta.crm.repository.empresario.*;
 import com.posta.crm.service.empresario.ProcessEmpresarioServiceImpl;
 
 import java.util.ArrayList;
@@ -48,6 +43,10 @@ public class ProcessEmpresarioController {
     ConceptosGeneralesRepository conceptosGeneralesRepository;
     @Autowired
     AnalisisResultadosRepository analisisResultadosRepository;
+    @Autowired
+    AnalisisEconomicoRepository analisisEconomicoRepository;
+    @Autowired
+    IndicadorRepository indicadorRepository;
     
     //Todos los POST y PUT para cada parte del Preceso empresario
     @PostMapping
@@ -106,15 +105,53 @@ public class ProcessEmpresarioController {
             analisisResultados.setGestionIntelectual(front.getProcessEmpresario().getDiagnosticoEmpresarial().getAnalisisResultados().getGestionIntelectual());
             analisisResultados.setGestionLogistica(front.getProcessEmpresario().getDiagnosticoEmpresarial().getAnalisisResultados().getGestionLogistica());
             analisisResultados.setGestionOperacional(front.getProcessEmpresario().getDiagnosticoEmpresarial().getAnalisisResultados().getGestionOperacional());
-          
+
             return ResponseEntity.status(HttpStatus.CREATED).body(analisisResultadosRepository.save(analisisResultados));
         }
         return ResponseEntity.notFound().build();
     }
-    @PutMapping("/economico")
-    public ResponseEntity<?>updateEconomico(@RequestBody Process process){
-        
-        return ResponseEntity.status(HttpStatus.CREATED).body(ProcessEmpresario.save(process));
+    @PutMapping("/economico/{id}")
+    public ResponseEntity<?>updateEconomico(@RequestBody Process process,@PathVariable Long id){
+        Optional<AnalisisEconomico>optionalAnalisisEconomico = analisisEconomicoRepository.findById(id);
+        AnalisisEconomico analisisEconomico = new AnalisisEconomico();
+       Indicador indicador = new Indicador();
+        if (optionalAnalisisEconomico.isPresent()) {
+            analisisEconomico = optionalAnalisisEconomico.get();
+            //para otras fuentes
+            indicador = indicadorRepository.findById(analisisEconomico.getVentasMes().getId()).get();
+            analisisEconomico.setVentasMes(indicador);
+
+            indicador = indicadorRepository.findById(analisisEconomico.getAumentoVentas().getId()).get();
+            analisisEconomico.setAumentoVentas(indicador);
+
+            indicador = indicadorRepository.findById(analisisEconomico.getAccesoOtrasFuentes().getId()).get();
+            analisisEconomico.setAccesoOtrasFuentes(indicador);
+
+            indicador = indicadorRepository.findById(analisisEconomico.getEmpleosFormales().getId()).get();
+            analisisEconomico.setEmpleosFormales(indicador);
+
+            indicador = indicadorRepository.findById(analisisEconomico.getEmpleosInformales().getId()).get();
+            analisisEconomico.setEmpleosInformales(indicador);
+
+            indicador = indicadorRepository.findById(analisisEconomico.getEmpleosNuevos().getId()).get();
+            analisisEconomico.setEmpleosNuevos(indicador);
+
+            indicador = indicadorRepository.findById(analisisEconomico.getEmpresaExportando().getId()).get();
+            analisisEconomico.setEmpresaExportando(indicador);
+
+            indicador = indicadorRepository.findById(analisisEconomico.getVentassExportacion().getId()).get();
+            analisisEconomico.setVentassExportacion(indicador);
+
+            indicador = indicadorRepository.findById(analisisEconomico.getDiversificacionProductos().getId()).get();
+            analisisEconomico.setDiversificacionProductos(indicador);
+
+            indicador= indicadorRepository.findById(analisisEconomico.getAperturaNuevosMercados().getId()).get();
+            analisisEconomico.setAperturaNuevosMercados(indicador);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(analisisEconomicoRepository.save(analisisEconomico));
+
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/planAccion")

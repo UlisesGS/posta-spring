@@ -43,14 +43,9 @@ public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService {
 
         ProcessEmpresario processUpdate = process.getProcessEmpresario();
         DiagnosticoEmpresarial diagnosticoEmpresarialUpdate = processUpdate.getDiagnosticoEmpresarial();
-<<<<<<< HEAD
         PlanDeAccion planAccionUpdate=processUpdate.getPlanDeAccion();
         System.out.println(diagnosticoEmpresarialUpdate);
         if(diagnosticoEmpresarialUpdate.getDiagnostico().getId()==null) {
-=======
-        PlanDeAccion planAccionUpdate = processUpdate.getPlanDeAccion();
-        if (diagnosticoEmpresarialUpdate.getDiagnostico().getId() == null) {
->>>>>>> 208c048e42a8580968a9e0cbc7102f03b03b11ac
             System.out.println("diagnositco empresarial");
             processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialServiceImpl.save(diagnosticoEmpresarialUpdate));
         } else if (diagnosticoEmpresarialUpdate.getAnalisisResultados().getId() == null) {
@@ -61,22 +56,16 @@ public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService {
             diagnosticoEmpresarialUpdate = diagnosticoEmpresarialServiceImpl.updateEconomico(diagnosticoEmpresarialUpdate, diagnosticoEmpresarialUpdate.getId());
         } else if (planAccionUpdate != null) {
             //PlanDeAccion planDeAccion = new PlanDeAccion();
-
+            areaIntervenirRepository.save(planAccionUpdate.getLineamientosBasicos());
+            areaIntervenirRepository.save(planAccionUpdate.getMercadeoVentas());
+            areaIntervenirRepository.save(planAccionUpdate.getProduccionOperaciones());
+            areaIntervenirRepository.save(planAccionUpdate.getTalentoHumano());
             planDeAccionRepository.save(planAccionUpdate);
         }
-<<<<<<< HEAD
 
         processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialUpdate);
         processUpdate.setPlanDeAccion(planAccionUpdate);
         return processEmpresarioRepository.save(processUpdate);
-=======
-        //}
-
-
-             processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialUpdate);
-             processUpdate.setPlanDeAccion(planAccionUpdate);
-             return processEmpresarioRepository.save(processUpdate);
->>>>>>> 208c048e42a8580968a9e0cbc7102f03b03b11ac
     }
 
 

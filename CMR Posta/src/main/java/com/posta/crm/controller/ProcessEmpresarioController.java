@@ -69,12 +69,7 @@ public class ProcessEmpresarioController {
         List<ConceptosGenerales> generalesList = process.getProcessEmpresario().getDiagnosticoEmpresarial().getDiagnostico().getConceptosGenerales();
         List<ConceptosGenerales> generalesListUpdate = new ArrayList<>();
         if (opcionDiagnostico.isPresent()){
-<<<<<<< HEAD
             diagnostico=opcionDiagnostico.get();
-=======
-            diagnostico = opcionDiagnostico.get();
-           // ver el tema de conceptos generales
->>>>>>> 208c048e42a8580968a9e0cbc7102f03b03b11ac
 
             for (ConceptosGenerales concepto : generalesList) {
 

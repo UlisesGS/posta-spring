@@ -69,11 +69,8 @@ public class DiagnosticoEmpresarialServiceImpl implements IDiagnosticoEmpresaria
     @Override
     public DiagnosticoEmpresarial updateResultados(DiagnosticoEmpresarial diagnosticoEmpresarial, Long id) {
         DiagnosticoEmpresarial diagnosticoEmpresarialUpdate = diagnosticoEmpresarialRepository.findById(id).get();
-
         AnalisisResultados analisisResultados = diagnosticoEmpresarial.getAnalisisResultados();
-
         diagnosticoEmpresarialUpdate.setAnalisisResultados(analisisResultadosRepository.save(analisisResultados));
-
         return diagnosticoEmpresarialRepository.save(diagnosticoEmpresarialUpdate);
     }
 

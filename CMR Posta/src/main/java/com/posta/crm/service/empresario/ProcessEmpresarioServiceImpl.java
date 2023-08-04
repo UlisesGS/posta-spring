@@ -40,12 +40,11 @@ public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService {
     @Override
     public ProcessEmpresario save(Process process) {
 
-         
 
         ProcessEmpresario processUpdate = process.getProcessEmpresario();
         DiagnosticoEmpresarial diagnosticoEmpresarialUpdate = processUpdate.getDiagnosticoEmpresarial();
-        PlanDeAccion planAccionUpdate=processUpdate.getPlanDeAccion();
-        if(diagnosticoEmpresarialUpdate.getDiagnostico().getId()==null) {
+        PlanDeAccion planAccionUpdate = processUpdate.getPlanDeAccion();
+        if (diagnosticoEmpresarialUpdate.getDiagnostico().getId() == null) {
             System.out.println("diagnositco empresarial");
             processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialServiceImpl.save(diagnosticoEmpresarialUpdate));
         } else if (diagnosticoEmpresarialUpdate.getAnalisisResultados().getId() == null) {
@@ -54,62 +53,19 @@ public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService {
         } else if (diagnosticoEmpresarialUpdate.getAnalisisEconomico().getId() == null && diagnosticoEmpresarialUpdate.getAnalisisResultados().getId() != null) {
             System.out.println("diagnositco economico");
             diagnosticoEmpresarialUpdate = diagnosticoEmpresarialServiceImpl.updateEconomico(diagnosticoEmpresarialUpdate, diagnosticoEmpresarialUpdate.getId());
-        }else
+        } else if (planAccionUpdate != null) {
+            //PlanDeAccion planDeAccion = new PlanDeAccion();
 
-        if (planAccionUpdate!=null){
-            List<AreaIntervenir>lineamientosBasicos=planAccionUpdate.getLineamientosBasicos();
-            List<AreaIntervenir>lineamientosBasicosUpdate=new ArrayList();
-
-            List<AreaIntervenir>mercadeoVentas=planAccionUpdate.getMercadeoVentas();
-            List<AreaIntervenir>mercadeoVentasUpdate=new ArrayList();
-
-            List<AreaIntervenir>produccionOperaciones=planAccionUpdate.getProduccionOperaciones();
-            List<AreaIntervenir>produccionOperacionesUpdate=new ArrayList();
-
-            List<AreaIntervenir>talentoHumano=planAccionUpdate.getTalentoHumano();
-            List<AreaIntervenir>talentoHumanoUpdate=new ArrayList();
-
-            if(planAccionUpdate.getId()==null){
-                for (AreaIntervenir lineamientosBasico : lineamientosBasicos) {
-                    if(!lineamientosBasicos.contains(lineamientosBasico)){
-                        lineamientosBasicosUpdate.add(lineamientosBasico);
-                    }
-                    lineamientosBasicosUpdate.add(areaIntervenirRepository.save(lineamientosBasico));
-                }
-                for (AreaIntervenir mercadeoVenta : mercadeoVentas) {
-                    if(!mercadeoVentas.contains(mercadeoVenta)){
-                        mercadeoVentasUpdate.add(mercadeoVenta);
-                    }
-                    mercadeoVentasUpdate.add(areaIntervenirRepository.save(mercadeoVenta));
-                }
-                for (AreaIntervenir produccionOperacione : produccionOperaciones) {
-                    if(!produccionOperaciones.contains(produccionOperacione)){
-                        produccionOperacionesUpdate.add(produccionOperacione);
-                    }
-                    produccionOperacionesUpdate.add(areaIntervenirRepository.save(produccionOperacione));
-
-                }
-                for (AreaIntervenir areaIntervenir : talentoHumano) {
-                    if(!talentoHumano.contains(areaIntervenir)){
-                        talentoHumanoUpdate.add(areaIntervenir);
-                    }
-                    talentoHumanoUpdate.add(areaIntervenirRepository.save(areaIntervenir));
-                }
-                planAccionUpdate.setLineamientosBasicos(lineamientosBasicosUpdate);
-                planAccionUpdate.setMercadeoVentas(mercadeoVentasUpdate);
-                planAccionUpdate.setProduccionOperaciones(produccionOperacionesUpdate);
-                planAccionUpdate.setTalentoHumano(talentoHumanoUpdate);
-                planDeAccionRepository.save(planAccionUpdate);
-            }
+            planDeAccionRepository.save(planAccionUpdate);
         }
+        //}
 
-        
 
-
-        processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialUpdate);
-        processUpdate.setPlanDeAccion(planAccionUpdate);
-        return processEmpresarioRepository.save(processUpdate);
+             processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialUpdate);
+             processUpdate.setPlanDeAccion(planAccionUpdate);
+             return processEmpresarioRepository.save(processUpdate);
     }
+
 
     @Override
     public List<ProcessEmpresario> findAll() {

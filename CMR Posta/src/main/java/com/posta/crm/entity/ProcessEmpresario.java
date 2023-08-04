@@ -47,6 +47,7 @@ public class ProcessEmpresario {
     private DiagnosticoEmpresarial diagnosticoEmpresarial;
     @OneToOne
     private PlanDeAccion planDeAccion;
+    private Boolean informeDiagnostico;
     
 
     @PrePersist

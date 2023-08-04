@@ -86,40 +86,31 @@ public class Client {
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;
-    
     private LocalDate fechaNacimiento;
     private Integer edad;
-    
-    
-
     //Atributos Empresario
     @Enumerated(value = EnumType.STRING)
     private Contracting contracting;
-    //@NotBlank
     private String companyName;
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "America/Bogota")
     private Date fechaAlta;
     @Enumerated(value = EnumType.STRING)
     private TypeOfCompany typeOfCompany;
-    //@NotNull
     private Integer employeePartTime;
-    //@NotNull
     private Integer employeeFullTime;
     private Boolean registroMercantil;
     private String numberMercantilRegistry;
     @ManyToOne
     private Actividades ciiu;
-
     //Atributos Emprededor
-    //@NotBlank
     private String businessIdea;
-    //@NotBlank
     private String product;
+    //Atibutos para cargar en informe de Diagnostico
+    private String paginaWeb;
+    private String productoServicio;
     
-    //Atributo Modelo Canvas
-//    @OneToOne
-//    private CanvasModel canvasModel;
+
     
    
     

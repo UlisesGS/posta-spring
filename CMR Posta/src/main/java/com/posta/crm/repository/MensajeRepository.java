@@ -7,6 +7,7 @@ package com.posta.crm.repository;
 import com.posta.crm.entity.Mensaje;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -16,5 +17,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MensajeRepository extends JpaRepository<Mensaje, Long>{
     public List<Mensaje>findByRemitenteId(Long id);
+    
+    @Query("SELECT m FROM Mensaje m WHERE m.remitente.id = :userId OR m.destinatario.id = :userId")
+    List<Mensaje> findMensajesByUser(Long userId);
     
 }

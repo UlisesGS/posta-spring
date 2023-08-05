@@ -59,4 +59,12 @@ public class MensajeControllador {
         }
         return ResponseEntity.notFound().build();
     }
+    @GetMapping("/porUser/{id}")
+    public ResponseEntity<?>findAllUser(@PathVariable Long id){
+        List<Mensaje>todosUser=mensajeServiceImpl.findByRemitenteId(id);
+        if (todosUser != null) {
+            return ResponseEntity.ok(todosUser);
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

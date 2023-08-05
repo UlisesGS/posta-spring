@@ -55,7 +55,10 @@ public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService {
             diagnosticoEmpresarialUpdate = diagnosticoEmpresarialServiceImpl.updateEconomico(diagnosticoEmpresarialUpdate, diagnosticoEmpresarialUpdate.getId());
         } else if (planAccionUpdate != null) {
             //PlanDeAccion planDeAccion = new PlanDeAccion();
-
+            areaIntervenirRepository.save(planAccionUpdate.getLineamientosBasicos());
+            areaIntervenirRepository.save(planAccionUpdate.getMercadeoVentas());
+            areaIntervenirRepository.save(planAccionUpdate.getProduccionOperaciones());
+            areaIntervenirRepository.save(planAccionUpdate.getTalentoHumano());
             planDeAccionRepository.save(planAccionUpdate);
         }
         //}

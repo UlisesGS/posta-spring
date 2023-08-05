@@ -18,4 +18,5 @@ public interface IMensajeService {
     public List<Mensaje>findAll();
     public Optional<Mensaje> findById(Long id);
     public Mensaje save(Mensaje mensaje);
+    public List<Mensaje>findByRemitenteId(Long id);
 }

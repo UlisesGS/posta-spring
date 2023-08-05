@@ -36,5 +36,10 @@ public class MensajeServiceImpl implements IMensajeService{
     public Mensaje save(Mensaje mensaje) {
         return mensajeRepository.save(mensaje);
     }
+
+    @Override
+    public List<Mensaje> findByRemitenteId(Long id) {
+        return mensajeRepository.findMensajesByUser(id);
+    }
     
 }

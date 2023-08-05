@@ -62,7 +62,6 @@ public class ImageController {
         return null;
     }
 
-    
 
     @PostMapping("/uploadEncuesta/{id}")
     public String uploadImage1(@RequestParam("file") MultipartFile file, @PathVariable Long id) {
@@ -127,6 +126,41 @@ public class ImageController {
         }
         return null;
     }
+    
+    @GetMapping(value = "/imagenImpacto/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public @ResponseBody
+    byte[] getImage3(@PathVariable Long id) throws IOException {
+        Process nuevoProceso = processServiceImpl.findById(id).get();
+
+        if (nuevoProceso != null) {
+            String rutaImagen = nuevoProceso.getEncuestaSatisfaccion();
+            Path path = Paths.get(rutaImagen);
+            return Files.readAllBytes(path);
+        }
+        return null;
+    }
+
+    @PostMapping("/uploadImpacto/{id}")
+    public String uploadImage3(@RequestParam("file") MultipartFile file, @PathVariable Long id) {
+
+        Process nuevoProceso = processServiceImpl.findById(id).get();
+
+        try {
+            byte[] bytes = file.getBytes();
+           String uniqueFileName=generateUniqueFileName(file.getOriginalFilename());
+            Path path = Paths.get(UPLOAD_DIR + uniqueFileName);
+            Files.write(path, bytes);
+            nuevoProceso.setImpacto(path.toString());
+            processServiceImpl.save(nuevoProceso);
+            return "Imagen subida exitosamente!";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Error al subir la imagen";
+        }
+    }
+    
+    
+    
     
     //Metodo para modificar el nombre del archivo
     private String generateUniqueFileName(String originalFileName) {

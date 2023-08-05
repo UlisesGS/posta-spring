@@ -61,9 +61,11 @@ public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService {
             areaIntervenirRepository.save(planAccionUpdate.getProduccionOperaciones());
             areaIntervenirRepository.save(planAccionUpdate.getTalentoHumano());
             planDeAccionRepository.save(planAccionUpdate);
+        } else {
+            processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialUpdate);
         }
+        System.out.println("pasooooooooooooo");
 
-        processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialUpdate);
         processUpdate.setPlanDeAccion(planAccionUpdate);
         return processEmpresarioRepository.save(processUpdate);
     }

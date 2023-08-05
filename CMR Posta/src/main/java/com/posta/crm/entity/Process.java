@@ -47,6 +47,7 @@ public class Process {
     private String documentoCompromiso;
     private String encuestaSatisfaccion;
     private String actaCierre;
+    private String impacto;
 
     @PrePersist
     public void prePersist(){

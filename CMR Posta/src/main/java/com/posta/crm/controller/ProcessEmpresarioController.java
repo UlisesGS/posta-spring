@@ -66,19 +66,20 @@ public class ProcessEmpresarioController {
         Diagnostico diagnostico = new Diagnostico();
         Optional<Diagnostico> opcionDiagnostico = diagnosticoRepository.findById(id);
         ConceptosGenerales conceptosGenerales = new ConceptosGenerales();
-        List<ConceptosGenerales> generalesList = new ArrayList<>();
+        List<ConceptosGenerales> generalesList = process.getProcessEmpresario().getDiagnosticoEmpresarial().getDiagnostico().getConceptosGenerales();
+        List<ConceptosGenerales> generalesListUpdate = new ArrayList<>();
         if (opcionDiagnostico.isPresent()){
-            diagnostico = opcionDiagnostico.get();
-           // ver el tema de conceptos generales
+            diagnostico=opcionDiagnostico.get();
 
-                process.getProcessEmpresario().getDiagnosticoEmpresarial().getDiagnostico().getConceptosGenerales().forEach(front->{
+            for (ConceptosGenerales concepto : generalesList) {
 
-                    generalesList.add(conceptosGeneralesRepository.save(front));
+                generalesListUpdate.add(conceptosGeneralesRepository.save(concepto));
+            }
 
-                });
+            System.out.println(generalesListUpdate);
+            System.out.println(diagnostico);
 
-
-            diagnostico.setConceptosGenerales(generalesList);
+            diagnostico.setConceptosGenerales(generalesListUpdate);
             diagnostico.setGestionAmbiental(process.getProcessEmpresario().getDiagnosticoEmpresarial().getDiagnostico().getGestionAmbiental());
             diagnostico.setGestionDigital(process.getProcessEmpresario().getDiagnosticoEmpresarial().getDiagnostico().getGestionDigital());
             diagnostico.setGestionEstrategica(process.getProcessEmpresario().getDiagnosticoEmpresarial().getDiagnostico().getGestionEstrategica());

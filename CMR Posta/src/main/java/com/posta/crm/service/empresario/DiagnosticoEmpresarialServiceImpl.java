@@ -47,23 +47,86 @@ public class DiagnosticoEmpresarialServiceImpl implements IDiagnosticoEmpresaria
     @Override
     public DiagnosticoEmpresarial save(DiagnosticoEmpresarial diagnosticoEmpresarial) {
 
-        Diagnostico diagnostico = diagnosticoEmpresarial.getDiagnostico();
-        List<ConceptosGenerales> conceptosGenerales = diagnostico.getConceptosGenerales();
-        List<ConceptosGenerales> conceptosGeneralesUpdate = new ArrayList();
+        System.out.println("pasoooooo 222");
 
-        for (ConceptosGenerales conceptosGenerale : conceptosGenerales) {
-            if (!conceptosGenerales.contains(conceptosGenerale)) {
-                conceptosGeneralesUpdate.add(conceptosGenerale);
+        System.out.println("pasoooooo 111");
+        if(diagnosticoEmpresarial.getId()!=null){
+            System.out.println("entro 333");
+            DiagnosticoEmpresarial diagnosticoEmpresarial1 = diagnosticoEmpresarialRepository.findById(diagnosticoEmpresarial.getId()).get();
+            Diagnostico diagnostico = diagnosticoEmpresarial1.getDiagnostico();
+            List<ConceptosGenerales> conceptosGenerales = diagnostico.getConceptosGenerales();
+            List<ConceptosGenerales> conceptosGeneralesUpdate = new ArrayList();
+
+            List<Integer> estrategica=diagnostico.getGestionEstrategica();
+            List<Integer> productividad=diagnostico.getGestionProductividad();
+            List<Integer> operacional=diagnostico.getGestionOperacional();
+
+            for (ConceptosGenerales conceptosGenerale : conceptosGenerales) {
+                if (!conceptosGenerales.contains(conceptosGenerale)) {
+                    conceptosGeneralesUpdate.add(conceptosGenerale);
+                }
+                conceptosGeneralesUpdate.add(conceptosGeneralesRepository.save(conceptosGenerale));
             }
-            conceptosGeneralesUpdate.add(conceptosGeneralesRepository.save(conceptosGenerale));
+
+            for (Integer estrategicas : diagnostico.getGestionEstrategica()) {
+                if (!estrategica.contains(estrategicas)) {
+                    estrategica.add(estrategicas);
+                }
+                diagnostico.setGestionEstrategica(estrategica);
+            }
+
+            diagnostico.setConceptosGenerales(conceptosGeneralesUpdate);
+            diagnosticoEmpresarial1.getDiagnostico().calcularTotales();
+
+            if (diagnosticoEmpresarial1.getId() != null) {
+
+                diagnosticoEmpresarial1.setDiagnostico(diagnosticoRepository.save(diagnostico));
+                return diagnosticoEmpresarial1;
+            }
+
+            diagnosticoEmpresarial1.setDiagnostico(diagnosticoRepository.save(diagnostico));
+            return diagnosticoEmpresarialRepository.save(diagnosticoEmpresarial1);
+
+        } else{
+            System.out.println("entro 4444");
+            DiagnosticoEmpresarial diagnosticoEmpresarial1=new DiagnosticoEmpresarial();
+            Diagnostico diagnostico = diagnosticoEmpresarial.getDiagnostico();
+            List<ConceptosGenerales> conceptosGenerales = diagnostico.getConceptosGenerales();
+            List<ConceptosGenerales> conceptosGeneralesUpdate = new ArrayList();
+
+            List<Integer> estrategica=diagnostico.getGestionEstrategica();
+            List<Integer> productividad=diagnostico.getGestionProductividad();
+            List<Integer> operacional=diagnostico.getGestionOperacional();
+
+            for (ConceptosGenerales conceptosGenerale : conceptosGenerales) {
+                if (!conceptosGenerales.contains(conceptosGenerale)) {
+                    conceptosGeneralesUpdate.add(conceptosGenerale);
+                }
+                conceptosGeneralesUpdate.add(conceptosGeneralesRepository.save(conceptosGenerale));
+            }
+
+            for (Integer estrategicas : diagnostico.getGestionEstrategica()) {
+                if (!estrategica.contains(estrategicas)) {
+                    estrategica.add(estrategicas);
+                }
+                diagnostico.setGestionEstrategica(estrategica);
+            }
+
+            diagnostico.setConceptosGenerales(conceptosGeneralesUpdate);
+            //diagnosticoEmpresarial1.getDiagnostico().calcularTotales();
+
+            if (diagnosticoEmpresarial1.getId() != null) {
+
+                diagnosticoEmpresarial1.setDiagnostico(diagnosticoRepository.save(diagnostico));
+                return diagnosticoEmpresarial1;
+            }
+
+            diagnosticoEmpresarial1.setDiagnostico(diagnosticoRepository.save(diagnostico));
+            diagnosticoEmpresarial1.getDiagnostico().calcularTotales();
+            return diagnosticoEmpresarialRepository.save(diagnosticoEmpresarial1);
         }
-        diagnostico.setConceptosGenerales(conceptosGeneralesUpdate);
-        diagnosticoEmpresarial.getDiagnostico().calcularTotales();
-        diagnosticoEmpresarial.setDiagnostico(diagnosticoRepository.save(diagnostico));
-        if (diagnosticoEmpresarial.getId() != null) {
-            return diagnosticoEmpresarial;
-        }
-        return diagnosticoEmpresarialRepository.save(diagnosticoEmpresarial);
+
+
     }
 
     @Override

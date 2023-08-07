@@ -2,6 +2,7 @@ package com.posta.crm.controller;
 
 import com.posta.crm.entity.Advisory;
 import com.posta.crm.entity.User;
+import com.posta.crm.enums.Role;
 import com.posta.crm.service.AdvisoryServiceImpl;
 import com.posta.crm.service.UserServiceImpl;
 import jakarta.validation.Valid;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,7 +39,9 @@ public class UserController {
     
     @Autowired
     private AdvisoryServiceImpl advisoryService;
-    
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private ResponseEntity<?> validation(BindingResult result) {
         Map<String, Object> errores = new HashMap();
@@ -71,7 +75,10 @@ public class UserController {
         if (result.hasErrors()) {
             return this.validation(result);
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.ADVISER);
         User newUser = userService.save(user);
+
         return ResponseEntity.ok(newUser);
     }
 

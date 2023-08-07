@@ -14,8 +14,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements IUserService{
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
 
     @Override
     public List<User> findAll() {
@@ -29,8 +28,6 @@ public class UserServiceImpl implements IUserService{
 
     @Override
     public User save(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(Role.ADVISER);
         return userRepository.save(user);
     }
 

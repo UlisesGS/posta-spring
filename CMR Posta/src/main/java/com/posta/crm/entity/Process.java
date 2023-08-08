@@ -39,6 +39,10 @@ public class Process {
     @ManyToOne
     private User user;
     private String estado;
+
+    private String estadoAnteriorEmpresario;
+
+    private String estadoAnteriorEmprendedor;
     private boolean terminado;
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "America/Bogota")

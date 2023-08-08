@@ -26,5 +26,7 @@ public interface ProcessEmpresarioRepository extends JpaRepository<ProcessEmpres
     @Query("select p from ProcessEmpresario p where p.terminado = ?1")
     List<ProcessEmpresario>findByTerminado(Boolean terminado);
     List<ProcessEmpresario>findByEstado(String estado);
+    @Query("select p from ProcessEmpresario p where p.client.id = ?1")
+    public ProcessEmpresario findByClient(Long id);
     
 }

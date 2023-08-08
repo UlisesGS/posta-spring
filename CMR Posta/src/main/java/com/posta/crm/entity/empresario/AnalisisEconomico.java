@@ -4,13 +4,9 @@
  */
 package com.posta.crm.entity.empresario;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.OneToMany;
+import com.posta.crm.enums.DiagEmpr;
+import jakarta.persistence.*;
+
 import java.util.List;
 import lombok.Data;
 
@@ -21,13 +17,32 @@ import lombok.Data;
 @Entity
 @Data
 public class AnalisisEconomico {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     
-    @OneToMany
-    private List<Indicador> indicadores;
-    @Lob
-    @Column(length = 5000)
-    private List<String> observaciones;
+    @OneToOne
+    private Indicador ventasMes;
+    @OneToOne
+    private Indicador aumentoVentas;
+    @OneToOne
+    private Indicador empleosFormales;
+    @OneToOne
+    private Indicador empleosInformales;
+    @OneToOne
+    private Indicador empleosNuevos;
+
+    @OneToOne
+    private Indicador empresaExportando;
+    @OneToOne
+    private Indicador ventassExportacion;
+    @OneToOne
+    private Indicador diversificacionProductos;
+    @OneToOne
+    private Indicador aperturaNuevosMercados;
+    @OneToOne
+    private Indicador accesoOtrasFuentes;
+
 }

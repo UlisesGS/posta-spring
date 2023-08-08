@@ -4,6 +4,7 @@
  */
 package com.posta.crm.service.empresario;
 
+import com.posta.crm.entity.Process;
 import com.posta.crm.entity.ProcessEmpresario;
 import java.util.List;
 import java.util.Optional;
@@ -16,9 +17,9 @@ import org.springframework.data.domain.Pageable;
  */
 public interface IProcessEmpresarioService {
     
-     public List<ProcessEmpresario> findAll();
+    public List<ProcessEmpresario> findAll();
     public Optional<ProcessEmpresario> findById(Long id);
-    public ProcessEmpresario save(ProcessEmpresario process);
+    public ProcessEmpresario save(Process process);
     public List<ProcessEmpresario>findAllUltimo();
     List<ProcessEmpresario>findByNombreCliente(String termino);
     List<ProcessEmpresario>findByTypeCliente(String type);

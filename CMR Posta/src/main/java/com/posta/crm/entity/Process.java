@@ -33,7 +33,8 @@ public class Process {
     private BusinessPlan businessPlan;
     @OneToOne
     private BusinessPlanFinancial businessPlanFinancial;
-    
+    @OneToOne
+    private ProcessEmpresario processEmpresario;
     
     @ManyToOne
     private User user;
@@ -46,6 +47,7 @@ public class Process {
     private String documentoCompromiso;
     private String encuestaSatisfaccion;
     private String actaCierre;
+    private String impacto;
 
     @PrePersist
     public void prePersist(){

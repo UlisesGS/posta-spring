@@ -4,10 +4,16 @@
  */
 package com.posta.crm.service.empresario;
 
+import com.posta.crm.entity.Process;
 import com.posta.crm.entity.ProcessEmpresario;
+import com.posta.crm.entity.empresario.AreaIntervenir;
 import com.posta.crm.entity.empresario.Diagnostico;
 import com.posta.crm.entity.empresario.DiagnosticoEmpresarial;
+import com.posta.crm.entity.empresario.PlanDeAccion;
+import com.posta.crm.repository.empresario.AreaIntervenirRepository;
+import com.posta.crm.repository.empresario.PlanDeAccionRepository;
 import com.posta.crm.repository.empresario.ProcessEmpresarioRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,33 +26,50 @@ import org.springframework.stereotype.Service;
  * @author crowl
  */
 @Service
-public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService{
-    
+public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService {
+
     @Autowired
     private ProcessEmpresarioRepository processEmpresarioRepository;
     @Autowired
     private DiagnosticoEmpresarialServiceImpl diagnosticoEmpresarialServiceImpl;
-    
-    
-    
-    
+    @Autowired
+    private PlanDeAccionRepository planDeAccionRepository;
+    @Autowired
+    private AreaIntervenirRepository areaIntervenirRepository;
+
     @Override
-    public ProcessEmpresario save(ProcessEmpresario process) {
-        ProcessEmpresario processUpdate=process;
-        DiagnosticoEmpresarial diagnosticoEmpresarialUpdate=processUpdate.getDiagnosticoEmpresarial();
-        if(diagnosticoEmpresarialUpdate.getId()==null){
-            diagnosticoEmpresarialServiceImpl.save(diagnosticoEmpresarialUpdate);
+    public ProcessEmpresario save(Process process) {
+
+
+        ProcessEmpresario processUpdate = process.getProcessEmpresario();
+        DiagnosticoEmpresarial diagnosticoEmpresarialUpdate = processUpdate.getDiagnosticoEmpresarial();
+        PlanDeAccion planAccionUpdate=processUpdate.getPlanDeAccion();
+        System.out.println(diagnosticoEmpresarialUpdate);
+        if(diagnosticoEmpresarialUpdate.getDiagnostico().getId()==null) {
+            System.out.println("diagnositco empresarial");
+            processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialServiceImpl.save(diagnosticoEmpresarialUpdate));
+        } else if (diagnosticoEmpresarialUpdate.getAnalisisResultados().getId() == null) {
+            System.out.println("diagnositco resultado");
+            diagnosticoEmpresarialUpdate = diagnosticoEmpresarialServiceImpl.updateResultados(diagnosticoEmpresarialUpdate, diagnosticoEmpresarialUpdate.getId());
+        } else if (diagnosticoEmpresarialUpdate.getAnalisisEconomico().getId() == null && diagnosticoEmpresarialUpdate.getAnalisisResultados().getId() != null) {
+            System.out.println("diagnositco economico");
+            diagnosticoEmpresarialUpdate = diagnosticoEmpresarialServiceImpl.updateEconomico(diagnosticoEmpresarialUpdate, diagnosticoEmpresarialUpdate.getId());
+        } else if (planAccionUpdate != null) {
+            //PlanDeAccion planDeAccion = new PlanDeAccion();
+            areaIntervenirRepository.save(planAccionUpdate.getLineamientosBasicos());
+            areaIntervenirRepository.save(planAccionUpdate.getMercadeoVentas());
+            areaIntervenirRepository.save(planAccionUpdate.getProduccionOperaciones());
+            areaIntervenirRepository.save(planAccionUpdate.getTalentoHumano());
+            planDeAccionRepository.save(planAccionUpdate);
+        } else {
+            processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialUpdate);
         }
-//        if(diagnosticoEmpresarialUpdate.getAnalisisEconomico().getId()==null){
-//             diagnosticoEmpresarialServiceImpl.updateEconomico(diagnosticoEmpresarialUpdate,diagnosticoEmpresarialUpdate.getId());
-//        }
-//       if(diagnosticoEmpresarialUpdate.getAnalisisResultados().getId()==null){
-//           diagnosticoEmpresarialServiceImpl.updateResultados(diagnosticoEmpresarialUpdate, diagnosticoEmpresarialUpdate.getId());
-//       }
-        
-        processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialUpdate);
-        return processEmpresarioRepository.save(process);
+        System.out.println("pasooooooooooooo");
+
+        processUpdate.setPlanDeAccion(planAccionUpdate);
+        return processEmpresarioRepository.save(processUpdate);
     }
+
 
     @Override
     public List<ProcessEmpresario> findAll() {
@@ -58,11 +81,9 @@ public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService{
         return processEmpresarioRepository.findById(id);
     }
 
-    
-
     @Override
     public List<ProcessEmpresario> findAllUltimo() {
-       return  processEmpresarioRepository.findTop6ByOrderByFechaAltaDesc();
+        return processEmpresarioRepository.findTop6ByOrderByFechaAltaDesc();
     }
 
     @Override
@@ -89,5 +110,5 @@ public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService{
     public Page<ProcessEmpresario> paginacion(Pageable pageable) {
         return processEmpresarioRepository.findAll(pageable);
     }
-    
+
 }

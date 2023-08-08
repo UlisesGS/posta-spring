@@ -16,7 +16,8 @@ import lombok.Data;
  */
 @Entity
 @Data
-public class PlanInversion {
+public class
+PlanInversion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

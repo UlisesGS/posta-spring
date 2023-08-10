@@ -50,6 +50,8 @@ public class Diagnostico {
     
     private List<Integer> totales;
     
+    private Integer total=0;
+    
     
     public void calcularTotales(){
         
@@ -106,6 +108,11 @@ public class Diagnostico {
             }
             this.totales.add(totalAux);
             totalAux=0;
+            
+            for (Integer totale : totales) {
+            total=0;
+            total+=totale;
+        }
         
     }
     

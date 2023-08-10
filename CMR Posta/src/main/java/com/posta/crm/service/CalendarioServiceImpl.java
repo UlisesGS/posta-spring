@@ -23,7 +23,7 @@ public class CalendarioServiceImpl implements ICalendarioService{
 
     @Override
     public List<Calendario> findByUserId(Long userId) {
-        return calendarioRepository.findAll();
+        return calendarioRepository.findByUsuarioId(userId);
     }
 
     @Override

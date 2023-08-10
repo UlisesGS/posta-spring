@@ -28,8 +28,10 @@ public class Calendario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "America/Bogota")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", timezone = "America/Bogota")
     private Date fecha;
+    
+ 
     
     private String titulo;
     @Lob

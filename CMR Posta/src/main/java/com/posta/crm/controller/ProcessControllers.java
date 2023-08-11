@@ -67,6 +67,8 @@ public class ProcessControllers {
         if(optionalProcess.isPresent()){
             processDb=optionalProcess.get();
             processDb.setEstado(process.getEstado());
+            processDb.setEstadoAnteriorEmprendedor(process.getEstadoAnteriorEmprendedor());
+            processDb.setEstadoAnteriorEmpresario(process.getEstadoAnteriorEmpresario());
             processDb.setTerminado(process.isTerminado());
             processDb.setSelfAssessment(process.getSelfAssessment());
             processDb.setCanvasModel(process.getCanvasModel());

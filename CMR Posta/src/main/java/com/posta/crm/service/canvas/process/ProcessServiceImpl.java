@@ -40,7 +40,11 @@ public class ProcessServiceImpl implements IProcessService{
 
     @Override
     public List<Process> findByTypeCliente(String type) {
-        return processRepository.findByTypeCliente(type);
+        if(type.equals("entrepreneur")){
+            return processRepository.findByTypeCliente(type);
+        }
+return processRepository.findByTypeClienteE(type);
+
     }
 
     @Override

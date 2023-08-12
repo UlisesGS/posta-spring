@@ -28,5 +28,6 @@ public class AdvisoryServiceImpl implements IAdvisoryService{
     public Advisory save(Advisory advisory) {
        return advisoryRepository.save(advisory);
                }
+
     
 }

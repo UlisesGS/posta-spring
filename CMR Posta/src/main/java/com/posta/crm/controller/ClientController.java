@@ -280,5 +280,9 @@ public class ClientController {
 
         return ResponseEntity.ok(clienteService.findAll());
     }
+    @GetMapping("/activos/{active}")
+    public ResponseEntity<?>buscarPorEstado(@PathVariable Boolean active){
+        return ResponseEntity.ok(clienteService.buscarPorDesactivado(active));
+    }
 
 }

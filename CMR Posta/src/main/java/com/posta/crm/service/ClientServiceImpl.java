@@ -113,8 +113,8 @@ public class ClientServiceImpl implements IClientService {
 
     @Override
     public Page<Client> paginacion(Pageable pageable) {
-        return clientRepository.buscarPorActivos(pageable);
-      //  return clientRepository.findAll(pageable);
+       return clientRepository.buscarPorActivos(pageable);
+      // return clientRepository.findAll(pageable);
 
     }
 

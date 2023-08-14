@@ -20,100 +20,109 @@ import lombok.Data;
 @Entity
 @Data
 public class Diagnostico {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @OneToMany
     private List<ConceptosGenerales> conceptosGenerales;
-    
+
     private List<Integer> gestionEstrategica;
-    
+
     private List<Integer> gestionProductividad;
-    
+
     private List<Integer> gestionOperacional;
-    
+
     private List<Integer> gestionCalidad;
-    
+
     private List<Integer> gestionInnovacion;
-    
+
     private List<Integer> gestionFinanciera;
-    
+
     private List<Integer> gestionLogistica;
-    
+
     private List<Integer> gestionDigital;
-    
+
     private List<Integer> gestionAmbiental;
-    
+
     private List<Integer> gestionIntelectual;
-    
+
     private List<Integer> totales;
-    
-    private Integer total=0;
-    
-    
-    public void calcularTotales(){
-        
-        Integer totalAux=0;
-        this.totales=new ArrayList();
-        
-            for (Integer integer : this.gestionEstrategica) {
-            totalAux+=integer;
+
+    private Integer total = 0;
+
+    public void calcularTotales() {
+
+        Integer totalAux = 0;
+        this.totales = new ArrayList();
+
+        for (Integer integer : this.gestionEstrategica) {
+            totalAux += integer;
         }
-            this.totales.add(totalAux);
-            totalAux=0;
-            for (Integer integer : this.gestionProductividad) {
-                totalAux+=integer;
-            }
-            this.totales.add(totalAux);
-            totalAux=0;
-            for (Integer integer : this.gestionOperacional) {
-                totalAux+=integer;
-            }
-            this.totales.add(totalAux);
-            totalAux=0;
-            for (Integer integer : this.gestionCalidad) {
-                totalAux+=integer;
-            }
-            this.totales.add(totalAux);
-            totalAux=0;
-            for (Integer integer : this.gestionInnovacion) {
-                totalAux+=integer;
-            }
-            this.totales.add(totalAux);
-            totalAux=0;
-            for (Integer integer : this.gestionFinanciera) {
-                totalAux+=integer;
-            }
-            this.totales.add(totalAux);
-            totalAux=0;
-            for (Integer integer : this.gestionLogistica) {
-                totalAux+=integer;
-            }
-            this.totales.add(totalAux);
-            totalAux=0;
-            for (Integer integer : this.gestionDigital) {
-                totalAux+=integer;
-            }
-            this.totales.add(totalAux);
-            totalAux=0;
-            for (Integer integer : this.gestionAmbiental) {
-                totalAux+=integer;
-            }
-            this.totales.add(totalAux);
-            totalAux=0;
-            for (Integer integer : this.gestionIntelectual) {
-                totalAux+=integer;
-            }
-            this.totales.add(totalAux);
-            totalAux=0;
-            
-            for (Integer totale : totales) {
-            total=0;
-            total+=totale;
+        totalAux = totalAux /18;
+        this.totales.add(totalAux);
+        totalAux = 0;
+        for (Integer integer : this.gestionProductividad) {
+            totalAux += integer;
         }
-        
+        totalAux = totalAux / 13;
+        this.totales.add(totalAux);
+        totalAux = 0;
+        for (Integer integer : this.gestionOperacional) {
+            totalAux += integer;
+        }
+        totalAux = totalAux / 11;
+        this.totales.add(totalAux);
+        totalAux = 0;
+        for (Integer integer : this.gestionCalidad) {
+            totalAux += integer;
+        }
+        totalAux = totalAux / 10;
+        this.totales.add(totalAux);
+        totalAux = 0;
+        for (Integer integer : this.gestionInnovacion) {
+            totalAux += integer;
+        }
+        totalAux = totalAux / 4;
+        this.totales.add(totalAux);
+        totalAux = 0;
+        for (Integer integer : this.gestionFinanciera) {
+            totalAux += integer;
+        }
+        totalAux = totalAux / 16;
+        this.totales.add(totalAux);
+        totalAux = 0;
+        for (Integer integer : this.gestionLogistica) {
+            totalAux += integer;
+        }
+        totalAux = totalAux / 6;
+        this.totales.add(totalAux);
+        totalAux = 0;
+        for (Integer integer : this.gestionDigital) {
+            totalAux += integer;
+        }
+        totalAux = totalAux / 6;
+        this.totales.add(totalAux);
+        totalAux = 0;
+        for (Integer integer : this.gestionAmbiental) {
+            totalAux += integer;
+        }
+        totalAux = totalAux / 9;
+        this.totales.add(totalAux);
+        totalAux = 0;
+        for (Integer integer : this.gestionIntelectual) {
+            totalAux += integer;
+        }
+        totalAux = totalAux / 6;
+        this.totales.add(totalAux);
+        totalAux = 0;
+
+        for (Integer totale : totales) {
+            total = 0;
+            total += totale;
+        }
+
     }
-    
+
 }

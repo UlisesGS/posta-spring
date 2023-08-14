@@ -16,6 +16,8 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.posta.crm.entity.Client;
@@ -68,7 +70,6 @@ public class PDFCOntroller {
             // Abrir el documento para agregar contenido
             document.open();
 
-            
             String imagePathIzq = new File("camaraHD.jpg").getAbsolutePath();
 
             // Agregar la imagen en la parte superior izquierda
@@ -386,13 +387,13 @@ public class PDFCOntroller {
             document.newPage();
             document.add(new Paragraph("\n\n"));
             Paragraph paragraph5 = new Paragraph();
-            
+
             paragraph5.add(new Phrase("2. INFORME DE DIANÓSTICO ", contentFont3));
             paragraph5.setIndentationLeft(50);
             paragraph5.add(new Phrase("\n2.2. DIAGNÓSTICO ", contentFont3));
             paragraph5.add(new Phrase("\nLa información que se describe a continuación es el resultado obtenido de la información"
-                    + " registrada con participación del empresario en la herramienta de diagnóstico.\n" 
-                    +"Se pueden incluir gráfico(S) resumen, fotografias, tablas de datos u objetos que refuercen el análisis de las áreas diagnósticadas", contentFont2));
+                    + " registrada con participación del empresario en la herramienta de diagnóstico.\n"
+                    + "Se pueden incluir gráfico(S) resumen, fotografias, tablas de datos u objetos que refuercen el análisis de las áreas diagnósticadas", contentFont2));
             paragraph5.add(new Phrase("\n2.2.1 AREA LINEAMIENTOS BÁSICOS ESTRATÉGICOS ", contentFont3));
             paragraph5.add(new Phrase("\nSe realiza el análisis del área lineamientos básicos estratégicos de acuerdo"
                     + " a los principales hallazgos identificados, y con base en estos se deberá formular el plan de acción.", contentFont2));
@@ -424,7 +425,7 @@ public class PDFCOntroller {
             paragraph5.setSpacingAfter(10f); // Agregar espacio después del párrafo
             paragraph5.setAlignment(Element.ALIGN_JUSTIFIED);
             document.add(paragraph5);
-            
+
             document.newPage();
             document.add(new Paragraph("\n\n"));
             Paragraph paragraph6 = new Paragraph();
@@ -439,13 +440,156 @@ public class PDFCOntroller {
             paragraph6.add(new Phrase(client.getUser().getName().toUpperCase(), contentFont3));
             paragraph6.add(new Phrase("\nAsesor/a", contentFont2));
             paragraph6.add(new Phrase("\nCDE-SBDC", contentFont2));
-            paragraph6.add(new Phrase("\n"+client.getUser().getEmail(), contentFont2));
-            
+            paragraph6.add(new Phrase("\n" + client.getUser().getEmail(), contentFont2));
+
             paragraph6.setLeading(20);
             paragraph6.setSpacingAfter(10f); // Agregar espacio después del párrafo
             paragraph6.setAlignment(Element.ALIGN_JUSTIFIED);
             document.add(paragraph6);
 
+            // Cerrar el documento
+            document.close();
+            outputStream.flush();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+    }
+
+    @GetMapping("/diagnostico/{id}")
+    public void generarDiagnostico(HttpServletResponse response, @PathVariable Long id) {
+
+        String[] nombregestion = new String[10];
+        nombregestion[0] = "GESTIÓN ESTRATÉGICA COMERCIAL Y DE MARKETING";
+        nombregestion[1] = "GESTIÓN DE PRODUCTIVIDAD Y DEL TALENTO HUMANO";
+        nombregestion[2] = "GESTIÓN DE LA PRODUCTIVIDAD OPERACIONAL";
+        nombregestion[3] = "GESTIÓN DE CALIDAD";
+        nombregestion[4] = "GESTIÓN DE LA INNOVACIÓN";
+        nombregestion[5] = "GESTIÓN FINANCIERA Y CONTABLE";
+        nombregestion[6] = "GESTIÓN LOGÍSTICA";
+        nombregestion[7] = "GESTIÓN DE LA TRANSFORMACIÓN DIGÍTAL";
+        nombregestion[8] = "GESTIÓN DE SOSTENIBILIDAD AMBIENTAL";
+        nombregestion[9] = "GESTIÓN DE LA PROPIEDAD INTELECTUAL E INDUSTRIAL";
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=diagnosticoEmpresarial.pdf");
+
+        try {
+
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4);
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+
+            // Crear una instancia de la clase PdfFooterEventHandler para manejar el pie de página
+            PdfFooterEventHandler footerHandler = new PdfFooterEventHandler();
+            writer.setPageEvent(footerHandler);
+            // Crear una instancia de la clase PdfHeaderEventHandler para manejar el encabezado
+            PdfHeaderEventHandler headerHandler = new PdfHeaderEventHandler();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+
+            Client client = clientRepository.findById(id).get();
+            ProcessEmpresario processEmpresario = processEmpresarioRepository.findByClient(client.getId());
+            // Agregar contenido al PDF
+            // Crear un párrafo vacío antes del título para agregar espacio entre el título y el primer párrafo
+            //Crear Fecha para portada
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+
+            // Establecer el estilo de fuente para el título
+            document.add(new Paragraph("\n\n"));
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+            Paragraph title = new Paragraph(client.getCompanyName().toUpperCase(), titleFont);
+            title.setSpacingBefore(20f);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph("\n"));
+            Paragraph title1 = new Paragraph("Diagnóstico Empresarial", titleFont);
+
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+            document.add(new Paragraph("\n"));
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+
+            //Crea tabla con 3 columnas
+            PdfPTable table = new PdfPTable(3);
+            table.setWidths(new float[]{5f, 75f, 20f});
+            BaseColor colorHeader = new BaseColor(204, 255, 255);
+            //Agrega el Titulo a la fila
+            PdfPCell cell = new PdfPCell(new Paragraph("CONSOLIDADO", contentFont4));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setColspan(2);
+            cell.setBackgroundColor(colorHeader);
+            table.addCell(cell);
+            PdfPCell cell10 = new PdfPCell(new Paragraph("CALIFICACIÓN", contentFont4));
+            cell10.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell10.setBackgroundColor(colorHeader);
+            table.addCell(cell10);
+            //Fila Datos
+            for (int i = 0; i < 10; i++) {
+                PdfPCell cell0 = new PdfPCell(new Paragraph(String.valueOf(i + 1), contentFont4));
+                cell0.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell0);
+                PdfPCell cell1 = new PdfPCell(new Paragraph(nombregestion[i], contentFont4));
+                cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell1);
+                PdfPCell cell2 = new PdfPCell(new Paragraph(String.valueOf(processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getTotales().get(i)), contentFont4));
+                cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell2);
+
+            }
+            BaseColor colorFooter = new BaseColor(255, 255, 204);
+            PdfPCell cell3 = new PdfPCell(new Paragraph("TOTAL", contentFont4));
+            cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell3.setColspan(2);
+            cell3.setBackgroundColor(colorFooter);
+            table.addCell(cell3);
+            PdfPCell cell4 = new PdfPCell(new Paragraph(String.valueOf(processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getTotal()), contentFont4));
+            cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell4.setBackgroundColor(colorFooter);
+
+            table.addCell(cell4);
+            document.add(table);
+
+            Paragraph title2 = new Paragraph("Análisis de Resultados Diagnóstico Empresarial", titleFont);
+            title.setSpacingBefore(20f);
+            title2.setAlignment(Element.ALIGN_CENTER);
+            document.add(title2);
+            document.add(new Paragraph("\n"));
+            
+            //Contenido de Analisis de Resultados
+            Paragraph parrafo = new Paragraph("GESTIÓN ESTRATÉGICA COMERCIAL Y DE MARKETING", contentFont1);
+            parrafo.setAlignment(Element.ALIGN_CENTER);
+            parrafo.setSpacingBefore(20f);
+            document.add(parrafo);
+            Paragraph parrafo1 = new Paragraph(processEmpresario.getDiagnosticoEmpresarial().getAnalisisResultados().getGestionEstrategica(), contentFont4);
+            parrafo1.setAlignment(Element.ALIGN_JUSTIFIED);
+            parrafo1.setSpacingBefore(20f);
+            document.add(parrafo1);
+            
+             Paragraph parrafo2 = new Paragraph("GESTIÓN DE PRODUCTIVIDAD Y DEL TALENTO HUMANO", contentFont1);
+            parrafo2.setAlignment(Element.ALIGN_CENTER);
+            parrafo2.setSpacingBefore(20f);
+            document.add(parrafo2);
+            Paragraph parrafo3 = new Paragraph(processEmpresario.getDiagnosticoEmpresarial().getAnalisisResultados().getGestionProductividad(), contentFont4);
+            parrafo3.setAlignment(Element.ALIGN_JUSTIFIED);
+            parrafo3.setSpacingBefore(20f);
+            document.add(parrafo3);
+            
             // Cerrar el documento
             document.close();
             outputStream.flush();

@@ -23,8 +23,8 @@ import org.springframework.http.MediaType;
 public class ImageController {
 
 
-    //private static final String UPLOAD_DIR = "img/";
-    private static final String UPLOAD_DIR = System.getenv("UPLOAD_DIR");
+    private static final String UPLOAD_DIR = "img/";
+    //private static final String UPLOAD_DIR = System.getenv("UPLOAD_DIR");
 
     @Autowired
     private ProcessServiceImpl processServiceImpl;
@@ -133,7 +133,7 @@ public class ImageController {
         Process nuevoProceso = processServiceImpl.findById(id).get();
 
         if (nuevoProceso != null) {
-            String rutaImagen = nuevoProceso.getEncuestaSatisfaccion();
+            String rutaImagen = nuevoProceso.getImpacto();
             Path path = Paths.get(rutaImagen);
             return Files.readAllBytes(path);
         }

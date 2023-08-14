@@ -49,7 +49,7 @@ public class InternalExternalAnalysisServiceImpl implements IInternalExternalAna
             findInternal.setEquipoTrabajo(internalExternalAnalysis.getEquipoTrabajo());
             findInternal.setFuenteFinanciacion(internalExternalAnalysis.getFuenteFinanciacion());
             findInternal.setLegal(internalExternalAnalysis.getLegal());
-            findInternal.setMediosDigitales(internalExternalAnalysis.getMediosDigitales());
+            //findInternal.setMediosDigitales(internalExternalAnalysis.getMediosDigitales());
             findInternal.setOperacion(internalExternalAnalysis.getOperacion());
             findInternal.setPropuestaValor(internalExternalAnalysis.getPropuestaValor());
             findInternal.setPublicoObjetivo(internalExternalAnalysis.getPublicoObjetivo());

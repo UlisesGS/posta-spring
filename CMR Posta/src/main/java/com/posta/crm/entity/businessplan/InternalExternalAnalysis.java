@@ -51,9 +51,9 @@ public class InternalExternalAnalysis {
     @Column(length = 5000)
     private String competencias;
 
-    @Lob
-    @Column(length = 5000)
-    private String mediosDigitales;
+//    @Lob
+//    @Column(length = 5000)
+//    private String mediosDigitales;
 
     @Lob
     @Column(length = 5000)

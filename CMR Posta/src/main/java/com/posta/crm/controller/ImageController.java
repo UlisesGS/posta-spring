@@ -133,7 +133,7 @@ public class ImageController {
         Process nuevoProceso = processServiceImpl.findById(id).get();
 
         if (nuevoProceso != null) {
-            String rutaImagen = nuevoProceso.getEncuestaSatisfaccion();
+            String rutaImagen = nuevoProceso.getImpacto();
             Path path = Paths.get(rutaImagen);
             return Files.readAllBytes(path);
         }

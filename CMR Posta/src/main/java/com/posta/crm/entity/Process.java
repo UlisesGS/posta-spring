@@ -9,9 +9,11 @@ import com.posta.crm.entity.businessplan.BusinessPlan;
 import com.posta.crm.entity.canvas.CanvasModel;
 import com.posta.crm.entity.financiero.BusinessPlanFinancial;
 import jakarta.persistence.*;
+import java.sql.Timestamp;
 import lombok.Data;
 
 import java.util.Date;
+import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  *
@@ -38,6 +40,8 @@ public class Process {
     
     @ManyToOne
     private User user;
+    @OneToOne
+    private Client client;
     private String estado;
 
     private String estadoAnteriorEmpresario;
@@ -47,6 +51,11 @@ public class Process {
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "America/Bogota")
     private Date fechaAlta;
+    @UpdateTimestamp
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm", timezone = "America/Bogota")
+    private Timestamp updatedate;
+    
+    private Date fechaFinalizacion;
     
     private String documentoCompromiso;
     private String encuestaSatisfaccion;

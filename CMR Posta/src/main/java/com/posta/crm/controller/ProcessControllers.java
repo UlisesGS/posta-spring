@@ -4,6 +4,7 @@ import com.posta.crm.entity.Process;
 import com.posta.crm.service.canvas.process.IProcessService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -75,6 +76,7 @@ public class ProcessControllers {
             processDb.setBusinessPlan(process.getBusinessPlan());
             processDb.setBusinessPlanFinancial(process.getBusinessPlanFinancial());
             processDb.setProcessEmpresario(process.getProcessEmpresario());
+            processDb.setFechaFinalizacion(process.getFechaFinalizacion());
             return ResponseEntity.status(HttpStatus.CREATED).body(processService.save(processDb));
         }
         return ResponseEntity.notFound().build();

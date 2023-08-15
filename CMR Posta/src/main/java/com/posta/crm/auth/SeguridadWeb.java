@@ -43,8 +43,11 @@ public class SeguridadWeb {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(authRules -> authRules
-                        .requestMatchers(HttpMethod.GET,"users/byEmail/{email}").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/users/byEmail/{email}").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/users").hasAnyRole("ADMIN", "ADVISER")
                         .requestMatchers(HttpMethod.PUT, "/users").hasAnyRole("ADMIN", "ADVISER")
+                        .requestMatchers(HttpMethod.POST, "/users/advisory").hasAnyRole("ADMIN", "ADVISER")
+                        .requestMatchers(HttpMethod.GET, "/users/byAdvisory/{page}").hasAnyRole("ADMIN", "ADVISER")
                         .requestMatchers("/plan/**").hasAnyRole("ADMIN", "ADVISER")
                         .requestMatchers("/clients/**").hasAnyRole("ADMIN", "ADVISER")
                         .requestMatchers("/diagEmp/**").hasAnyRole("ADMIN", "ADVISER")
@@ -55,6 +58,8 @@ public class SeguridadWeb {
                         .requestMatchers("/processEmpre/**").hasAnyRole("ADMIN", "ADVISER")
                         .requestMatchers("/search/**").hasAnyRole("ADMIN", "ADVISER")
                         .requestMatchers("/users/**").hasRole("ADMIN")
+                        .requestMatchers("/mensaje/**").hasAnyRole("ADMIN", "ADVISER")
+                        .requestMatchers("/calendario/**").hasAnyRole("ADMIN", "ADVISER")
                         .anyRequest().authenticated())
                 .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
                 .addFilter(new JwtValidationFilter(authenticationConfiguration.getAuthenticationManager()))

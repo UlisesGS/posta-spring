@@ -47,6 +47,8 @@ public class PresupuestoVenta {
     //agrego para push de mi puta rama
     private Double totalCalificacion = 0.0;
     
+    private Double totalUnidadesAno=0.0;
+    
     
     
     public void calcular(){
@@ -67,6 +69,7 @@ public class PresupuestoVenta {
     
     public void calculosCiclicidad(){
         this.totalCalificacion = 0.0;
+        this.totalUnidadesAno=0.0;
         for (CiclicidadVentas ciclicidadVenta : ciclicidadVentas) {
             this.totalCalificacion+=ciclicidadVenta.getCalificacion();
         }
@@ -74,6 +77,7 @@ public class PresupuestoVenta {
         for (CiclicidadVentas ciclicidadVenta : ciclicidadVentas) {
             ciclicidadVenta.setUnidadesAnio((ciclicidadVenta.getCalificacion()/this.totalCalificacion)*this.totalProductos);
             ciclicidadVenta.setVentasAnio((this.totalTotal*ciclicidadVenta.getUnidadesAnio())/this.totalProductos);
+            this.totalUnidadesAno+=ciclicidadVenta.getUnidadesAnio();
         }
         
     }

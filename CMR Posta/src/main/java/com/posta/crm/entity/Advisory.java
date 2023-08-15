@@ -12,6 +12,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Data
@@ -28,4 +29,7 @@ public class Advisory {
     @CreationTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm", timezone = "America/Bogota")
     private Timestamp regdate;
+    @UpdateTimestamp
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm", timezone = "America/Bogota")
+    private Timestamp updatedate;
 }

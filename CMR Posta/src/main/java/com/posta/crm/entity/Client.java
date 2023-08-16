@@ -91,13 +91,17 @@ public class Client {
     //Atributos Empresario
     @Enumerated(value = EnumType.STRING)
     private Contracting contracting;
+    @Enumerated(value = EnumType.STRING)
+    private Contracting contracting1;
     private String companyName;
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "America/Bogota")
     private Date fechaAlta;
     @Enumerated(value = EnumType.STRING)
     private TypeOfCompany typeOfCompany;
+    @Column(nullable = true)
     private Integer employeePartTime;
+    @Column(nullable = true)
     private Integer employeeFullTime;
     private Boolean registroMercantil;
     private String numberMercantilRegistry;

@@ -29,5 +29,7 @@ public class KeyActivities {
     @NotBlank
     @Column(length = 1000)
     private String postVenta;
+    @Column(length = 1000)
+    private String otros;
     
 }

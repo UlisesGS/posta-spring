@@ -24,4 +24,5 @@ public interface IClientService {
     public Page<Client>findByMunicipio(Long idMunicipio, Pageable pageable);
     public List<Client>findByName(String name);
     public Page<Client>findByRegdate(Pageable pageable);
+    public List<Client>buscarPorDesactivado(boolean active);
 }

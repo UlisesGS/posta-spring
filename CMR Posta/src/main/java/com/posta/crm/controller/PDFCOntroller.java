@@ -362,21 +362,20 @@ public class PDFCOntroller {
             paragraph4.setIndentationLeft(50);
             paragraph4.add(new Phrase("\nRAZÓN SOCIAL: " + client.getCompanyName(), contentFont2));
             paragraph4.add(new Phrase("\nREPRESENTANTE LEGAL: " + client.getName() + " " + client.getLastName(), contentFont2));
-            paragraph4.add(new Phrase("\nCONTACTO EMPRESA: XXXXXXXXXXXXXXXXXXXXXXX", contentFont2));
+//            paragraph4.add(new Phrase("\nCONTACTO EMPRESA: XXXXXXXXXXXXXXXXXXXXXXX", contentFont2));
             paragraph4.add(new Phrase("\nTIPO DE EMPRESA: " + client.getTypeOfCompany().toString().toUpperCase(), contentFont2));
             paragraph4.add(new Phrase("\nDOCUMENTO/NIT: " + client.getNIT(), contentFont2));
             paragraph4.add(new Phrase("\nFECHA DE CONSTITUCIÓN: " + formattedDate3, contentFont2));
-            paragraph4.add(new Phrase("\nTELÉFONO CELULAR: XXXXXXXXXXXXXXXXXXXXXXX" + client.getPhone(), contentFont2));
+            paragraph4.add(new Phrase("\nTELÉFONO CELULAR: " + client.getPhone(), contentFont2));
             paragraph4.add(new Phrase("\nDIRECCIÓN DE LA EMPRESA: " + client.getAddress(), contentFont2));
-            paragraph4.add(new Phrase("\nPÁGINA WEB : ", contentFont2));
+//            paragraph4.add(new Phrase("\nPÁGINA WEB : ", contentFont2));
             paragraph4.add(new Phrase("\nEMAIL: " + client.getEmail(), contentFont2));
             paragraph4.add(new Phrase("\nSECTOR ECONÓMICO: " + client.getCiiu().getTitulo(), contentFont2));
-            paragraph4.add(new Phrase("\nPRODUCTO O SERVICIO: XXXXXXXXXXXXXXXXXXXXXXX", contentFont2));
+//            paragraph4.add(new Phrase("\nPRODUCTO O SERVICIO: XXXXXXXXXXXXXXXXXXXXXXX", contentFont2));
             paragraph4.add(new Phrase("\n\n"));
             paragraph4.add(new Phrase("1.1	RESEÑA HISTÓRICA ", contentFont3));
             paragraph4.add(new Phrase("Esta empresa fue constituida desde " + formattedDate2 + ". Opera en unas instalaciones que"
-                    + " son de su propiedad y que están ubicadas en el sector " + client.getMunicipio().getCountry() + " Barrio " + client.getMunicipio().getName() + ". Es proveedora"
-                    + " de XXXXXXX XXXXXX XXXX XXXX XXXXXX XXXXXXXX XXXXXXX XXXXXXX XXXX XXXXXX XXXX XXXXX, Desarrolla sus actividades"
+                    + " son de su propiedad y que están ubicadas en el sector " + client.getMunicipio().getCountry() + " Barrio " + client.getMunicipio().getName() + ". Desarrolla sus actividades"
                     + " con " + client.getEmployeeFullTime().toString() + " empleados de planta y " + client.getEmployeePartTime().toString() + " en misión contratados a través de Desarrollo de Actividad.", contentFont2));
 
             paragraph4.setLeading(20);

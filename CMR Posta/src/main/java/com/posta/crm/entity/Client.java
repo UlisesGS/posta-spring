@@ -114,6 +114,8 @@ public class Client {
     private String paginaWeb;
     private String productoServicio;
     
+    
+    
 
     
    
@@ -123,6 +125,7 @@ public class Client {
     @PrePersist
     public void active() {
         this.active = true;
+        
     }
 
 }

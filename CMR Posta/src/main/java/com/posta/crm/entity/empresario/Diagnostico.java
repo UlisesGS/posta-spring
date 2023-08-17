@@ -48,13 +48,13 @@ public class Diagnostico {
 
     private List<Integer> gestionIntelectual;
 
-    private List<Integer> totales;
+    private List<Float> totales;
 
-    private Integer total = 0;
+    private Float total = 0.0f;
 
     public void calcularTotales() {
 
-        Integer totalAux = 0;
+        Float totalAux = 0.0f;
         this.totales = new ArrayList();
 
         for (Integer integer : this.gestionEstrategica) {
@@ -62,66 +62,66 @@ public class Diagnostico {
         }
         totalAux = totalAux /18;
         this.totales.add(totalAux);
-        totalAux = 0;
+        totalAux = 0.0f;
         for (Integer integer : this.gestionProductividad) {
             totalAux += integer;
         }
         totalAux = totalAux / 13;
         this.totales.add(totalAux);
-        totalAux = 0;
+        totalAux = 0.0f;
         for (Integer integer : this.gestionOperacional) {
             totalAux += integer;
         }
         totalAux = totalAux / 11;
         this.totales.add(totalAux);
-        totalAux = 0;
+        totalAux = 0.0f;
         for (Integer integer : this.gestionCalidad) {
             totalAux += integer;
         }
         totalAux = totalAux / 10;
         this.totales.add(totalAux);
-        totalAux = 0;
+        totalAux = 0.0f;
         for (Integer integer : this.gestionInnovacion) {
             totalAux += integer;
         }
         totalAux = totalAux / 4;
         this.totales.add(totalAux);
-        totalAux = 0;
+        totalAux = 0.0f;
         for (Integer integer : this.gestionFinanciera) {
             totalAux += integer;
         }
         totalAux = totalAux / 16;
         this.totales.add(totalAux);
-        totalAux = 0;
+        totalAux = 0.0f;
         for (Integer integer : this.gestionLogistica) {
             totalAux += integer;
         }
         totalAux = totalAux / 6;
         this.totales.add(totalAux);
-        totalAux = 0;
+        totalAux = 0.0f;
         for (Integer integer : this.gestionDigital) {
             totalAux += integer;
         }
         totalAux = totalAux / 6;
         this.totales.add(totalAux);
-        totalAux = 0;
+        totalAux = 0.0f;
         for (Integer integer : this.gestionAmbiental) {
             totalAux += integer;
         }
         totalAux = totalAux / 9;
         this.totales.add(totalAux);
-        totalAux = 0;
+        totalAux = 0.0f;
         for (Integer integer : this.gestionIntelectual) {
             totalAux += integer;
         }
         totalAux = totalAux / 6;
         this.totales.add(totalAux);
-        totalAux = 0;
+        totalAux = 0.0f;
 
-        for (Integer totale : totales) {
-            total = 0;
-            total += totale;
-        }
+//        for (Float totale : totales) {
+//            this.total = 0.0f;
+//            this.total += totale;
+//        }
 
     }
 

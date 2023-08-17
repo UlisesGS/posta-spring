@@ -90,6 +90,7 @@ public class ProcessEmpresarioController {
             diagnostico.setGestionOperacional(process.getProcessEmpresario().getDiagnosticoEmpresarial().getDiagnostico().getGestionOperacional());
             diagnostico.setGestionProductividad(process.getProcessEmpresario().getDiagnosticoEmpresarial().getDiagnostico().getGestionProductividad());
             diagnostico.setGestionLogistica(process.getProcessEmpresario().getDiagnosticoEmpresarial().getDiagnostico().getGestionLogistica());
+            diagnostico.setTotal(process.getProcessEmpresario().getDiagnosticoEmpresarial().getDiagnostico().getTotal());
             diagnostico.calcularTotales();
             return ResponseEntity.status(HttpStatus.CREATED).body(diagnosticoRepository.save(diagnostico));
         }

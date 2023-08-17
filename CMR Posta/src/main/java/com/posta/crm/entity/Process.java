@@ -61,10 +61,14 @@ public class Process {
     private String encuestaSatisfaccion;
     private String actaCierre;
     private String impacto;
+    
+    //La gilada para que cuando convierta funque
+    private Boolean cambio;
 
     @PrePersist
     public void prePersist(){
         this.terminado=false;
         this.fechaAlta= new Date();
+        this.cambio=false;
     }
 }

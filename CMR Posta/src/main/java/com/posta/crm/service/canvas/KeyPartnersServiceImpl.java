@@ -34,6 +34,7 @@ public class KeyPartnersServiceImpl implements IKeyPartnersService{
             newPartners.setEntidadesPrivadas(keyPartners.getEntidadesPrivadas());
             newPartners.setEntidadesPublicas(keyPartners.getEntidadesPublicas());
             newPartners.setProveedores(keyPartners.getProveedores());
+            newPartners.setOtros(keyPartners.getOtros());
             return keyPartnersRepository.save(newPartners);
         }
         return null;

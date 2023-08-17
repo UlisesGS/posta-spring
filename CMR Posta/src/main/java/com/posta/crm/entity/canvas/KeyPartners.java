@@ -29,4 +29,6 @@ public class KeyPartners {
     @NotBlank
     @Column(length = 1000)
     private String academia;
+    @Column(length = 1000)
+    private String otros;
 }

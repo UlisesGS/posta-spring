@@ -77,6 +77,7 @@ public class ProcessControllers {
             processDb.setBusinessPlanFinancial(process.getBusinessPlanFinancial());
             processDb.setProcessEmpresario(process.getProcessEmpresario());
             processDb.setFechaFinalizacion(process.getFechaFinalizacion());
+            processDb.setCambio(process.getCambio());
             return ResponseEntity.status(HttpStatus.CREATED).body(processService.save(processDb));
         }
         return ResponseEntity.notFound().build();

@@ -27,4 +27,7 @@ public class RevenueStreams {
     @NotBlank
     @Column(length = 1000)
     private String canalesPago;
+    
+    @Column(length = 1000)
+    private String otros;
 }

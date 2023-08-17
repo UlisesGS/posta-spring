@@ -32,6 +32,7 @@ public class RevenueStreamsServiceImpl implements IRevenueStreamsService{
             newRevenue.setCanalesPago(revenueStreams.getCanalesPago());
             newRevenue.setCapitalPorpio(revenueStreams.getCapitalPorpio());
             newRevenue.setCapitalPrestamo(revenueStreams.getCapitalPrestamo());
+            newRevenue.setOtros(revenueStreams.getOtros());
             return revenueStreamsRepository.save(newRevenue);
         }
         return null;

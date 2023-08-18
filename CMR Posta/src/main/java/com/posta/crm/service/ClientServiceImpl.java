@@ -24,8 +24,10 @@ public class ClientServiceImpl implements IClientService {
 
     @Override
     public List<Client> findAll() {
+
         return clientRepository.findAll();
     }
+
 
     @Override
     public Optional<Client> findById(Long id) {
@@ -111,7 +113,8 @@ public class ClientServiceImpl implements IClientService {
 
     @Override
     public Page<Client> paginacion(Pageable pageable) {
-        return clientRepository.findAll(pageable);
+       return clientRepository.buscarPorActivos(pageable);
+      // return clientRepository.findAll(pageable);
 
     }
 
@@ -149,5 +152,10 @@ public class ClientServiceImpl implements IClientService {
     @Override
     public Page<Client> findByRegdate(Pageable pageable) {
         return clientRepository.findByRegdate(pageable);
+    }
+
+    @Override
+    public List<Client> buscarPorDesactivado(boolean active) {
+        return clientRepository.buscarPorEstado(active);
     }
 }

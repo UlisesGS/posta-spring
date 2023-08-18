@@ -50,6 +50,12 @@ public class UserController {
         });
         return new ResponseEntity<>(errores, HttpStatus.NOT_FOUND);
     }
+@GetMapping("/paginar/{page}")
+public ResponseEntity<?>findAllPaginar(@PathVariable Integer page){
+        Pageable pageable = PageRequest.of(page,10);
+        Page<User>paginarUsuario = userService.findAll(pageable);
+        return ResponseEntity.ok(paginarUsuario);
+}
 
     @GetMapping
     public ResponseEntity<?> findAll() {

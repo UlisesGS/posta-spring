@@ -18,8 +18,11 @@ public interface ClientRepository extends JpaRepository<Client, Long>{
     public Page<Client> findByGender(@Param("gender") Gender gender, Pageable pageable);
     public Page<Client> findByType(String type, Pageable pageable);
     public Page<Client>findByActive(Boolean active, Pageable pageable);
-    @Query("SELECT a FROM Client a ORDER BY a.regdate DESC")
+    
+//    @Query("SELECT a FROM Client a ORDER BY a.regdate DESC")
+    @Query("SELECT a FROM Client a WHERE a.active = true ORDER BY a.regdate DESC")
     public Page<Client>findByRegdate(Pageable pageable);
+    
     @Query("SELECT b FROM Client b WHERE b.municipio.id=?1")
     public Page<Client>findByMunicipio(@Param("idMunicipio")Long idMunicipio, Pageable pageable);
     
@@ -27,7 +30,9 @@ public interface ClientRepository extends JpaRepository<Client, Long>{
     public List<Client>findByName(String name);
 
     public List<Client> findByNameContainingIgnoreCase(String term);
-    
-    
+   @Query("select c from Client c where c.active=true")
+    public Page<Client> buscarPorActivos(Pageable pageable);
+    @Query("select c from Client c where c.active=?1")
+    public List<Client> buscarPorEstado(Boolean active);
     
 }

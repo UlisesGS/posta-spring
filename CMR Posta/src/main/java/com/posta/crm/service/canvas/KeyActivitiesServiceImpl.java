@@ -33,6 +33,7 @@ public class KeyActivitiesServiceImpl implements IKeyActivitiesService{
             newkeyActivities.setComunicacionMarketing(keyActivities.getComunicacionMarketing());
             newkeyActivities.setPostVenta(keyActivities.getPostVenta());
             newkeyActivities.setPrestacionServicio(keyActivities.getPrestacionServicio());
+            newkeyActivities.setOtros(keyActivities.getOtros());
             return keyActivitiesRpository.save(newkeyActivities);
         }
         return null;

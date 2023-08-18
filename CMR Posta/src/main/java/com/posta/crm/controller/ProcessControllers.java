@@ -4,6 +4,7 @@ import com.posta.crm.entity.Process;
 import com.posta.crm.service.canvas.process.IProcessService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -67,20 +68,26 @@ public class ProcessControllers {
         if(optionalProcess.isPresent()){
             processDb=optionalProcess.get();
             processDb.setEstado(process.getEstado());
+            processDb.setEstadoAnteriorEmprendedor(process.getEstadoAnteriorEmprendedor());
+            processDb.setEstadoAnteriorEmpresario(process.getEstadoAnteriorEmpresario());
             processDb.setTerminado(process.isTerminado());
             processDb.setSelfAssessment(process.getSelfAssessment());
             processDb.setCanvasModel(process.getCanvasModel());
             processDb.setBusinessPlan(process.getBusinessPlan());
             processDb.setBusinessPlanFinancial(process.getBusinessPlanFinancial());
             processDb.setProcessEmpresario(process.getProcessEmpresario());
+            processDb.setFechaFinalizacion(process.getFechaFinalizacion());
+            processDb.setCambio(process.getCambio());
             return ResponseEntity.status(HttpStatus.CREATED).body(processService.save(processDb));
         }
         return ResponseEntity.notFound().build();
     }
     @GetMapping("/paginar/{page}")
     public ResponseEntity<?> paginacion(@PathVariable Integer page){
+
         Pageable pageable = PageRequest.of(page, 5);
         Page<Process> processes = processService.paginacion(pageable);
+        System.out.println(processes);
 
         if(processes.isEmpty()){
             return ResponseEntity.noContent().build();

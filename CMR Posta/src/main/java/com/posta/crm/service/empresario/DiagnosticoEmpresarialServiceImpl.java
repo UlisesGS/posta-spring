@@ -123,6 +123,7 @@ public class DiagnosticoEmpresarialServiceImpl implements IDiagnosticoEmpresaria
 
             diagnosticoEmpresarial1.setDiagnostico(diagnosticoRepository.save(diagnostico));
             diagnosticoEmpresarial1.getDiagnostico().calcularTotales();
+            diagnosticoEmpresarial1.getDiagnostico().setTotal(diagnosticoEmpresarial.getDiagnostico().getTotal());
             return diagnosticoEmpresarialRepository.save(diagnosticoEmpresarial1);
         }
 

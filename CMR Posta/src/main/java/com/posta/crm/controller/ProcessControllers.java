@@ -84,8 +84,10 @@ public class ProcessControllers {
     }
     @GetMapping("/paginar/{page}")
     public ResponseEntity<?> paginacion(@PathVariable Integer page){
+
         Pageable pageable = PageRequest.of(page, 5);
         Page<Process> processes = processService.paginacion(pageable);
+        System.out.println(processes);
 
         if(processes.isEmpty()){
             return ResponseEntity.noContent().build();

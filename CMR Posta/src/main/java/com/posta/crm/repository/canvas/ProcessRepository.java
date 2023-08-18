@@ -12,8 +12,13 @@ public interface ProcessRepository extends JpaRepository<Process,Long> {
     // buscar por nombre de cliente mientras tipiamos
     @Query("select p from Process p where p.canvasModel.client.name like %?1%")
     List<Process>findByNombreCliente(String termino);
+ @Query("select p from Process p where p.processEmpresario.client.name like %?1%")
+ List<Process>findByNombreClienteE(String termino);
+
     @Query("select p from Process p where p.canvasModel.client.type = ?1")
     List<Process>findByTypeCliente(String type);
+    @Query("select p from Process p where p.processEmpresario.client.type = ?1")
+    List<Process>findByTypeClienteE(String type);
     @Query("select p from Process p where p.terminado = ?1")
     List<Process>findByTerminado(Boolean terminado);
     List<Process>findByEstado(String estado);

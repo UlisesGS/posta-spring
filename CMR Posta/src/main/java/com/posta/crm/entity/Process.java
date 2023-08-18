@@ -69,6 +69,7 @@ public class Process {
     public void prePersist(){
         this.terminado=false;
         this.fechaAlta= new Date();
-        this.cambio=false;
+        //esto esta de mas
+//        this.cambio=false;
     }
 }

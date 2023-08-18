@@ -30,8 +30,10 @@ public interface ClientRepository extends JpaRepository<Client, Long>{
     public List<Client>findByName(String name);
 
     public List<Client> findByNameContainingIgnoreCase(String term);
+    
    @Query("select c from Client c where c.active=true")
-    public Page<Client> buscarPorActivos(Pageable pageable);
+    public List<Client> buscarPorActivos(Pageable pageable);
+    
     @Query("select c from Client c where c.active=?1")
     public List<Client> buscarPorEstado(Boolean active);
     

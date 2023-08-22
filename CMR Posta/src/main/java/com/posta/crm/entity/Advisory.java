@@ -2,10 +2,12 @@
 package com.posta.crm.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 
 import jakarta.validation.constraints.NotBlank;
@@ -23,6 +25,8 @@ public class Advisory {
     @ManyToOne
     private Client client;
     @NotBlank
+    @Lob
+    @Column(length = 5000)
     private String advisory;
     @ManyToOne
     private User user;

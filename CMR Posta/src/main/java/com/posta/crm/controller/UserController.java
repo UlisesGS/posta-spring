@@ -6,10 +6,12 @@ import com.posta.crm.enums.Role;
 import com.posta.crm.service.AdvisoryServiceImpl;
 import com.posta.crm.service.UserServiceImpl;
 import jakarta.validation.Valid;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,12 +33,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins= "*")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
-    
+
     @Autowired
     private AdvisoryServiceImpl advisoryService;
 
@@ -50,12 +52,13 @@ public class UserController {
         });
         return new ResponseEntity<>(errores, HttpStatus.NOT_FOUND);
     }
-@GetMapping("/paginar/{page}")
-public ResponseEntity<?>findAllPaginar(@PathVariable Integer page){
-        Pageable pageable = PageRequest.of(page,10);
-        Page<User>paginarUsuario = userService.findAll(pageable);
+
+    @GetMapping("/paginar/{page}")
+    public ResponseEntity<?> findAllPaginar(@PathVariable Integer page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<User> paginarUsuario = userService.findAll(pageable);
         return ResponseEntity.ok(paginarUsuario);
-}
+    }
 
     @GetMapping
     public ResponseEntity<?> findAll() {
@@ -75,7 +78,7 @@ public ResponseEntity<?>findAllPaginar(@PathVariable Integer page){
         return ResponseEntity.ok(user);
     }
 
-    
+
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestBody User user, BindingResult result) {
         if (result.hasErrors()) {
@@ -99,6 +102,7 @@ public ResponseEntity<?>findAllPaginar(@PathVariable Integer page){
             updateUser.setName(user.getName());
             updateUser.setLastName(user.getLastName());
             updateUser.setEmail(user.getEmail());
+            updateUser.setPassword(passwordEncoder.encode(user.getPassword()));
             updateUser.setPhone(user.getPhone());
             updateUser.setRole(user.getRole());
             updateUser.setCedula(user.getCedula());
@@ -108,15 +112,16 @@ public ResponseEntity<?>findAllPaginar(@PathVariable Integer page){
         }
         return ResponseEntity.notFound().build();
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?>activateDeactivate(@PathVariable Long id){
-        User user=new User();
+    public ResponseEntity<?> activateDeactivate(@PathVariable Long id) {
+        User user = new User();
         Optional<User> find = userService.findById(id);
-        if(find.isPresent()){
+        if (find.isPresent()) {
             System.out.println(find);
-            user=find.get();
+            user = find.get();
             System.out.println(user);
-            if(user.getActive()){
+            if (user.getActive()) {
                 user.setActive(false);
                 userService.save(user);
                 return ResponseEntity.ok(user);
@@ -128,33 +133,33 @@ public ResponseEntity<?>findAllPaginar(@PathVariable Integer page){
         }
         return ResponseEntity.notFound().build();
     }
-    
+
     @PostMapping("/advisory")
-    public ResponseEntity<?>saveAdvisory(@Valid @RequestBody Advisory advisory, BindingResult result){
+    public ResponseEntity<?> saveAdvisory(@Valid @RequestBody Advisory advisory, BindingResult result) {
         if (result.hasErrors()) {
             return this.validation(result);
         }
-        Advisory newAdvisory=advisoryService.save(advisory);
+        Advisory newAdvisory = advisoryService.save(advisory);
         return ResponseEntity.ok(newAdvisory);
     }
 
     @GetMapping("/byAdvisory/{page}")
-    public ResponseEntity<?>findByAdvisory(@RequestParam("user_id")Long userId, @PathVariable Integer page){
-        Pageable pageable = PageRequest.of(page,10);
-        Page<Advisory> advisoryes=advisoryService.findByUser(userId, pageable);
-        if(advisoryes.isEmpty()){
+    public ResponseEntity<?> findByAdvisory(@RequestParam("user_id") Long userId, @PathVariable Integer page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Advisory> advisoryes = advisoryService.findByUser(userId, pageable);
+        if (advisoryes.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-                return ResponseEntity.ok(advisoryes);
-}
+        return ResponseEntity.ok(advisoryes);
+    }
 
     @GetMapping("/byEmail/{email}")
-    public ResponseEntity<?>findByEmail(@PathVariable String email){
-        Optional<User>find=userService.findByEmail(email);
-        if(find.isEmpty()){
+    public ResponseEntity<?> findByEmail(@PathVariable String email) {
+        Optional<User> find = userService.findByEmail(email);
+        if (find.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        User user=find.get();
+        User user = find.get();
         return ResponseEntity.ok(user);
     }
 }

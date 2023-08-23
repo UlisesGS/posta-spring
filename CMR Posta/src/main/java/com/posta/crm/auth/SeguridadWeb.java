@@ -44,6 +44,7 @@ public class SeguridadWeb {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(authRules -> authRules
                         .requestMatchers(HttpMethod.GET,"/users/byEmail/{email}").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/users").permitAll()
                         .requestMatchers(HttpMethod.GET,"/users").hasAnyRole("ADMIN", "ADVISER")
                         .requestMatchers(HttpMethod.PUT, "/users").hasAnyRole("ADMIN", "ADVISER")
                         .requestMatchers(HttpMethod.POST, "/users/advisory").hasAnyRole("ADMIN", "ADVISER")
@@ -73,7 +74,9 @@ public class SeguridadWeb {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
+
         //config.setAllowedOrigins(Arrays.asList("http://posta-app.s3-website.us-east-2.amazonaws.com"));
+
         config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));

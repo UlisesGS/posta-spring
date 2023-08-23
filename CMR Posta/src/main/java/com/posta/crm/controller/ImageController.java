@@ -30,7 +30,9 @@ public class ImageController {
 
 
     private static final String UPLOAD_DIR = "img/";
-    //private static final String UPLOAD_DIR = System.getenv("UPLOAD_DIR");
+
+  //  private static final String UPLOAD_DIR = System.getenv("UPLOAD_DIR");
+
 
     @Autowired
     private ProcessServiceImpl processServiceImpl;

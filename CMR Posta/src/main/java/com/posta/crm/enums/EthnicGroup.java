@@ -7,5 +7,6 @@ public enum EthnicGroup {
     INDIGENAS,
     AFROCOLOMBIANO,
     RAIZALES,
-    OTRO
+    OTRO,
+    NINGUNA
 }

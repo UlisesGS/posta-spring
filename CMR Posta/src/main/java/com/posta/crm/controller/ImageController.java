@@ -27,10 +27,8 @@ import org.springframework.http.ResponseEntity;
 @RestController
 public class ImageController {
 
-    private static final String UPLOAD_DIR = "img/";
-
-  //  private static final String UPLOAD_DIR = System.getenv("UPLOAD_DIR");
-
+    //private static final String UPLOAD_DIR = "img/";
+    private static final String UPLOAD_DIR = System.getenv("UPLOAD_DIR");
 
     @Autowired
     private ProcessServiceImpl processServiceImpl;
@@ -80,7 +78,7 @@ public class ImageController {
 
         try {
             byte[] bytes = file.getBytes();
-            String uniqueFileName=generateUniqueFileName(file.getOriginalFilename());
+            String uniqueFileName = generateUniqueFileName(file.getOriginalFilename());
             Path path = Paths.get(UPLOAD_DIR + uniqueFileName);
             Files.write(path, bytes);
             nuevoProceso.setEncuestaSatisfaccion(path.toString());

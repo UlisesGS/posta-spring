@@ -17,18 +17,18 @@ public class KeyPartners {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotBlank
-    @Column(length = 1000)
+    
+    @Column(length = 5000)
     private String proveedores;
-    @NotBlank
-    @Column(length = 1000)
+    
+    @Column(length = 5000)
     private String entidadesPublicas;
-    @NotBlank
-    @Column(length = 1000)
+    
+    @Column(length = 5000)
     private String entidadesPrivadas;
-    @NotBlank
-    @Column(length = 1000)
+    
+    @Column(length = 5000)
     private String academia;
-    @Column(length = 1000)
+    @Column(length = 5000)
     private String otros;
 }

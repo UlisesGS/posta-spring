@@ -17,20 +17,20 @@ public class Channels {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotBlank
-    @Column(length = 1000)
+    
+    @Column(length = 5000)
     private String informacion;
-    @NotBlank
-    @Column(length = 1000)
+    
+    @Column(length = 5000)
     private String evaluacion;
-    @NotBlank
-    @Column(length = 1000)
+    
+    @Column(length = 5000)
     private String compra;
-    @NotBlank
-    @Column(length = 1000)
+    
+    @Column(length = 5000)
     private String entrega;
-    @NotBlank
-    @Column(length = 1000)
+    
+    @Column(length = 5000)
     private String postVenta;
     
 }

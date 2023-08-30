@@ -17,17 +17,17 @@ public class KeyRecources {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotBlank
-    @Column(length = 1000)
+   
+    @Column(length = 5000)
     private String recursosHumanos;
-    @NotBlank
-    @Column(length = 1000)
+    
+    @Column(length = 5000)
     private String recursosFisicos;
-    @NotBlank
-    @Column(length = 1000)
+    
+    @Column(length = 5000)
     private String recursosIntelectuales;
-    @NotBlank
-    @Column(length = 1000)
+    
+    @Column(length = 5000)
     private String recursosTecnologicos;
     
 }

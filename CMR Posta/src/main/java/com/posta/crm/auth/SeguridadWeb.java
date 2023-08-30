@@ -74,8 +74,9 @@ public class SeguridadWeb {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://posta-app.s3-website.us-east-2.amazonaws.com"));
-        //config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        //config.setAllowedOrigins(Arrays.asList("http://crm-posta.s3-website-us-east-1.amazonaws.com"));
+        //config.setAllowedOrigins(Arrays.asList("http://posta-app.s3-website.us-east-2.amazonaws.com"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         config.setAllowCredentials(true);

@@ -17,4 +17,6 @@ public interface IProcessService {
     List<Process>findByTerminado(Boolean terminado);
     List<Process>findByEstado(String estado);
     public Page<Process> paginacion(Pageable pageable);
+    Page<Process> buscarPorUsuario(Long id, Pageable pageable);
+
 }

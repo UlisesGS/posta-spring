@@ -36,5 +36,6 @@ public interface ClientRepository extends JpaRepository<Client, Long>{
     
     @Query("select c from Client c where c.active=?1")
     public List<Client> buscarPorEstado(Boolean active);
-    
+    @Query("select c from Client c where c.user.id=?1")
+    public Page<Client> buscarPorUsuario(Long id,Pageable pageable);
 }

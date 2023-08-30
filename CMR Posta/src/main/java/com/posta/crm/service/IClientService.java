@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
+import org.springframework.data.jpa.repository.Query;
 
 
 public interface IClientService {
@@ -25,4 +25,5 @@ public interface IClientService {
     public List<Client>findByName(String name);
     public Page<Client>findByRegdate(Pageable pageable);
     public List<Client>buscarPorDesactivado(boolean active);
+    public Page<Client> buscarPorUsuario(Long id,Pageable pageable);
 }

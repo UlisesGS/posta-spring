@@ -158,4 +158,9 @@ public class ClientServiceImpl implements IClientService {
     public List<Client> buscarPorDesactivado(boolean active) {
         return clientRepository.buscarPorEstado(active);
     }
+
+    @Override
+    public Page<Client> buscarPorUsuario(Long id, Pageable pageable) {
+        return clientRepository.buscarPorUsuario(id,pageable);
+    }
 }

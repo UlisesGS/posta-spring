@@ -163,4 +163,11 @@ public class ClientServiceImpl implements IClientService {
     public Page<Client> buscarPorUsuario(Long id, Pageable pageable) {
         return clientRepository.buscarPorUsuario(id,pageable);
     }
+
+    @Override
+    public List<Client> findByRegdate() {
+        return clientRepository.findByRegdate();
+    }
+
+
 }

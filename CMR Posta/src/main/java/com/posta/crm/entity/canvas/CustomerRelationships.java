@@ -17,13 +17,13 @@ public class CustomerRelationships {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotBlank
-    @Column(length = 1000)
+   
+    @Column(length = 5000)
     private String captacion;
-    @NotBlank
-    @Column(length = 1000)
+    
+    @Column(length = 5000)
     private String fidelizacion;
-    @NotBlank
-    @Column(length = 1000)
+    
+    @Column(length = 5000)
     private String estimulacion;
 }

@@ -26,4 +26,5 @@ public interface IClientService {
     public Page<Client>findByRegdate(Pageable pageable);
     public List<Client>buscarPorDesactivado(boolean active);
     public Page<Client> buscarPorUsuario(Long id,Pageable pageable);
+    public List<Client>findByRegdate();
 }

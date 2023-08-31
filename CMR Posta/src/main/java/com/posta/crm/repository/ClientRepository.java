@@ -17,6 +17,8 @@ public interface ClientRepository extends JpaRepository<Client, Long>{
     @Query("SELECT a FROM Client a WHERE a.gender=:gender")
     public Page<Client> findByGender(@Param("gender") Gender gender, Pageable pageable);
     public Page<Client> findByType(String type, Pageable pageable);
+    @Query("SELECT a FROM Client a WHERE a.active = true ORDER BY a.regdate DESC LIMIT 5")
+    public List<Client>findByRegdate();
     public Page<Client>findByActive(Boolean active, Pageable pageable);
     
 //    @Query("SELECT a FROM Client a ORDER BY a.regdate DESC")

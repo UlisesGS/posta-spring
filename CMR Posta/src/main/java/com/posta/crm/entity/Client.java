@@ -65,7 +65,7 @@ public class Client {
     @NotBlank
     private String address;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String remarks;
     private Boolean active;
     private String type;

@@ -27,22 +27,22 @@ public class Indicador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String mes1;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String mes2;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String mes3;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String mes4;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String mes5;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String observaciones;
     
     

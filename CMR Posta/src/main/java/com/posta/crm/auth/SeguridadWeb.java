@@ -44,6 +44,7 @@ public class SeguridadWeb {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(authRules -> authRules
                         .requestMatchers(HttpMethod.GET,"/users/byEmail/{email}").permitAll()
+                        .requestMatchers("/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/users").permitAll()
                         .requestMatchers(HttpMethod.GET,"/users").hasAnyRole("ADMIN", "ADVISER")
                         .requestMatchers(HttpMethod.PUT, "/users").hasAnyRole("ADMIN", "ADVISER")

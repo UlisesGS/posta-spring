@@ -31,7 +31,7 @@ public class ConceptosGenerales {
     @Enumerated(value = EnumType.STRING)
     private DiagEmpr diagEmpr;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String observaciones;
     
     

@@ -24,31 +24,31 @@ public class InternalExternalAnalysis {
     private Long id;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String publicoObjetivo;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String actividadPrincipal;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String propuestaValor;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String comercializacion;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String operacion;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String equipoTrabajo;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String competencias;
 
 //    @Lob
@@ -56,14 +56,14 @@ public class InternalExternalAnalysis {
 //    private String mediosDigitales;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String recursosNecesarios;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String legal;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String fuenteFinanciacion;
 }

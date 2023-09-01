@@ -17,16 +17,16 @@ public class CustomerSegments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String  demograficas;
     
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String  geograficas;
     
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String  psicograficas;
     
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String  comportanmiento;
     
     

@@ -18,17 +18,17 @@ public class KeyPartners {
     private Long id;
     
     
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String proveedores;
     
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String entidadesPublicas;
     
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String entidadesPrivadas;
     
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String academia;
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String otros;
 }

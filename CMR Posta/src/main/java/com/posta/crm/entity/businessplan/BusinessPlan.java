@@ -36,7 +36,7 @@ public class BusinessPlan {
     private DofaAnalisis dofaAnalisis;
     
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String conclusion;
 
 }

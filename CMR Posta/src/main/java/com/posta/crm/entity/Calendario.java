@@ -35,7 +35,7 @@ public class Calendario {
     
     private String titulo;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String contenido;
     
     

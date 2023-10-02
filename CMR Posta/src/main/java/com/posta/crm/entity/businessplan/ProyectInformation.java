@@ -25,35 +25,35 @@ public class ProyectInformation {
     private Long id;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String resumen;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String problemas;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String objetivos;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String mision;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String vision;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String valoresCorporativos;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String impactoAmbiental;
 
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String impactoSocial;
     
 }

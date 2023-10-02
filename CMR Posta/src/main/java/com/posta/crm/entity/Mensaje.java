@@ -31,7 +31,7 @@ public class Mensaje {
     private String asunto;
     
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String contenido;
     
     @ManyToOne

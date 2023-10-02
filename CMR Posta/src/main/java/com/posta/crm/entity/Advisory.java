@@ -26,7 +26,7 @@ public class Advisory {
     private Client client;
     @NotBlank
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String advisory;
     @ManyToOne
     private User user;

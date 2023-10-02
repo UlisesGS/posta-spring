@@ -25,34 +25,34 @@ public class AnalisisResultados {
     private Long id;
     
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String gestionEstrategica;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String gestionProductividad;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String gestionOperacional;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String gestionCalidad;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String gestionInnovacion;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String gestionFinanciera;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String gestionLogistica;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String gestionDigital;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String gestionAmbiental;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String gestionIntelectual;
     
 }

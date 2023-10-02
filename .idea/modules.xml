@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-
       <module fileurl="file://$PROJECT_DIR$/.idea/CRM-posta.iml" filepath="$PROJECT_DIR$/.idea/CRM-posta.iml" />
       <module fileurl="file://$PROJECT_DIR$/CMR Posta/crm.iml" filepath="$PROJECT_DIR$/CMR Posta/crm.iml" />
-
     </modules>
   </component>
 </project>

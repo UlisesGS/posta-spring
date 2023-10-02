@@ -41,6 +41,7 @@ public class SeguridadWeb {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(authRules -> authRules
+
                 .requestMatchers(HttpMethod.GET, "/users/byEmail/{email}").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
                 .requestMatchers(HttpMethod.GET, "/users").hasAnyRole("ADMIN", "ADVISER")
@@ -61,6 +62,7 @@ public class SeguridadWeb {
                 .requestMatchers("/calendario/**").hasAnyRole("ADMIN", "ADVISER")
                 .requestMatchers("/pdf/**").hasAnyRole("ADMIN", "ADVISER")
                 .anyRequest().authenticated())
+
                 .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
                 .addFilter(new JwtValidationFilter(authenticationConfiguration.getAuthenticationManager()))
                 .csrf(config -> config.disable())
@@ -73,8 +75,12 @@ public class SeguridadWeb {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
+
+      //  config.setAllowedOrigins(Arrays.asList("http://posta-app.s3-website.us-east-2.amazonaws.com"));
+
         //config.setAllowedOrigins(Arrays.asList("http://crm-posta.s3-website-us-east-1.amazonaws.com"));
         //config.setAllowedOrigins(Arrays.asList("http://posta-app.s3-website.us-east-2.amazonaws.com"));
+
         config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));

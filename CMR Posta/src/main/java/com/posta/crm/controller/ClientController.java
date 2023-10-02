@@ -284,5 +284,24 @@ public class ClientController {
     public ResponseEntity<?>buscarPorEstado(@PathVariable Boolean active){
         return ResponseEntity.ok(clienteService.buscarPorDesactivado(active));
     }
+    @GetMapping("/usuario/{id}/page/{page}")
+    public ResponseEntity<?>buscarPorUsuario(@PathVariable Long id, @PathVariable Integer page){
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Client>clientes = clienteService.buscarPorUsuario(id,pageable);
+        return ResponseEntity.ok(clientes);
+    }
+    @GetMapping("/creacion")
+    public ResponseEntity<?>porCreacion(){
+
+        List<Client> clients = clienteService.findByRegdate();
+
+        //List<Client> reversedClients = new ArrayList<>(clients);
+      //  Collections.reverse(reversedClients);
+
+
+        return ResponseEntity.ok(clients);
+        //return ResponseEntity.ok(reversedClients);
+
+    }
 
 }

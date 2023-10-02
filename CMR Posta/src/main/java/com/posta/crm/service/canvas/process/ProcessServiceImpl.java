@@ -60,4 +60,9 @@ return processRepository.findByTypeClienteE(type);
     public Page<Process> paginacion(Pageable pageable) {
         return processRepository.findAll(pageable);
     }
+
+    @Override
+    public Page<Process> buscarPorUsuario(Long id, Pageable pageable) {
+        return processRepository.buscarPorUsuario(id,pageable);
+    }
 }

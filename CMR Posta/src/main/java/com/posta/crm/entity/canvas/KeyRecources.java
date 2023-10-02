@@ -18,6 +18,7 @@ public class KeyRecources {
     private Long id;
     
    
+
     @Column(length = 3000)
     private String recursosHumanos;
     
@@ -28,6 +29,7 @@ public class KeyRecources {
     private String recursosIntelectuales;
     
     @Column(length = 3000)
+
     private String recursosTecnologicos;
     
 }

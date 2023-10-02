@@ -16,7 +16,7 @@ public class ValuePropositions {
     @GeneratedValue(strategy =GenerationType.IDENTITY)
     private Long id;
     @NotBlank
-    @Column(length = 1000)
+    @Column(length = 3000)
     private String proposition;
     
 }

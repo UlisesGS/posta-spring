@@ -36,7 +36,7 @@ import org.springframework.http.ResponseEntity;
 public class ImageController {
 
     private static final String UPLOAD_DIR = "img/";
-//    private static final String UPLOAD_DIR = System.getenv("UPLOAD_DIR");
+    //private static final String UPLOAD_DIR = System.getenv("UPLOAD_DIR");
 //    private static final String BUCKET_NAME = "posta-app";
     @Autowired
     private ProcessServiceImpl processServiceImpl;

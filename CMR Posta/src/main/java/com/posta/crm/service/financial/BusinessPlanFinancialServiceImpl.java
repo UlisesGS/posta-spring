@@ -116,15 +116,20 @@ public class BusinessPlanFinancialServiceImpl implements IBusinessPlanFinancialS
 
     @Override
     public BusinessPlanFinancial updateCompras(BusinessPlanFinancial businessPlanFinancial, Long id) {
+        
         BusinessPlanFinancial businessPlanFinancialUpdate = businessPlanFinancialRepository.findById(id).get();
+        
         List<PresupuestoCompra> presupuestoCompra = businessPlanFinancial.getPresupuestoCompra();
 
         List<PresupuestoCompra> presupuestoCompraUpdate = new ArrayList();
 
         List<EstructuraCompras> estructuraComprasUpdate = new ArrayList();
+        
+        List<EstructuraCompras> otrosInsumosUpdate = new ArrayList();
 
         List<EstructuraMercado> estructuraMercado = businessPlanFinancialUpdate.getPresupuestoVenta().getEstructuraMercado();
-
+        
+        
         for (PresupuestoCompra presupuestoCompra1 : presupuestoCompra) {
             for (EstructuraCompras estructura : presupuestoCompra1.getEstructuraCompras()) {
                 if (!presupuestoCompra1.getEstructuraCompras().contains(estructura)) {
@@ -132,6 +137,13 @@ public class BusinessPlanFinancialServiceImpl implements IBusinessPlanFinancialS
                 }
                 estructura.calculoTotal();
                 estructuraComprasUpdate.add(estructuraComprasRepository.save(estructura));
+            }
+            for (EstructuraCompras insumo : presupuestoCompra1.getOtrosInsumos()) {
+                if (!presupuestoCompra1.getOtrosInsumos().contains(insumo)) {
+                    presupuestoCompra1.getOtrosInsumos().add(insumo);
+                }
+                insumo.calculoTotal();
+                otrosInsumosUpdate.add(estructuraComprasRepository.save(insumo));
             }
             
             presupuestoCompraUpdate.add(presupuestoCompraRepository.save(presupuestoCompra1));

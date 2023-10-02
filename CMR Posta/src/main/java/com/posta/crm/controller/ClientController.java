@@ -284,5 +284,6 @@ public class ClientController {
     public ResponseEntity<?>buscarPorEstado(@PathVariable Boolean active){
         return ResponseEntity.ok(clienteService.buscarPorDesactivado(active));
     }
+    
 
 }

@@ -99,6 +99,7 @@ public class Client {
     private Date fechaAlta;
     @Enumerated(value = EnumType.STRING)
     private TypeOfCompany typeOfCompany;
+    
     @Column(nullable = true)
     private Integer employeePartTime;
     @Column(nullable = true)

@@ -22,6 +22,7 @@ import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.posta.crm.entity.Client;
 import com.posta.crm.entity.ProcessEmpresario;
+import com.posta.crm.entity.empresario.ConceptosGenerales;
 import com.posta.crm.repository.ClientRepository;
 import com.posta.crm.repository.empresario.ProcessEmpresarioRepository;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,8 +32,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -49,6 +52,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/pdf")
 @CrossOrigin(origins = "*")
 public class PDFCOntroller {
+    
+   
 
     @Autowired
     private ClientRepository clientRepository;
@@ -60,7 +65,7 @@ public class PDFCOntroller {
         // Establecer el tipo de contenido de la respuesta como PDF
         response.setContentType("application/pdf");
         // Establecer el encabezado para indicar la descarga del archivo PDF
-        response.setHeader("Content-Disposition", "attachment; filename=example.pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=Contacto.pdf");
 
         try {
             // Crear un nuevo documento PDF
@@ -70,28 +75,52 @@ public class PDFCOntroller {
             // Abrir el documento para agregar contenido
             document.open();
 
-            String imagePathIzq = new File("camaraHD.jpg").getAbsolutePath();
+//            String imagePathIzq = new File("camaraHD.jpg").getAbsolutePath();
+//
+//            // Agregar la imagen en la parte superior izquierda
+//            Image image = Image.getInstance(imagePathIzq);
+//            image.scaleToFit(100, 100); // Escala la imagen para que tenga un ancho y alto de 100 unidades
+//            image.setAbsolutePosition(36, 750); // Coordenadas (36, 770) en el PDF (medida en unidades, donde 1 unidad = 1/72 pulgadas)
+//            document.add(image);
+//
+//            String imagePathDer = new File("CodigoRCP-CreacionContacto.jpg").getAbsolutePath();
+//
+//            // Agregar la imagen en la parte superior izquierda
+//            Image image1 = Image.getInstance(imagePathDer);
+//            image1.scaleToFit(150, 150); // Escala la imagen para que tenga un ancho y alto de 100 unidades
+//            image1.setAbsolutePosition(PageSize.A4.getWidth() - 180, 760); // Coordenadas (36, 770) en el PDF (medida en unidades, donde 1 unidad = 1/72 pulgadas)
+//            document.add(image1);
+            String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+            Image headerImageIzq = Image.getInstance(imagePathIzq);
+            headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+            float imageX1 = 36;
+            float imageY1 = PageSize.A4.getHeight() - 20 - headerImageIzq.getScaledHeight();
+            headerImageIzq.setAbsolutePosition(imageX1, imageY1);
+            document.add(headerImageIzq);
 
-            // Agregar la imagen en la parte superior izquierda
-            Image image = Image.getInstance(imagePathIzq);
-            image.scaleToFit(100, 100); // Escala la imagen para que tenga un ancho y alto de 100 unidades
-            image.setAbsolutePosition(36, 750); // Coordenadas (36, 770) en el PDF (medida en unidades, donde 1 unidad = 1/72 pulgadas)
-            document.add(image);
+            String imagePathDer = new File("CodigoRCP-CreacionContacto.jpg").getAbsolutePath();
+            Image headerImageDer = Image.getInstance(imagePathDer);
+            headerImageDer.scaleToFit(100, 100);
+            float imageX2 = PageSize.A4.getWidth() - 136;
+            float imageY2 = PageSize.A4.getHeight() - 20 - headerImageDer.getScaledHeight();
+            headerImageDer.setAbsolutePosition(imageX2, imageY2);
+            document.add(headerImageDer);
 
-            String imagePathDer = new File("costitaIzq.jpg").getAbsolutePath();
-
-            // Agregar la imagen en la parte superior izquierda
-            Image image1 = Image.getInstance(imagePathDer);
-            image1.scaleToFit(100, 100); // Escala la imagen para que tenga un ancho y alto de 100 unidades
-            image1.setAbsolutePosition(PageSize.A4.getWidth() - 136, 760); // Coordenadas (36, 770) en el PDF (medida en unidades, donde 1 unidad = 1/72 pulgadas)
-            document.add(image1);
+            //Imagen Derecha pero a la izquierda de la imagen del metodo de abajo
+            String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+            Image headerImageIzq3 = Image.getInstance(imagePathIzq3);
+            headerImageIzq3.scaleToFit(150, 150); // Ajusta el tamaño de la tercera imagen según tus necesidades
+            float imageX3 = imageX2 - headerImageIzq3.getScaledWidth() - 10; // Coloca la tercera imagen a la izquierda de la segunda imagen
+            float imageY3 = imageY2 - 10; // Mantiene la misma altura que la segunda imagen
+            headerImageIzq3.setAbsolutePosition(imageX3, imageY3);
+            document.add(headerImageIzq3);
 
             // Agregar contenido al PDF
             // Crear un párrafo vacío antes del título para agregar espacio entre el título y el primer párrafo
             // Establecer el estilo de fuente para el título
             Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, Font.BOLD);
             Paragraph title = new Paragraph("Datos del Cliente", titleFont);
-            title.setSpacingBefore(20f);
+            title.setSpacingBefore(40f);
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
             document.add(new Paragraph("\n\n"));
@@ -104,10 +133,19 @@ public class PDFCOntroller {
             String tipo;
             String tipoNego;
             String tipoServ;
+            String genero = client.getGender().name();
+
+            if (genero.equals("FEMALE")) {
+                genero = "Femenino";
+            } else if (genero.equals("MALE")) {
+                genero = "Masculino";
+            } else if (genero.equals("LGBTQ")) {
+                genero = "LGBTIQ+";
+            }
             if (client.getType().equals("businessman")) {
-                tipo = "EMPRESARIO";
+                tipo = "Empresario";
             } else {
-                tipo = "EMPRENDEDOR";
+                tipo = "Emprendedor";
             }
             if (client.getType().equals("businessman")) {
                 tipoNego = client.getCompanyName();
@@ -119,6 +157,10 @@ public class PDFCOntroller {
             } else {
                 tipoServ = client.getProduct();
             }
+
+            Date fecha = client.getRegdate();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            String fechaFormateada = sdf.format(fecha);
             // Simulamos datos de ejemplo para agregar al PDF
 //            String nombre = "John Doe";
 //            int edad = 30;
@@ -126,14 +168,21 @@ public class PDFCOntroller {
 
             // Crear un párrafo con los datos y agregarlo al PDF
             Paragraph paragraph = new Paragraph();
-            paragraph.add(new Phrase("Clasificación de Cliente: ", contentFont));
+            paragraph.add(new Phrase("Fecha: ", contentFont));
+            paragraph.add(new Phrase(fechaFormateada, atributos));
+            paragraph.add(new Phrase("              Municipio: ", contentFont));
+            paragraph.add(new Phrase(client.getMunicipio().getName(), atributos));
+            paragraph.add(new Phrase("\nAsesor: ", contentFont));
+            paragraph.add(new Phrase(client.getUser().getName() + " " + client.getUser().getLastName(), atributos));
+
+            paragraph.add(new Phrase("\nClasificación de Cliente: ", contentFont));
             paragraph.add(new Phrase(tipo, atributos));
             paragraph.add(new Phrase("\nNombres y Apellidos: ", contentFont));
             paragraph.add(new Phrase(client.getName() + " " + client.getLastName() + " ", atributos));
             paragraph.add(new Phrase("                          Documento/NIT: ", contentFont));
-            paragraph.add(new Phrase(String.valueOf(client.getNIT()), atributos));
+            paragraph.add(new Phrase(client.getNIT().toString(), atributos));
             paragraph.add(new Phrase("\nGénero: ", contentFont));
-            paragraph.add(new Phrase(client.getGender().name(), atributos));
+            paragraph.add(new Phrase(genero, atributos));
             paragraph.add(new Phrase("\nNombre de la Empresa o Idea de Negocio: ", contentFont));
             paragraph.add(new Phrase(tipoNego, atributos));
             paragraph.add(new Phrase("\nProducto o Servicio a Comercializar: ", contentFont));
@@ -142,6 +191,10 @@ public class PDFCOntroller {
             paragraph.add(new Phrase(client.getPhone(), atributos));
             paragraph.add(new Phrase("                          Correo Electrónico: ", contentFont));
             paragraph.add(new Phrase(client.getEmail(), atributos));
+            paragraph.add(new Phrase("\nDirección: ", contentFont));
+            paragraph.add(new Phrase(client.getAddress(), atributos));
+            paragraph.add(new Phrase("\nObservaciones: ", contentFont));
+            paragraph.add(new Phrase(client.getRemarks(), atributos));
 
             paragraph.setSpacingAfter(10f); // Agregar espacio después del párrafo
             document.add(paragraph);
@@ -481,12 +534,13 @@ public class PDFCOntroller {
             Document document = new Document(PageSize.A4);
             OutputStream outputStream = response.getOutputStream();
             PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(document.leftMargin(), document.rightMargin(), 100, 100);
 
             // Crear una instancia de la clase PdfFooterEventHandler para manejar el pie de página
             PdfFooterEventHandler footerHandler = new PdfFooterEventHandler();
             writer.setPageEvent(footerHandler);
             // Crear una instancia de la clase PdfHeaderEventHandler para manejar el encabezado
-            PdfHeaderEventHandler headerHandler = new PdfHeaderEventHandler();
+            PdfHeaderEventHandler1 headerHandler = new PdfHeaderEventHandler1();
             writer.setPageEvent(headerHandler);
 
             // Abrir el documento para escribir el contenido
@@ -500,9 +554,6 @@ public class PDFCOntroller {
             Date currentDate = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
             String formattedDate = dateFormat.format(currentDate).toUpperCase();
-
-            // Establecer el estilo de fuente para el título
-            document.add(new Paragraph("\n\n"));
 
             Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
             Paragraph title = new Paragraph(client.getCompanyName().toUpperCase(), titleFont);
@@ -546,7 +597,7 @@ public class PDFCOntroller {
                 PdfPCell cell1 = new PdfPCell(new Paragraph(nombregestion[i], contentFont4));
                 cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell1);
-                PdfPCell cell2 = new PdfPCell(new Paragraph(String.valueOf(processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getTotales().get(i)), contentFont4));
+                PdfPCell cell2 = new PdfPCell(new Paragraph(new DecimalFormat("#.##").format(processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getTotales().get(i)), contentFont4));
                 cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell2);
 
@@ -557,7 +608,7 @@ public class PDFCOntroller {
             cell3.setColspan(2);
             cell3.setBackgroundColor(colorFooter);
             table.addCell(cell3);
-            PdfPCell cell4 = new PdfPCell(new Paragraph(String.valueOf(processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getTotal()), contentFont4));
+            PdfPCell cell4 = new PdfPCell(new Paragraph(new DecimalFormat("#.##").format(processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getTotal()), contentFont4));
             cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell4.setBackgroundColor(colorFooter);
 
@@ -569,26 +620,168 @@ public class PDFCOntroller {
             title2.setAlignment(Element.ALIGN_CENTER);
             document.add(title2);
             document.add(new Paragraph("\n"));
-            
+
             //Contenido de Analisis de Resultados
             Paragraph parrafo = new Paragraph("GESTIÓN ESTRATÉGICA COMERCIAL Y DE MARKETING", contentFont1);
             parrafo.setAlignment(Element.ALIGN_CENTER);
             parrafo.setSpacingBefore(20f);
             document.add(parrafo);
+            if (writer.getVerticalPosition(false) < parrafo.getTotalLeading()) {
+                document.newPage();
+            }
             Paragraph parrafo1 = new Paragraph(processEmpresario.getDiagnosticoEmpresarial().getAnalisisResultados().getGestionEstrategica(), contentFont4);
             parrafo1.setAlignment(Element.ALIGN_JUSTIFIED);
             parrafo1.setSpacingBefore(20f);
             document.add(parrafo1);
-            
-             Paragraph parrafo2 = new Paragraph("GESTIÓN DE PRODUCTIVIDAD Y DEL TALENTO HUMANO", contentFont1);
+
+            if (writer.getVerticalPosition(true) < parrafo1.getTotalLeading()) {
+                System.out.println("ALGO");
+                document.newPage();
+            }
+
+            Paragraph parrafo2 = new Paragraph("GESTIÓN DE PRODUCTIVIDAD Y DEL TALENTO HUMANO", contentFont1);
             parrafo2.setAlignment(Element.ALIGN_CENTER);
             parrafo2.setSpacingBefore(20f);
             document.add(parrafo2);
+            if (writer.getVerticalPosition(false) < parrafo2.getTotalLeading()) {
+                document.newPage();
+            }
             Paragraph parrafo3 = new Paragraph(processEmpresario.getDiagnosticoEmpresarial().getAnalisisResultados().getGestionProductividad(), contentFont4);
             parrafo3.setAlignment(Element.ALIGN_JUSTIFIED);
             parrafo3.setSpacingBefore(20f);
             document.add(parrafo3);
-            
+            if (writer.getVerticalPosition(false) < parrafo3.getTotalLeading()) {
+                document.newPage();
+            }
+
+            Paragraph parrafo4 = new Paragraph("GESTIÓN DE LA PRODUCTIVIDAD OPERACIONAL", contentFont1);
+            parrafo4.setAlignment(Element.ALIGN_CENTER);
+            parrafo4.setSpacingBefore(20f);
+            document.add(parrafo4);
+            if (writer.getVerticalPosition(false) < parrafo4.getTotalLeading()) {
+                document.newPage();
+            }
+
+            Paragraph parrafo5 = new Paragraph(processEmpresario.getDiagnosticoEmpresarial().getAnalisisResultados().getGestionProductividad(), contentFont4);
+            parrafo5.setAlignment(Element.ALIGN_JUSTIFIED);
+            parrafo5.setSpacingBefore(20f);
+            document.add(parrafo5);
+            if (writer.getVerticalPosition(false) < parrafo5.getTotalLeading()) {
+                document.newPage();
+            }
+
+            Paragraph parrafo6 = new Paragraph("GESTIÓN DE CALIDAD", contentFont1);
+            parrafo6.setAlignment(Element.ALIGN_CENTER);
+            parrafo6.setSpacingBefore(20f);
+            document.add(parrafo6);
+            if (writer.getVerticalPosition(false) < parrafo6.getTotalLeading()) {
+                document.newPage();
+            }
+
+            Paragraph parrafo7 = new Paragraph(processEmpresario.getDiagnosticoEmpresarial().getAnalisisResultados().getGestionCalidad(), contentFont4);
+            parrafo7.setAlignment(Element.ALIGN_JUSTIFIED);
+            parrafo7.setSpacingBefore(20f);
+            document.add(parrafo7);
+            if (writer.getVerticalPosition(false) < parrafo7.getTotalLeading()) {
+                document.newPage();
+            }
+
+            Paragraph parrafo8 = new Paragraph("GESTIÓN DE LA INNOVACIÓN", contentFont1);
+            parrafo8.setAlignment(Element.ALIGN_CENTER);
+            parrafo8.setSpacingBefore(20f);
+            document.add(parrafo8);
+            if (writer.getVerticalPosition(false) < parrafo8.getTotalLeading()) {
+                document.newPage();
+            }
+
+            Paragraph parrafo9 = new Paragraph(processEmpresario.getDiagnosticoEmpresarial().getAnalisisResultados().getGestionInnovacion(), contentFont4);
+            parrafo9.setAlignment(Element.ALIGN_JUSTIFIED);
+            parrafo9.setSpacingBefore(20f);
+            document.add(parrafo9);
+            if (writer.getVerticalPosition(false) < parrafo9.getTotalLeading()) {
+                document.newPage();
+            }
+
+            Paragraph parrafo10 = new Paragraph("GESTIÓN FINANCIERA Y CONTABLE", contentFont1);
+            parrafo10.setAlignment(Element.ALIGN_CENTER);
+            parrafo10.setSpacingBefore(20f);
+            document.add(parrafo10);
+            if (writer.getVerticalPosition(false) < parrafo10.getTotalLeading()) {
+                document.newPage();
+            }
+
+            Paragraph parrafo11 = new Paragraph(processEmpresario.getDiagnosticoEmpresarial().getAnalisisResultados().getGestionFinanciera(), contentFont4);
+            parrafo11.setAlignment(Element.ALIGN_JUSTIFIED);
+            parrafo11.setSpacingBefore(20f);
+            document.add(parrafo11);
+            if (writer.getVerticalPosition(false) < parrafo11.getTotalLeading()) {
+                document.newPage();
+            }
+
+            Paragraph parrafo12 = new Paragraph("GESTIÓN LOGÍSTICA", contentFont1);
+            parrafo12.setAlignment(Element.ALIGN_CENTER);
+            parrafo12.setSpacingBefore(20f);
+            document.add(parrafo12);
+            if (writer.getVerticalPosition(false) < parrafo12.getTotalLeading()) {
+                document.newPage();
+            }
+
+            Paragraph parrafo13 = new Paragraph(processEmpresario.getDiagnosticoEmpresarial().getAnalisisResultados().getGestionLogistica(), contentFont4);
+            parrafo13.setAlignment(Element.ALIGN_JUSTIFIED);
+            parrafo13.setSpacingBefore(20f);
+            document.add(parrafo13);
+            if (writer.getVerticalPosition(false) < parrafo13.getTotalLeading()) {
+                document.newPage();
+            }
+
+            Paragraph parrafo14 = new Paragraph("GESTIÓN DE LA TRANSFORMACIÓN DIGÍTAL", contentFont1);
+            parrafo14.setAlignment(Element.ALIGN_CENTER);
+            parrafo14.setSpacingBefore(20f);
+            document.add(parrafo14);
+            if (writer.getVerticalPosition(false) < parrafo14.getTotalLeading()) {
+                document.newPage();
+            }
+
+            Paragraph parrafo15 = new Paragraph(processEmpresario.getDiagnosticoEmpresarial().getAnalisisResultados().getGestionDigital(), contentFont4);
+            parrafo15.setAlignment(Element.ALIGN_JUSTIFIED);
+            parrafo15.setSpacingBefore(20f);
+            document.add(parrafo15);
+            if (writer.getVerticalPosition(false) < parrafo15.getTotalLeading()) {
+                document.newPage();
+            }
+
+            Paragraph parrafo16 = new Paragraph("GESTIÓN DE SOSTENIBILIDAD AMBIENTAL", contentFont1);
+            parrafo16.setAlignment(Element.ALIGN_CENTER);
+            parrafo16.setSpacingBefore(20f);
+            document.add(parrafo16);
+            if (writer.getVerticalPosition(false) < parrafo16.getTotalLeading()) {
+                document.newPage();
+            }
+
+            Paragraph parrafo17 = new Paragraph(processEmpresario.getDiagnosticoEmpresarial().getAnalisisResultados().getGestionAmbiental(), contentFont4);
+            parrafo17.setAlignment(Element.ALIGN_JUSTIFIED);
+            parrafo17.setSpacingBefore(20f);
+            document.add(parrafo17);
+            if (writer.getVerticalPosition(false) < parrafo17.getTotalLeading()) {
+                document.newPage();
+            }
+
+            Paragraph parrafo18 = new Paragraph("GESTIÓN DE LA PROPIEDAD INTELECTUAL E INDUSTRIAL", contentFont1);
+            parrafo18.setAlignment(Element.ALIGN_CENTER);
+            parrafo18.setSpacingBefore(20f);
+            document.add(parrafo18);
+            if (writer.getVerticalPosition(false) < parrafo18.getTotalLeading()) {
+                document.newPage();
+            }
+
+            Paragraph parrafo19 = new Paragraph(processEmpresario.getDiagnosticoEmpresarial().getAnalisisResultados().getGestionIntelectual(), contentFont4);
+            parrafo19.setAlignment(Element.ALIGN_JUSTIFIED);
+            parrafo19.setSpacingBefore(20f);
+            document.add(parrafo19);
+            if (writer.getVerticalPosition(false) < parrafo19.getTotalLeading()) {
+                document.newPage();
+            }
+
             // Cerrar el documento
             document.close();
             outputStream.flush();
@@ -596,6 +789,1898 @@ public class PDFCOntroller {
             e.printStackTrace();
             // Manejar errores aquí
         }
+    }
+
+    @GetMapping("/conceptos/{id}")
+    public void generarConceptos(HttpServletResponse response, @PathVariable Long id) {
+        String[] preguntas = {
+            "¿Cumple con los documentos y registros necesarios legalmente (comerciales, tributarios, uso del suelo, registro Invima, concepto sanitario, concepto bomberos, licencia ambiental)?",
+            "¿Cumple con todos los requisitos legales vigentes relacionados con el pago de la seguridad laboral del personal (seguridad social y pensiones administración de riesgos profesionales, fondos de cesantías)?",
+            "¿Lleva libros de contabilidad, actas, de reformas, y de información legal? ¿se encuentran al día y debidamente registrados y archivados?",
+            "¿Tiene definidas las responsabilidades y funciones de cada puesto de trabajo o cargos que desempeñan cada uno de los integrantes de la empresa?",
+            "¿La empresa cuenta con un reglamento interno de trabajo?",
+            "¿Cuentan con manual de procesos?",
+            "¿Se tienen establecidas claramente la misión, visión, valores corportativos y política de calidad de la empresa?",
+            "¿Se tienen indicadores: financieros, comerciales, producción, calidad?",
+            "¿Tiene claramente definido el producto y el cliente hacia el cual está dirigido?",
+            "¿Ha analizado la competencia y el entorno en general (productos sustitutos, competidores potenciales, proveedores, clientes)?",
+            "¿La empresa cuenta con una imagen corporativa?",
+            "¿La empresa dispone de un portafolio de productos/ servicios suficientemente?",
+            "¿La empresa cuenta con metas (comerciales - financieras), medibles y verificables en un plazo de tiempo definido, con asignación del responsable de su cumplimiento?",
+            "¿La empresa tiene definidas estrategias para comercializar sus servicios?",
+            "¿La empresa cuenta con instalaciones y está ubicada geográficamente permitiendo el fácil acceso a clientes y proveedores?",
+            "¿Cuenta con herramientas y maquinaria necesaria para la fabricación de sus productos o prestación de servicios?",
+            "¿Se cuenta con áreas organizadas para las fabricación de los productos o servicios, almacenamiento de materias primas, productos en proceso y productos terminados?",
+            "¿Cuenta con la disponibilidad de mano de obra calificada para la fabricación de productos o prestación de servicios?",
+            "¿La empresa conoce y aplica las normas ambientales en el desarrollo de su actividad?",
+            "¿La disponibilidad de materia prima está garantizada a mediano y largo plazo?",
+            "¿Posee un sistema de contabilidad y costos que ofrece información confiable y oportuna para la toma de decisiones?",
+            "¿La empresa realiza presupuestos?",
+            "¿Posee Cuenta de Ahorro o Cuenta Corriente?"
+        };
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=conceptosGeneralesEmpresa.pdf");
+
+        try {
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4);
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(0, 0, 70, 30);
+
+            // Crear una instancia de la clase PdfFooterEventHandler para manejar el pie de página
+            //PdfFooterEventHandler footerHandler = new PdfFooterEventHandler();
+            //writer.setPageEvent(footerHandler);
+            // Crear una instancia de la clase PdfHeaderEventHandler para manejar el encabezado
+            PdfHeaderEventHandler1 headerHandler = new PdfHeaderEventHandler1();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+            Client client = clientRepository.findById(id).get();
+            ProcessEmpresario processEmpresario = processEmpresarioRepository.findByClient(client.getId());
+
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+            Font contentFont5 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.NORMAL);
+            // Agregar contenido al PDF
+            // Crear un párrafo vacío antes del título para agregar espacio entre el título y el primer párrafo
+            //Crear Fecha para portada
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+            Paragraph title = new Paragraph(client.getCompanyName().toUpperCase(), titleFont);
+            title.setSpacingBefore(20f);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph("\n"));
+            Paragraph title1 = new Paragraph("Diagnóstico Empresarial- Conceptos Generales", titleFont);
+
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+            document.add(new Paragraph("\n"));
+
+            // Crear una tabla con 4 columnas
+            PdfPTable table = new PdfPTable(4);
+
+            // Configurar el ancho de las columnas
+            float[] columnWidths = {4, 56, 10, 30};
+            table.setWidths(columnWidths);
+            BaseColor colorHeader = new BaseColor(204, 255, 255);
+            // Agregar encabezados de columna
+            PdfPCell cell = new PdfPCell();
+            cell.setPhrase(new Phrase("N°", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("CONCEPTOS GENERALES DE LA EMPRESA", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("CUMPL.", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("OBSERVACIONES", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table.addCell(cell);
+
+            List<ConceptosGenerales> conceptosGenerales = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getConceptosGenerales();
+            // Agregar filas de datos (esto es un ejemplo, deberás adaptar los datos según tus necesidades)
+            for (int i = 0; i < processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getConceptosGenerales().size(); i++) {
+                ConceptosGenerales concepto = conceptosGenerales.get(i);
+                PdfPCell cell1 = new PdfPCell(new Phrase(Integer.toString(i + 1), contentFont4));
+                PdfPCell cell2 = new PdfPCell(new Phrase(preguntas[i], contentFont5));
+                PdfPCell cell3 = new PdfPCell(new Phrase(concepto.getDiagEmpr().name(), contentFont4));
+                PdfPCell cell4 = new PdfPCell(new Phrase(concepto.getObservaciones(), contentFont5));
+
+                // Establecer la alineación de todas las celdas
+                cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell3.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+                // Agregar las celdas a la tabla
+                table.addCell(cell1);
+                table.addCell(cell2);
+                table.addCell(cell3);
+                table.addCell(cell4);
+            }
+
+            // Agregar la tabla al documento
+            document.add(table);
+
+            // Cerrar el documento
+            document.close();
+            outputStream.flush();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+    }
+
+    @GetMapping("/estrategica/{id}")
+    public void generarEstrategica(HttpServletResponse response, @PathVariable Long id) {
+        String[] elementos = {
+            "Mercado Objetivo",
+            "Estrategia Comercial",
+            "Mezcla de Mercadeo",
+            "Mecanismos",
+            "Tendencias",
+            "Material Mercadeo",
+            "Tiempos de Entrega",
+            "Prototipos",
+            "Generación de Ideas",
+            "Competencia",
+            "Precio",
+            "Estrategias por Canal",
+            "Marca",
+            "Imagen Corporativa",
+            "Fidelización",
+            "Merchandising",
+            "Otros Productos",
+            "Internacionalización"
+        };
+
+        String[] preguntas = {
+            "¿La empresa tiene identificado el mercado objetivo?",
+            "¿La empresa cuenta con metas comerciales medibles y verificables en un plazo de tiempo definido, con asignación del responsable de su cumplimiento?",
+            "¿La empresa asigna recursos para el mercadeo de sus servicios? (promociones, material publicitario, otros).",
+            "¿La empresa evalúa periódicamente sus mecanismos de promoción y publicidad para medir su efectividad y/o continuidad?",
+            "¿La empresa Investiga tendencias del sector y de su producto o servicio a nivel Local, Nacional e Internacional?",
+            "¿La empresa dispone de catálogos, portafolio o flayers con las especificaciones técnicas sus productos o servicios?",
+            "¿La empresa cumple con los requisitos de tiempo de entrega a sus clientes?",
+            "¿La empresa elabora pruebas piloto de cada producto, antes de ser lanzado al mercado?",
+            "¿La empresa promueve la creación de nuevos productos y o servicios para su negocio entre sus colaboradores?",
+            "¿La empresa Investiga periódicamente a la competencia? (Precios, productos, servicio)",
+            "¿Los precios de la empresa están determinados con base en el conocimiento de sus costos, de la demanda y de la competencia?",
+            "¿La empresa establece estrategias por cada canal de distribución?",
+            "¿La empresa tiene registrada su marca (marcas) e implementa estrategias para su posicionamiento?.",
+            "¿La empresa cuenta con imagen corporativa? (Manual de Imagen Corporativa)",
+            "¿La empresa cuenta con un plan de fidelización para los clientes?",
+            "¿La empresa cuenta con material de merchandising?",
+            "¿La empresa ofrece a sus clientes productos complementarios a su producto estrella?",
+            "¿La empresa exporta o importa bienes o servicios?"
+        };
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=gestionEstrategica.pdf");
+
+        try {
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4);
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(0, 0, 70, 30);
+
+            // Crear una instancia de la clase PdfFooterEventHandler para manejar el pie de página
+            //PdfFooterEventHandler footerHandler = new PdfFooterEventHandler();
+            //writer.setPageEvent(footerHandler);
+            // Crear una instancia de la clase PdfHeaderEventHandler para manejar el encabezado
+            PdfHeaderEventHandler1 headerHandler = new PdfHeaderEventHandler1();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+            Client client = clientRepository.findById(id).get();
+            ProcessEmpresario processEmpresario = processEmpresarioRepository.findByClient(client.getId());
+
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+            Font contentFont5 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.NORMAL);
+            // Agregar contenido al PDF
+            // Crear un párrafo vacío antes del título para agregar espacio entre el título y el primer párrafo
+            //Crear Fecha para portada
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+            Paragraph title = new Paragraph(client.getCompanyName().toUpperCase(), titleFont);
+            title.setSpacingBefore(20f);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph("\n"));
+            Paragraph title1 = new Paragraph("Diagnóstico Empresarial- Gestión Estratégica y de Marketing", titleFont);
+
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+            document.add(new Paragraph("\n"));
+
+            // Crear una tabla con 4 columnas
+            PdfPTable table = new PdfPTable(4);
+
+            // Configurar el ancho de las columnas
+            float[] columnWidths = {4, 20, 60, 14};
+            table.setWidths(columnWidths);
+            BaseColor colorHeader = new BaseColor(204, 255, 255);
+            // Agregar encabezados de columna
+            PdfPCell cell = new PdfPCell();
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("1. GESTIÓN ESTRATÉGICA COMERCIAL Y DE MARKETING", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("Calificación", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table.addCell(cell);
+
+            List<Integer> esterategica = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionEstrategica();
+            List<Float> totales = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getTotales();
+            // Agregar filas de datos (esto es un ejemplo, deberás adaptar los datos según tus necesidades)
+            for (int i = 0; i < processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionEstrategica().size(); i++) {
+                Integer concepto = esterategica.get(i);
+                PdfPCell cell1 = new PdfPCell(new Phrase(Integer.toString(i + 1), contentFont4));
+                PdfPCell cell2 = new PdfPCell(new Phrase(elementos[i], contentFont5));
+                PdfPCell cell3 = new PdfPCell(new Phrase(preguntas[i], contentFont4));
+                PdfPCell cell4 = new PdfPCell(new Phrase(new DecimalFormat("#.##").format(concepto), contentFont5));
+
+                // Establecer la alineación de todas las celdas
+                cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell4.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+                // Agregar las celdas a la tabla
+                table.addCell(cell1);
+                table.addCell(cell2);
+                table.addCell(cell3);
+                table.addCell(cell4);
+            }
+
+            BaseColor colorHeader1 = new BaseColor(255, 255, 204);
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("PUNTAJE TOTAL", contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase(new DecimalFormat("#.##").format(totales.get(0)), contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            // Agregar la tabla al documento
+            document.add(table);
+
+            // Cerrar el documento
+            document.close();
+            outputStream.flush();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+    }
+
+    @GetMapping("/productividad/{id}")
+    public void generarProductividad(HttpServletResponse response, @PathVariable Long id) {
+        String[] elementos = {
+            "Plan Estratégico",
+            "Estructura organizacional",
+            "Competencias",
+            "Cumplimiento Normas",
+            "Planeación",
+            "Manejo de Indicadores",
+            "Proceso de Selección",
+            "Procesos de Inducción y Capacitación",
+            "Seguridad y Salud en el Trabajo",
+            "Incentivos",
+            "Comunicación",
+            "Desempeño",
+            "Organizacional"
+        };
+
+        String[] preguntas = {
+            "¿La empresa cuenta con un plan estratégico (Metas corporativas, Visión, Misión, Estrategia y Objetivos)?",
+            "¿La empresa cuenta con una estructura organizacional (Organigrama, Manual de funciones y responsabilidades)?",
+            "¿La empresa evalúa las competencias y habilidades periódicamente de sus trabajadores?",
+            "¿En la empresa se cumplen las normas Tributarias, Contables, Laborales y Comerciales?",
+            "¿La empresa realiza grupos de trabajo para planear las estrategias del mes (comerciales, marketing)?",
+            "¿En la empresa se manejan indicadores de Gestión y Productividad?",
+            "¿La empresa cuenta con procesos de selección de nuevos empleados (pruebas psicológicas, psicotécnicas y de conocimiento)?",
+            "¿La empresa realiza procesos de inducción, reinducción y capacitación a los nuevos y antiguos empleados?",
+            "¿La empresa cuenta con Seguridad y Salud en el Trabajo (equipo de trabajo, manuales, procedimientos)?",
+            "¿La empresa maneja incentivos y recompensas por productividad y ventas y cumplimientos de metas?",
+            "¿Cuentan con canales de comunicación ágiles, asertivos y oportunos los diferentes niveles de personal de la compañía (directivos, técnicos, administrativos, otros)?",
+            "¿Realizan evaluación de desempeño a todos los colaboradores de la empresa?",
+            "¿La empresa hace medición del clima organizacional?"
+        };
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=gestionProductividad.pdf");
+
+        try {
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4);
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(0, 0, 70, 30);
+
+            // Crear una instancia de la clase PdfFooterEventHandler para manejar el pie de página
+            //PdfFooterEventHandler footerHandler = new PdfFooterEventHandler();
+            //writer.setPageEvent(footerHandler);
+            // Crear una instancia de la clase PdfHeaderEventHandler para manejar el encabezado
+            PdfHeaderEventHandler1 headerHandler = new PdfHeaderEventHandler1();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+            Client client = clientRepository.findById(id).get();
+            ProcessEmpresario processEmpresario = processEmpresarioRepository.findByClient(client.getId());
+
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+            Font contentFont5 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.NORMAL);
+            // Agregar contenido al PDF
+            // Crear un párrafo vacío antes del título para agregar espacio entre el título y el primer párrafo
+            //Crear Fecha para portada
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+            Paragraph title = new Paragraph(client.getCompanyName().toUpperCase(), titleFont);
+            title.setSpacingBefore(20f);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph("\n"));
+            Paragraph title1 = new Paragraph("Diagnóstico Empresarial- Gestión de la Productividad y del talento humano", titleFont);
+
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+            document.add(new Paragraph("\n"));
+
+            // Crear una tabla con 4 columnas
+            PdfPTable table = new PdfPTable(4);
+
+            // Configurar el ancho de las columnas
+            float[] columnWidths = {4, 20, 60, 14};
+            table.setWidths(columnWidths);
+            BaseColor colorHeader = new BaseColor(204, 255, 255);
+            // Agregar encabezados de columna
+            PdfPCell cell = new PdfPCell();
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("2. GESTIÓN DE LA PRODUCTIVIDAD Y DEL TALENTO HUMANO", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("Calificación", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table.addCell(cell);
+
+            List<Integer> esterategica = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionProductividad();
+            List<Float> totales = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getTotales();
+            // Agregar filas de datos (esto es un ejemplo, deberás adaptar los datos según tus necesidades)
+            for (int i = 0; i < processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionProductividad().size(); i++) {
+                Integer concepto = esterategica.get(i);
+                PdfPCell cell1 = new PdfPCell(new Phrase(Integer.toString(i + 1), contentFont4));
+                PdfPCell cell2 = new PdfPCell(new Phrase(elementos[i], contentFont5));
+                PdfPCell cell3 = new PdfPCell(new Phrase(preguntas[i], contentFont4));
+                PdfPCell cell4 = new PdfPCell(new Phrase(new DecimalFormat("#.##").format(concepto), contentFont5));
+
+                // Establecer la alineación de todas las celdas
+                cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell4.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+                // Agregar las celdas a la tabla
+                table.addCell(cell1);
+                table.addCell(cell2);
+                table.addCell(cell3);
+                table.addCell(cell4);
+            }
+
+            BaseColor colorHeader1 = new BaseColor(255, 255, 204);
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("PUNTAJE TOTAL", contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase(new DecimalFormat("#.##").format(totales.get(1)), contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            // Agregar la tabla al documento
+            document.add(table);
+
+            // Cerrar el documento
+            document.close();
+            outputStream.flush();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+    }
+
+    @GetMapping("/operacional/{id}")
+    public void generarOperacional(HttpServletResponse response, @PathVariable Long id) {
+        String[] elementos = {
+            "Procesos",
+            "Producción",
+            "Estrategia Operativa",
+            "Estrategia Operativa",
+            "Mano de Obra y Maquinaria",
+            "Empaque",
+            "Instalaciones",
+            "Capacidad",
+            "Mantenimiento",
+            "Seguridad",
+            "Seguridad Industrial"
+        };
+
+        String[] preguntas = {
+            "¿La empresa cuenta con manuales de procesos (existen fichas técnicas de todas las materias primas, productos terminados, maquinaria y equipo)?",
+            "¿La empresa cuenta con un plan de producción (objetivos, estrategias, flujogramas o protocolos de procesos para los bienes y servicios que produce)?",
+            "¿La empresa tiene identificados indicadores para los procesos productivos (indicadores de entregas a tiempo, de reprocesos)?",
+            "¿La empresa cuenta con metas de operación medibles y verificables en un plazo de tiempo definido, con asignación del responsable de su cumplimiento?",
+            "¿La empresa cuenta con la disponibilidad de mano de obra calificada y maquinaria para responder ante un incremento de la producción o cambios en los gustos y preferencias de los clientes?",
+            "¿El empaque del producto cumple con estándares y la normatividad actual?",
+            "¿Cuentan con infraestructura, instalaciones y equipos para atender sus necesidades de funcionamiento y operación actual y futura?",
+            "¿La empresa tiene definida su capacidad de producción o de prestación de servicios y con base en esto se coordina la utilización de los recursos físicos, humanos y financieros?",
+            "¿En la empresa existe un programa de mantenimiento definido de la maquinaria y equipo de mantenimiento?",
+            "¿En la empresa, la planta, los procesos, los equipos y las instalaciones en general están diseñados para procurar un ambiente seguro para el trabajador?",
+            "¿La empresa posee un SSST, reglamento interno de trabajo, de higiene y una política de seguridad industrial?"
+        };
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=gestionOperacional.pdf");
+
+        try {
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4);
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(0, 0, 70, 30);
+
+            // Crear una instancia de la clase PdfFooterEventHandler para manejar el pie de página
+            //PdfFooterEventHandler footerHandler = new PdfFooterEventHandler();
+            //writer.setPageEvent(footerHandler);
+            // Crear una instancia de la clase PdfHeaderEventHandler para manejar el encabezado
+            PdfHeaderEventHandler1 headerHandler = new PdfHeaderEventHandler1();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+            Client client = clientRepository.findById(id).get();
+            ProcessEmpresario processEmpresario = processEmpresarioRepository.findByClient(client.getId());
+
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+            Font contentFont5 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.NORMAL);
+            // Agregar contenido al PDF
+            // Crear un párrafo vacío antes del título para agregar espacio entre el título y el primer párrafo
+            //Crear Fecha para portada
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+            Paragraph title = new Paragraph(client.getCompanyName().toUpperCase(), titleFont);
+            title.setSpacingBefore(20f);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph("\n"));
+            Paragraph title1 = new Paragraph("Diagnóstico Empresarial- Gestión de la Productividad Operacional", titleFont);
+
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+            document.add(new Paragraph("\n"));
+
+            // Crear una tabla con 4 columnas
+            PdfPTable table = new PdfPTable(4);
+
+            // Configurar el ancho de las columnas
+            float[] columnWidths = {4, 20, 60, 14};
+            table.setWidths(columnWidths);
+            BaseColor colorHeader = new BaseColor(204, 255, 255);
+            // Agregar encabezados de columna
+            PdfPCell cell = new PdfPCell();
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("3. GESTIÓN DE LA PRODUCTIVIDAD OPERACIONAL", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("Calificación", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table.addCell(cell);
+
+            List<Integer> esterategica = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionOperacional();
+            List<Float> totales = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getTotales();
+            // Agregar filas de datos (esto es un ejemplo, deberás adaptar los datos según tus necesidades)
+            for (int i = 0; i < processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionOperacional().size(); i++) {
+                Integer concepto = esterategica.get(i);
+                PdfPCell cell1 = new PdfPCell(new Phrase(Integer.toString(i + 1), contentFont4));
+                PdfPCell cell2 = new PdfPCell(new Phrase(elementos[i], contentFont5));
+                PdfPCell cell3 = new PdfPCell(new Phrase(preguntas[i], contentFont4));
+                PdfPCell cell4 = new PdfPCell(new Phrase(new DecimalFormat("#.##").format(concepto), contentFont5));
+
+                // Establecer la alineación de todas las celdas
+                cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell4.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+                // Agregar las celdas a la tabla
+                table.addCell(cell1);
+                table.addCell(cell2);
+                table.addCell(cell3);
+                table.addCell(cell4);
+            }
+
+            BaseColor colorHeader1 = new BaseColor(255, 255, 204);
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("PUNTAJE TOTAL", contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase(new DecimalFormat("#.##").format(totales.get(2)), contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            // Agregar la tabla al documento
+            document.add(table);
+
+            // Cerrar el documento
+            document.close();
+            outputStream.flush();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+    }
+
+    @GetMapping("/calidad/{id}")
+    public void generarCalidad(HttpServletResponse response, @PathVariable Long id) {
+        String[] elementos = {
+            "Implementación",
+            "Automatización",
+            "Implementación",
+            "Documental",
+            "Mapeo",
+            "Optimización",
+            "Mejora",
+            "Medición",
+            "Satisfacción Cliente",
+            "CRM"
+        };
+
+        String[] preguntas = {
+            "¿La empresa cuenta con un sistema de calidad definido?",
+            "¿La empresa tiene automatizados los procesos?",
+            "¿La empresa cuenta con implementación de BPM (gestión de procesos de negocios) o similares?",
+            "¿La empresa tiene documentados los procesos?",
+            "¿La empresa tiene mapeo de los procesos?",
+            "¿La empresa cuenta con optimización de procesos?",
+            "¿La empresa cuenta con un esquema para ejecutar acciones de mejoramiento (correctivas y preventivas, pruebas metrológicas e inspecciones) necesarias para garantizar la calidad del producto o servicio?",
+            "¿La empresa hace medición de la productividad?",
+            "¿La empresa mide con frecuencia la satisfacción de sus clientes para diseñar estrategias de mantenimiento y fidelización?",
+            "¿La empresa cuenta con herramientas para hacerle seguimiento a sus clientes? (gestión de relaciones con el cliente)"
+        };
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=gestionCalidadl.pdf");
+
+        try {
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4);
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(0, 0, 70, 30);
+
+            // Crear una instancia de la clase PdfFooterEventHandler para manejar el pie de página
+            //PdfFooterEventHandler footerHandler = new PdfFooterEventHandler();
+            //writer.setPageEvent(footerHandler);
+            // Crear una instancia de la clase PdfHeaderEventHandler para manejar el encabezado
+            PdfHeaderEventHandler1 headerHandler = new PdfHeaderEventHandler1();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+            Client client = clientRepository.findById(id).get();
+            ProcessEmpresario processEmpresario = processEmpresarioRepository.findByClient(client.getId());
+
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+            Font contentFont5 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.NORMAL);
+            // Agregar contenido al PDF
+            // Crear un párrafo vacío antes del título para agregar espacio entre el título y el primer párrafo
+            //Crear Fecha para portada
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+            Paragraph title = new Paragraph(client.getCompanyName().toUpperCase(), titleFont);
+            title.setSpacingBefore(20f);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph("\n"));
+            Paragraph title1 = new Paragraph("Diagnóstico Empresarial- Gestión de Calidad", titleFont);
+
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+            document.add(new Paragraph("\n"));
+
+            // Crear una tabla con 4 columnas
+            PdfPTable table = new PdfPTable(4);
+
+            // Configurar el ancho de las columnas
+            float[] columnWidths = {4, 20, 60, 14};
+            table.setWidths(columnWidths);
+            BaseColor colorHeader = new BaseColor(204, 255, 255);
+            // Agregar encabezados de columna
+            PdfPCell cell = new PdfPCell();
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("4. GESTIÓN DE CALIDAD", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("Calificación", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table.addCell(cell);
+
+            List<Integer> esterategica = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionCalidad();
+            List<Float> totales = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getTotales();
+            // Agregar filas de datos (esto es un ejemplo, deberás adaptar los datos según tus necesidades)
+            for (int i = 0; i < processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionCalidad().size(); i++) {
+                Integer concepto = esterategica.get(i);
+                PdfPCell cell1 = new PdfPCell(new Phrase(Integer.toString(i + 1), contentFont4));
+                PdfPCell cell2 = new PdfPCell(new Phrase(elementos[i], contentFont5));
+                PdfPCell cell3 = new PdfPCell(new Phrase(preguntas[i], contentFont4));
+                PdfPCell cell4 = new PdfPCell(new Phrase(new DecimalFormat("#.##").format(concepto), contentFont5));
+
+                // Establecer la alineación de todas las celdas
+                cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell4.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+                // Agregar las celdas a la tabla
+                table.addCell(cell1);
+                table.addCell(cell2);
+                table.addCell(cell3);
+                table.addCell(cell4);
+            }
+
+            BaseColor colorHeader1 = new BaseColor(255, 255, 204);
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("PUNTAJE TOTAL", contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase(new DecimalFormat("#.##").format(totales.get(3)), contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            // Agregar la tabla al documento
+            document.add(table);
+
+            // Cerrar el documento
+            document.close();
+            outputStream.flush();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+    }
+
+    @GetMapping("/innovacion/{id}")
+    public void generarInnovacion(HttpServletResponse response, @PathVariable Long id) {
+        String[] elementos = {
+            "Desarrollo",
+            "Sofisticación",
+            "Desarrollo",
+            "Innovación"
+        };
+
+        String[] preguntas = {
+            "¿La empresa ha implementado prácticas/metodologías para la mejora del producto?",
+            "¿La empresa ha implementado pruebas piloto, de laboratorio para mejorar el producto (diseño, nuevos materiales, nuevos servicios)?",
+            "¿La empresa ha hecho gestión para estandarizar su producto o servicio?",
+            "¿En la empresa se investiga y se obtiene información sobre nuevas tecnologías, respecto a procesos, mercados, procesos administrativos, nuevas tendencias del producto o servicio?"
+        };
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=gestionInnovacion.pdf");
+
+        try {
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4);
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(0, 0, 70, 30);
+
+            // Crear una instancia de la clase PdfFooterEventHandler para manejar el pie de página
+            //PdfFooterEventHandler footerHandler = new PdfFooterEventHandler();
+            //writer.setPageEvent(footerHandler);
+            // Crear una instancia de la clase PdfHeaderEventHandler para manejar el encabezado
+            PdfHeaderEventHandler1 headerHandler = new PdfHeaderEventHandler1();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+            Client client = clientRepository.findById(id).get();
+            ProcessEmpresario processEmpresario = processEmpresarioRepository.findByClient(client.getId());
+
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+            Font contentFont5 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.NORMAL);
+            // Agregar contenido al PDF
+            // Crear un párrafo vacío antes del título para agregar espacio entre el título y el primer párrafo
+            //Crear Fecha para portada
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+            Paragraph title = new Paragraph(client.getCompanyName().toUpperCase(), titleFont);
+            title.setSpacingBefore(20f);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph("\n"));
+            Paragraph title1 = new Paragraph("Diagnóstico Empresarial- Gestión de la Innovación", titleFont);
+
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+            document.add(new Paragraph("\n"));
+
+            // Crear una tabla con 4 columnas
+            PdfPTable table = new PdfPTable(4);
+
+            // Configurar el ancho de las columnas
+            float[] columnWidths = {4, 20, 60, 14};
+            table.setWidths(columnWidths);
+            BaseColor colorHeader = new BaseColor(204, 255, 255);
+            // Agregar encabezados de columna
+            PdfPCell cell = new PdfPCell();
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("5. GESTIÓN DE LA INNOVACIÓN", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("Calificación", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table.addCell(cell);
+
+            List<Integer> esterategica = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionInnovacion();
+            List<Float> totales = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getTotales();
+            // Agregar filas de datos (esto es un ejemplo, deberás adaptar los datos según tus necesidades)
+            for (int i = 0; i < processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionInnovacion().size(); i++) {
+                Integer concepto = esterategica.get(i);
+                PdfPCell cell1 = new PdfPCell(new Phrase(Integer.toString(i + 1), contentFont4));
+                PdfPCell cell2 = new PdfPCell(new Phrase(elementos[i], contentFont5));
+                PdfPCell cell3 = new PdfPCell(new Phrase(preguntas[i], contentFont4));
+                PdfPCell cell4 = new PdfPCell(new Phrase(new DecimalFormat("#.##").format(concepto), contentFont5));
+
+                // Establecer la alineación de todas las celdas
+                cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell4.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+                // Agregar las celdas a la tabla
+                table.addCell(cell1);
+                table.addCell(cell2);
+                table.addCell(cell3);
+                table.addCell(cell4);
+            }
+
+            BaseColor colorHeader1 = new BaseColor(255, 255, 204);
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("PUNTAJE TOTAL", contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase(new DecimalFormat("#.##").format(totales.get(4)), contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            // Agregar la tabla al documento
+            document.add(table);
+
+            // Cerrar el documento
+            document.close();
+            outputStream.flush();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+    }
+
+    @GetMapping("/financiera/{id}")
+    public void generarFinanciera(HttpServletResponse response, @PathVariable Long id) {
+        String[] elementos = {
+            "Normatividad",
+            "Presupuestos",
+            "Información Financiera",
+            "Sistema Contable",
+            "Utilidades",
+            "Proveedores",
+            "Acreedores",
+            "Crecimiento",
+            "Contabilidad",
+            "Punto de Equilibrio",
+            "Fuentes de Financiamiento",
+            "Informes Financieros",
+            "Indicadores",
+            "Liquidez",
+            "Conocimiento Sector",
+            "Estrategia Financiera"
+        };
+
+        String[] preguntas = {
+            "¿La empresa conoce y aplica las normas contables vigentes?",
+            "¿La empresa realiza presupuestos anuales de ingresos, egresos y flujo de caja?",
+            "¿La información financiera de la empresa es confiable, oportuna, útil y se usa para la toma de decisiones?",
+            "¿La empresa cuenta con un sistema claro para establecer sus costos, dependiendo de los productos, servicios y procesos?",
+            "¿La empresa conoce la productividad que le genera la inversión en activos y el impacto de estos en la generación de utilidades en el negocio?",
+            "¿La empresa tiene una política definida para el pago a sus proveedores?",
+            "¿La empresa cumple con los compromisos adquiridos con sus acreedores de manera oportuna?",
+            "¿La empresa evalúa el crecimiento del negocio frente a las inversiones realizadas y conoce el retorno sobre su inversión?",
+            "¿La empresa maneja contabilidad al día?",
+            "¿La Empresa conoce y aplica el concepto de punto de equilibrio?",
+            "¿Conocen otras fuentes de financiación diferentes a las entidades bancarias?",
+            "¿La Empresa realiza informes periódicos del estado financiero?",
+            "¿La empresa conoce y aplica indicadores financieros? (Liquidez, Razón Cta., Prueba ácida, etc.)",
+            "¿La empresa cuenta con políticas para los excesos de liquidez?",
+            "¿La Empresa conoce indicadores de comportamiento del sector económico de su actividad empresarial?",
+            "¿La empresa cuenta con metas financieras medibles y verificables en un plazo de tiempo definido, con asignación del responsable de su cumplimiento?"
+        };
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=gestionFinanciera.pdf");
+
+        try {
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4);
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(0, 0, 70, 30);
+
+            // Crear una instancia de la clase PdfFooterEventHandler para manejar el pie de página
+            //PdfFooterEventHandler footerHandler = new PdfFooterEventHandler();
+            //writer.setPageEvent(footerHandler);
+            // Crear una instancia de la clase PdfHeaderEventHandler para manejar el encabezado
+            PdfHeaderEventHandler1 headerHandler = new PdfHeaderEventHandler1();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+            Client client = clientRepository.findById(id).get();
+            ProcessEmpresario processEmpresario = processEmpresarioRepository.findByClient(client.getId());
+
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+            Font contentFont5 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.NORMAL);
+            // Agregar contenido al PDF
+            // Crear un párrafo vacío antes del título para agregar espacio entre el título y el primer párrafo
+            //Crear Fecha para portada
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+            Paragraph title = new Paragraph(client.getCompanyName().toUpperCase(), titleFont);
+            title.setSpacingBefore(20f);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph("\n"));
+            Paragraph title1 = new Paragraph("Diagnóstico Empresarial- Gestión Financiera y Contable", titleFont);
+
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+            document.add(new Paragraph("\n"));
+
+            // Crear una tabla con 4 columnas
+            PdfPTable table = new PdfPTable(4);
+
+            // Configurar el ancho de las columnas
+            float[] columnWidths = {4, 20, 60, 14};
+            table.setWidths(columnWidths);
+            BaseColor colorHeader = new BaseColor(204, 255, 255);
+            // Agregar encabezados de columna
+            PdfPCell cell = new PdfPCell();
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("6. GESTIÓN FINANCIERA Y CONTABLE", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("Calificación", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table.addCell(cell);
+
+            List<Integer> esterategica = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionFinanciera();
+            List<Float> totales = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getTotales();
+            // Agregar filas de datos (esto es un ejemplo, deberás adaptar los datos según tus necesidades)
+            for (int i = 0; i < processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionFinanciera().size(); i++) {
+                Integer concepto = esterategica.get(i);
+                PdfPCell cell1 = new PdfPCell(new Phrase(Integer.toString(i + 1), contentFont4));
+                PdfPCell cell2 = new PdfPCell(new Phrase(elementos[i], contentFont5));
+                PdfPCell cell3 = new PdfPCell(new Phrase(preguntas[i], contentFont4));
+                PdfPCell cell4 = new PdfPCell(new Phrase(new DecimalFormat("#.##").format(concepto), contentFont5));
+
+                // Establecer la alineación de todas las celdas
+                cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell4.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+                // Agregar las celdas a la tabla
+                table.addCell(cell1);
+                table.addCell(cell2);
+                table.addCell(cell3);
+                table.addCell(cell4);
+            }
+
+            BaseColor colorHeader1 = new BaseColor(255, 255, 204);
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("PUNTAJE TOTAL", contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase(new DecimalFormat("#.##").format(totales.get(5)), contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            // Agregar la tabla al documento
+            document.add(table);
+
+            // Cerrar el documento
+            document.close();
+            outputStream.flush();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+    }
+
+    @GetMapping("/logistica/{id}")
+    public void generarLogistica(HttpServletResponse response, @PathVariable Long id) {
+        String[] elementos = {
+            "Inventarios",
+            "Distribución",
+            "Proveedores",
+            "Logística",
+            "Proceso Logístico",
+            "Proveedores"
+        };
+
+        String[] preguntas = {
+            "¿Cuentan con un sistema para la administración de inventarios, materia prima y producto terminado?",
+            "¿La empresa cuenta con un responsable para la gestión de compras, transporte y distribución?",
+            "¿La empresa cuenta con un proceso de evaluación y desarrollo de proveedores?",
+            "¿La empresa cuenta con una infraestructura idónea para optimizar los costos de logística?",
+            "¿La empresa cuenta con un proceso logístico?",
+            "¿En la empresa existen criterios definidos para selección y evaluación de proveedores?"
+
+        };
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=gestionLogistica.pdf");
+
+        try {
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4);
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(0, 0, 70, 30);
+
+            // Crear una instancia de la clase PdfFooterEventHandler para manejar el pie de página
+            //PdfFooterEventHandler footerHandler = new PdfFooterEventHandler();
+            //writer.setPageEvent(footerHandler);
+            // Crear una instancia de la clase PdfHeaderEventHandler para manejar el encabezado
+            PdfHeaderEventHandler1 headerHandler = new PdfHeaderEventHandler1();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+            Client client = clientRepository.findById(id).get();
+            ProcessEmpresario processEmpresario = processEmpresarioRepository.findByClient(client.getId());
+
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+            Font contentFont5 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.NORMAL);
+            // Agregar contenido al PDF
+            // Crear un párrafo vacío antes del título para agregar espacio entre el título y el primer párrafo
+            //Crear Fecha para portada
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+            Paragraph title = new Paragraph(client.getCompanyName().toUpperCase(), titleFont);
+            title.setSpacingBefore(20f);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph("\n"));
+            Paragraph title1 = new Paragraph("Diagnóstico Empresarial- Gestión Logística", titleFont);
+
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+            document.add(new Paragraph("\n"));
+
+            // Crear una tabla con 4 columnas
+            PdfPTable table = new PdfPTable(4);
+
+            // Configurar el ancho de las columnas
+            float[] columnWidths = {4, 20, 60, 14};
+            table.setWidths(columnWidths);
+            BaseColor colorHeader = new BaseColor(204, 255, 255);
+            // Agregar encabezados de columna
+            PdfPCell cell = new PdfPCell();
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("7. GESTIÓN LOGÍSTICA", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("Calificación", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table.addCell(cell);
+
+            List<Integer> esterategica = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionLogistica();
+            List<Float> totales = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getTotales();
+            // Agregar filas de datos (esto es un ejemplo, deberás adaptar los datos según tus necesidades)
+            for (int i = 0; i < processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionLogistica().size(); i++) {
+                Integer concepto = esterategica.get(i);
+                PdfPCell cell1 = new PdfPCell(new Phrase(Integer.toString(i + 1), contentFont4));
+                PdfPCell cell2 = new PdfPCell(new Phrase(elementos[i], contentFont5));
+                PdfPCell cell3 = new PdfPCell(new Phrase(preguntas[i], contentFont4));
+                PdfPCell cell4 = new PdfPCell(new Phrase(new DecimalFormat("#.##").format(concepto), contentFont5));
+
+                // Establecer la alineación de todas las celdas
+                cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell4.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+                // Agregar las celdas a la tabla
+                table.addCell(cell1);
+                table.addCell(cell2);
+                table.addCell(cell3);
+                table.addCell(cell4);
+            }
+
+            BaseColor colorHeader1 = new BaseColor(255, 255, 204);
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("PUNTAJE TOTAL", contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase(new DecimalFormat("#.##").format(totales.get(6)), contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            // Agregar la tabla al documento
+            document.add(table);
+
+            // Cerrar el documento
+            document.close();
+            outputStream.flush();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+    }
+
+    @GetMapping("/transformacion/{id}")
+    public void generarTransformacion(HttpServletResponse response, @PathVariable Long id) {
+        String[] elementos = {
+            "Digitalización",
+            "Transformación",
+            "Digitalización",
+            "Almacenamiento de datos",
+            "Protección de datos",
+            "Mejora productos"
+        };
+
+        String[] preguntas = {
+            "¿La empresa cuenta con herramientas digitales y tecnológicas para mejorar la producción o prestación del servicio?",
+            "¿La empresa ha considerado redefinir su nuevo modelo de negocio?",
+            "¿La empresa tiene acceso al marketing digital (redes sociales, página web, tiendas virtuales)?",
+            "¿La empresa hace uso o tiene acceso a la tecnología de big data, nube?",
+            "¿La empresa cuenta con un sistema de protección de datos?",
+            "¿La empresa ha buscado expertos para la transformación tecnológica de sus productos y/o servicios?"
+
+        };
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=gestionTransformacion.pdf");
+
+        try {
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4);
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(0, 0, 70, 30);
+
+            // Crear una instancia de la clase PdfFooterEventHandler para manejar el pie de página
+            //PdfFooterEventHandler footerHandler = new PdfFooterEventHandler();
+            //writer.setPageEvent(footerHandler);
+            // Crear una instancia de la clase PdfHeaderEventHandler para manejar el encabezado
+            PdfHeaderEventHandler1 headerHandler = new PdfHeaderEventHandler1();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+            Client client = clientRepository.findById(id).get();
+            ProcessEmpresario processEmpresario = processEmpresarioRepository.findByClient(client.getId());
+
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+            Font contentFont5 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.NORMAL);
+            // Agregar contenido al PDF
+            // Crear un párrafo vacío antes del título para agregar espacio entre el título y el primer párrafo
+            //Crear Fecha para portada
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+            Paragraph title = new Paragraph(client.getCompanyName().toUpperCase(), titleFont);
+            title.setSpacingBefore(20f);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph("\n"));
+            Paragraph title1 = new Paragraph("Diagnóstico Empresarial- Gestión de Transformación Digítal", titleFont);
+
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+            document.add(new Paragraph("\n"));
+
+            // Crear una tabla con 4 columnas
+            PdfPTable table = new PdfPTable(4);
+
+            // Configurar el ancho de las columnas
+            float[] columnWidths = {4, 20, 60, 14};
+            table.setWidths(columnWidths);
+            BaseColor colorHeader = new BaseColor(204, 255, 255);
+            // Agregar encabezados de columna
+            PdfPCell cell = new PdfPCell();
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("8. GESTIÓN DE TRANSFORMACIÓN DIGÍTAL", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("Calificación", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table.addCell(cell);
+
+            List<Integer> esterategica = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionDigital();
+            List<Float> totales = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getTotales();
+            // Agregar filas de datos (esto es un ejemplo, deberás adaptar los datos según tus necesidades)
+            for (int i = 0; i < processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionDigital().size(); i++) {
+                Integer concepto = esterategica.get(i);
+                PdfPCell cell1 = new PdfPCell(new Phrase(Integer.toString(i + 1), contentFont4));
+                PdfPCell cell2 = new PdfPCell(new Phrase(elementos[i], contentFont5));
+                PdfPCell cell3 = new PdfPCell(new Phrase(preguntas[i], contentFont4));
+                PdfPCell cell4 = new PdfPCell(new Phrase(concepto.toString(), contentFont5));
+
+                // Establecer la alineación de todas las celdas
+                cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell4.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+                // Agregar las celdas a la tabla
+                table.addCell(cell1);
+                table.addCell(cell2);
+                table.addCell(cell3);
+                table.addCell(cell4);
+            }
+
+            BaseColor colorHeader1 = new BaseColor(255, 255, 204);
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("PUNTAJE TOTAL", contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase(new DecimalFormat("#.##").format(totales.get(7)), contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            // Agregar la tabla al documento
+            document.add(table);
+
+            // Cerrar el documento
+            document.close();
+            outputStream.flush();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+    }
+
+    @GetMapping("/ambiental/{id}")
+    public void generarAmbiental(HttpServletResponse response, @PathVariable Long id) {
+        String[] elementos = {
+            "Normatividad",
+            "Cumplimiento",
+            "Producción",
+            "Mantenimiento",
+            "Prácticas",
+            "Costos",
+            "Diseño",
+            "Vida Útil",
+            "Producción Limpia"
+        };
+
+        String[] preguntas = {
+            "¿La empresa conoce y aplica las normas ambientales en el desarrollo de su actividad?",
+            "¿La empresa establece los procedimientos y procesos para cumplir las normas ambientales?",
+            "¿La empresa trata de minimizar el consumo de energía, agua y materias primas contaminantes mediante la mejora de sus procesos productivos, la sustitución de insumos y el uso de otras tecnologías?",
+            "¿La empresa realiza mantenimientos preventivos a sus automotores, maquinaria y equipos para evitar el deterioro del ambiente?",
+            "¿La empresa desarrolla prácticas de reciclaje en forma permanente y todos los empleados están comprometidos con este propósito?",
+            "¿La empresa tiene o ha proyectado disminuir los costos generados por desperdicio de materia prima en alguna etapa del proceso productivo?",
+            "¿En el diseño de productos y empaques, la empresa procura minimizar el uso de materiales e incluye criterios ecológicos al seleccionarlas?",
+            "¿En la empresa se fomenta el aprovechamiento de los productos al final de su vida útil (por ejemplo, mediante reutilización, procesamiento o reciclaje)?",
+            "¿La Empresa aplica conceptos de producción limpia?"
+
+        };
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=gestionAmbiental.pdf");
+
+        try {
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4);
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(0, 0, 70, 30);
+
+            // Crear una instancia de la clase PdfFooterEventHandler para manejar el pie de página
+            //PdfFooterEventHandler footerHandler = new PdfFooterEventHandler();
+            //writer.setPageEvent(footerHandler);
+            // Crear una instancia de la clase PdfHeaderEventHandler para manejar el encabezado
+            PdfHeaderEventHandler1 headerHandler = new PdfHeaderEventHandler1();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+            Client client = clientRepository.findById(id).get();
+            ProcessEmpresario processEmpresario = processEmpresarioRepository.findByClient(client.getId());
+
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+            Font contentFont5 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.NORMAL);
+            // Agregar contenido al PDF
+            // Crear un párrafo vacío antes del título para agregar espacio entre el título y el primer párrafo
+            //Crear Fecha para portada
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+            Paragraph title = new Paragraph(client.getCompanyName().toUpperCase(), titleFont);
+            title.setSpacingBefore(20f);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph("\n"));
+            Paragraph title1 = new Paragraph("Diagnóstico Empresarial- Gestión de Sostenibilidad Ambiental", titleFont);
+
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+            document.add(new Paragraph("\n"));
+
+            // Crear una tabla con 4 columnas
+            PdfPTable table = new PdfPTable(4);
+
+            // Configurar el ancho de las columnas
+            float[] columnWidths = {4, 20, 60, 14};
+            table.setWidths(columnWidths);
+            BaseColor colorHeader = new BaseColor(204, 255, 255);
+            // Agregar encabezados de columna
+            PdfPCell cell = new PdfPCell();
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("9. GESTIÓN DE SOSTENIBILIDAD AMBIENTAL", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("Calificación", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table.addCell(cell);
+
+            List<Integer> esterategica = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionAmbiental();
+            List<Float> totales = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getTotales();
+            // Agregar filas de datos (esto es un ejemplo, deberás adaptar los datos según tus necesidades)
+            for (int i = 0; i < processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionAmbiental().size(); i++) {
+                Integer concepto = esterategica.get(i);
+                PdfPCell cell1 = new PdfPCell(new Phrase(Integer.toString(i + 1), contentFont4));
+                PdfPCell cell2 = new PdfPCell(new Phrase(elementos[i], contentFont5));
+                PdfPCell cell3 = new PdfPCell(new Phrase(preguntas[i], contentFont4));
+                PdfPCell cell4 = new PdfPCell(new Phrase(concepto.toString(), contentFont5));
+
+                // Establecer la alineación de todas las celdas
+                cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell4.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+                // Agregar las celdas a la tabla
+                table.addCell(cell1);
+                table.addCell(cell2);
+                table.addCell(cell3);
+                table.addCell(cell4);
+            }
+
+            BaseColor colorHeader1 = new BaseColor(255, 255, 204);
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("PUNTAJE TOTAL", contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase(new DecimalFormat("#.##").format(totales.get(8)), contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            // Agregar la tabla al documento
+            document.add(table);
+
+            // Cerrar el documento
+            document.close();
+            outputStream.flush();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+    }
+
+    @GetMapping("/intelectual/{id}")
+    public void generarIntelectual(HttpServletResponse response, @PathVariable Long id) {
+        String[] elementos = {
+            "Derecho de Autor",
+            "Derecho Conexos",
+            "Propiedad Intelectual",
+            "Patente",
+            "Diseño Industrial",
+            "Marca"
+        };
+
+        String[] preguntas = {
+            "¿La empresa ha hecho gestión de los derechos de autor?",
+            "¿La empresa ha hecho gestión de los derechos conexos?",
+            "¿La empresa ha hecho gestión de propiedad intelectual?",
+            "¿La empresa cuenta con una patente?",
+            "¿La empresa cuenta con un diseño industrial?",
+            "¿La empresa cuenta con una marca?"
+
+        };
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=gestionIntelectual.pdf");
+
+        try {
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4);
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(0, 0, 70, 30);
+
+            // Crear una instancia de la clase PdfFooterEventHandler para manejar el pie de página
+            //PdfFooterEventHandler footerHandler = new PdfFooterEventHandler();
+            //writer.setPageEvent(footerHandler);
+            // Crear una instancia de la clase PdfHeaderEventHandler para manejar el encabezado
+            PdfHeaderEventHandler1 headerHandler = new PdfHeaderEventHandler1();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+            Client client = clientRepository.findById(id).get();
+            ProcessEmpresario processEmpresario = processEmpresarioRepository.findByClient(client.getId());
+
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+            Font contentFont5 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.NORMAL);
+            // Agregar contenido al PDF
+            // Crear un párrafo vacío antes del título para agregar espacio entre el título y el primer párrafo
+            //Crear Fecha para portada
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+            Paragraph title = new Paragraph(client.getCompanyName().toUpperCase(), titleFont);
+            title.setSpacingBefore(20f);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph("\n"));
+            Paragraph title1 = new Paragraph("Diagnóstico Empresarial- Gestión de la Propiedad Intelectual e Industrial", titleFont);
+
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+            document.add(new Paragraph("\n"));
+
+            // Crear una tabla con 4 columnas
+            PdfPTable table = new PdfPTable(4);
+
+            // Configurar el ancho de las columnas
+            float[] columnWidths = {4, 20, 60, 14};
+            table.setWidths(columnWidths);
+            BaseColor colorHeader = new BaseColor(204, 255, 255);
+            // Agregar encabezados de columna
+            PdfPCell cell = new PdfPCell();
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("10. GESTIÓN DE LA  PROPIEDAD INTELECTUAL E INDUSTRIAL", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("Calificación", contentFont4));
+            cell.setBackgroundColor(colorHeader);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table.addCell(cell);
+
+            List<Integer> esterategica = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionAmbiental();
+            List<Float> totales = processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getTotales();
+            // Agregar filas de datos (esto es un ejemplo, deberás adaptar los datos según tus necesidades)
+            for (int i = 0; i < processEmpresario.getDiagnosticoEmpresarial().getDiagnostico().getGestionAmbiental().size(); i++) {
+                Integer concepto = esterategica.get(i);
+                PdfPCell cell1 = new PdfPCell(new Phrase(Integer.toString(i + 1), contentFont4));
+                PdfPCell cell2 = new PdfPCell(new Phrase(elementos[i], contentFont5));
+                PdfPCell cell3 = new PdfPCell(new Phrase(preguntas[i], contentFont4));
+                PdfPCell cell4 = new PdfPCell(new Phrase(concepto.toString(), contentFont5));
+
+                // Establecer la alineación de todas las celdas
+                cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell4.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+                // Agregar las celdas a la tabla
+                table.addCell(cell1);
+                table.addCell(cell2);
+                table.addCell(cell3);
+                table.addCell(cell4);
+            }
+
+            BaseColor colorHeader1 = new BaseColor(255, 255, 204);
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase("PUNTAJE TOTAL", contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setPhrase(new Phrase(new DecimalFormat("#.##").format(totales.get(9)), contentFont4));
+            cell.setBackgroundColor(colorHeader1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setColspan(3);
+            table.addCell(cell);
+
+            // Agregar la tabla al documento
+            document.add(table);
+
+            // Cerrar el documento
+            document.close();
+            outputStream.flush();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+    }
+
+    //Analisis Economi queda pendiente, sacar dudas y ver porquen no agrega imagnes cuando es horizontal
+    @GetMapping("/analisisEconomico/{id}")
+    public void generarPlanAccion(HttpServletResponse response, @PathVariable Long id) {
+        
+         try {
+            // Inicializar las imágenes en el constructor
+            String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+            headerImageIzq = Image.getInstance(imagePathIzq);
+            headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+
+            String imagePathDer = new File("CodigoRCP-HerramientaDiagnostico.jpg").getAbsolutePath();
+            headerImageDer = Image.getInstance(imagePathDer);
+            headerImageDer.scaleToFit(100, 100);
+
+            String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+            headerImageIzq3 = Image.getInstance(imagePathIzq3);
+            headerImageIzq3.scaleToFit(150, 150);
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+        }
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=analisisEconomico.pdf");
+
+        try {
+// Crear una instancia del documento y del escritor
+        Document document = new Document(PageSize.A4.rotate()); // Orientación horizontal
+        OutputStream outputStream = response.getOutputStream();
+        PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+        document.setMargins(document.leftMargin(), document.rightMargin(), 100, 0);
+
+        // Crear una instancia de la clase PdfHeaderEventHandler1 para manejar el encabezado
+        PdfHeaderEventHandler2 headerHandler = new PdfHeaderEventHandler2();
+        writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+
+            Client client = clientRepository.findById(id).get();
+            ProcessEmpresario processEmpresario = processEmpresarioRepository.findByClient(client.getId());
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+            Paragraph title = new Paragraph(client.getCompanyName().toUpperCase(), titleFont);
+            title.setSpacingBefore(20f);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph("\n"));
+            Paragraph title1 = new Paragraph("Análisis Económico", titleFont);
+
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+            document.add(new Paragraph("\n"));
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+
+            // Crear una tabla con 7 columnas
+            PdfPTable table = new PdfPTable(7);
+            table.setWidthPercentage(100); // Ancho de tabla al 100% del ancho de página
+            BaseColor colorHeader = new BaseColor(255, 102, 102);
+            // Define una celda con estilo para los encabezados
+         
+
+            PdfPCell headerCell1 = new PdfPCell(new Phrase("INDICADOR", contentFont4));
+            headerCell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell1.setBackgroundColor(colorHeader);
+            headerCell1.setPadding(5);
+            table.addCell(headerCell1);
+
+            PdfPCell headerCell2 = new PdfPCell(new Phrase("MES 1", contentFont4));
+            headerCell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell2.setBackgroundColor(colorHeader);
+            headerCell2.setPadding(5);
+            table.addCell(headerCell2);
+
+            PdfPCell headerCell3 = new PdfPCell(new Phrase("MES 2", contentFont4));
+            headerCell3.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell3.setBackgroundColor(colorHeader);
+            headerCell3.setPadding(5);
+            table.addCell(headerCell3);
+
+            PdfPCell headerCell4 = new PdfPCell(new Phrase("MES 3", contentFont4));
+            headerCell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell4.setBackgroundColor(colorHeader);
+            headerCell4.setPadding(5);
+            table.addCell(headerCell4);
+
+            PdfPCell headerCell5 = new PdfPCell(new Phrase("MES 4", contentFont4));
+            headerCell5.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell5.setBackgroundColor(colorHeader);
+            headerCell5.setPadding(5);
+            table.addCell(headerCell5);
+
+            PdfPCell headerCell6 = new PdfPCell(new Phrase("MES 5", contentFont4));
+            headerCell6.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell6.setBackgroundColor(colorHeader);
+            headerCell6.setPadding(5);
+            table.addCell(headerCell6);
+
+            PdfPCell headerCell7 = new PdfPCell(new Phrase("OBSERV.", contentFont4));
+            headerCell7.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell7.setBackgroundColor(colorHeader);
+            headerCell7.setPadding(5);
+            table.addCell(headerCell7);
+
+            // Agrega las filas a la tabla
+            String[] indicadores = {
+                "VENTAS EN EL MES",
+                "AUMENTO EN VENTAS",
+                "EMPLEOS FORMALES",
+                "EMPLEOS INFORMALES",
+                "EMPLEOS NUEVOS",
+                "EMPRESA EXPORTANDO (SI - NO)",
+                "VENTAS POR EXPORTACIÓN",
+                "DIVERSIFICACIÓN DE PRODUCTOS (SI - NO)",
+                "APERTURA DE NUEVOS MERCADOS (SI - NO)",
+                "ACCESO A OTRAS FUENTES DE FINANCIACIÓN  (SI - NO)"
+            };
+
+            for (String indicador : indicadores) {
+                table.addCell(new PdfPCell(new Phrase(indicador, contentFont4)));
+                table.addCell(new PdfPCell(new Phrase("", contentFont4)));
+                table.addCell(new PdfPCell(new Phrase("", contentFont4)));
+                table.addCell(new PdfPCell(new Phrase("", contentFont4)));
+                table.addCell(new PdfPCell(new Phrase("", contentFont4)));
+                table.addCell(new PdfPCell(new Phrase("", contentFont4)));
+                table.addCell(new PdfPCell(new Phrase("", contentFont4)));
+            }
+
+            // Agrega la tabla al documento
+            document.add(table);
+
+            document.close();
+            outputStream.flush();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+
     }
 
     private static class PdfFooterEventHandler extends PdfPageEventHelper {
@@ -622,6 +2707,9 @@ public class PDFCOntroller {
     }
 
     private static class PdfHeaderEventHandler extends PdfPageEventHelper {
+
+        private PdfHeaderEventHandler() {
+        }
 
         @Override
         public void onStartPage(PdfWriter writer, Document document) {
@@ -653,4 +2741,122 @@ public class PDFCOntroller {
             }
         }
     }
+
+//para cada uno las imagenes del encabezado
+    private static class PdfFooterEventHandler1 extends PdfPageEventHelper {
+
+        @Override
+        public void onEndPage(PdfWriter writer, Document document) {
+            try {
+                // Obtener el número de página actual
+                int pageNumber = writer.getPageNumber();
+
+                // Obtener el contenido directo de la página
+                PdfContentByte content = writer.getDirectContent();
+
+                // Agregar imagen en el pie de página
+                String imagePath = new File("PiePagina.jpg").getAbsolutePath();
+                Image footerImage = Image.getInstance(imagePath);
+                footerImage.scaleToFit(PageSize.A4.getWidth(), footerImage.getHeight());
+                footerImage.setAbsolutePosition(0, 0);
+                content.addImage(footerImage);
+            } catch (IOException | DocumentException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static class PdfHeaderEventHandler1 extends PdfPageEventHelper {
+
+        @Override
+        public void onStartPage(PdfWriter writer, Document document) {
+            try {
+                // Obtener el número de página actual
+                int pageNumber = writer.getPageNumber();
+
+                // Obtener el contenido directo de la página
+                PdfContentByte content = writer.getDirectContent();
+
+                // Agregar imagen en el encabezado
+                String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+                Image headerImageIzq = Image.getInstance(imagePathIzq);
+                headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+                float imageX1 = 36;
+                float imageY1 = PageSize.A4.getHeight() - 20 - headerImageIzq.getScaledHeight();
+                headerImageIzq.setAbsolutePosition(imageX1, imageY1);
+                content.addImage(headerImageIzq);
+
+                String imagePathDer = new File("CodigoRCP-HerramientaDiagnostico.jpg").getAbsolutePath();
+                Image headerImageDer = Image.getInstance(imagePathDer);
+                headerImageDer.scaleToFit(100, 100);
+                float imageX2 = PageSize.A4.getWidth() - 136;
+                float imageY2 = PageSize.A4.getHeight() - 20 - headerImageDer.getScaledHeight();
+                headerImageDer.setAbsolutePosition(imageX2, imageY2);
+                content.addImage(headerImageDer);
+
+                //Imagen Derecha pero a la izquierda de la imagen del metodo de abajo
+                String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+                Image headerImageIzq3 = Image.getInstance(imagePathIzq3);
+                headerImageIzq3.scaleToFit(150, 150); // Ajusta el tamaño de la tercera imagen según tus necesidades
+                float imageX3 = imageX2 - headerImageIzq3.getScaledWidth() - 10; // Coloca la tercera imagen a la izquierda de la segunda imagen
+                float imageY3 = imageY2 - 10; // Mantiene la misma altura que la segunda imagen
+                headerImageIzq3.setAbsolutePosition(imageX3, imageY3);
+                content.addImage(headerImageIzq3);
+
+            } catch (IOException | DocumentException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+     private static Image headerImageIzq;
+    private static Image headerImageDer;
+    private static Image headerImageIzq3;
+    
+    private static class PdfHeaderEventHandler2 extends PdfPageEventHelper {
+
+    @Override
+    public void onStartPage(PdfWriter writer, Document document) {
+        try {
+            // Obtener el número de página actual
+            int pageNumber = writer.getPageNumber();
+
+            // Obtener el contenido directo de la página
+            PdfContentByte content = writer.getDirectContent();
+
+            // Definir las coordenadas y escalado de las imágenes
+            float imageX1 = 36;
+            float imageY1 = PageSize.A4.getHeight() - 20 - headerImageIzq.getScaledHeight();
+            float imageX2 = PageSize.A4.getWidth() - 136;
+            float imageY2 = PageSize.A4.getHeight() - 20 - headerImageDer.getScaledHeight();
+            float imageX3 = imageX2 - headerImageIzq3.getScaledWidth() - 10;
+            float imageY3 = imageY2 - 10;
+
+            // Agregar imagen en el encabezado
+            String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+            Image headerImageIzq = Image.getInstance(imagePathIzq);
+            headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+            headerImageIzq.setAbsolutePosition(imageX1, imageY1);
+            content.addImage(headerImageIzq);
+
+            String imagePathDer = new File("CodigoRCP-HerramientaDiagnostico.jpg").getAbsolutePath();
+            Image headerImageDer = Image.getInstance(imagePathDer);
+            headerImageDer.scaleToFit(100, 100);
+            headerImageDer.setAbsolutePosition(imageX2, imageY2);
+            content.addImage(headerImageDer);
+
+            String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+            Image headerImageIzq3 = Image.getInstance(imagePathIzq3);
+            headerImageIzq3.scaleToFit(150, 150);
+            headerImageIzq3.setAbsolutePosition(imageX3, imageY3);
+            content.addImage(headerImageIzq3);
+
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+    
+
 }

@@ -18,18 +18,20 @@ public class KeyActivities {
     private Long id;
     
    
-    @Column(length = 2500)
+
+    @Column(length = 3000)
     private String actividadPrincipal;
     
-    @Column(length = 2500)
+    @Column(length = 3000)
     private String prestacionServicio;
     
-    @Column(length = 2500)
+    @Column(length = 3000)
     private String comunicacionMarketing;
     
-    @Column(length = 2500)
+    @Column(length = 3000)
     private String postVenta;
-    @Column(length = 2500)
+    @Column(length = 3000)
+
     private String otros;
     
 }

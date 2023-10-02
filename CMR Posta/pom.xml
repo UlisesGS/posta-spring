@@ -90,11 +90,6 @@
             <scope>runtime</scope>
         </dependency>
 
-
-        
-
-
-
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
@@ -107,25 +102,40 @@
         </dependency>
         
         <dependency>
-        <groupId>commons-io</groupId>
-        <artifactId>commons-io</artifactId>
-        <version>2.11.0</version> <!-- Puedes ajustar la versión según tus necesidades -->
-    </dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version> <!-- Puedes ajustar la versión según tus necesidades -->
+        </dependency>
     
     
-     <dependency>
-        <groupId>com.amazonaws</groupId>
-        <artifactId>aws-java-sdk-s3</artifactId>
-        <version>1.12.119</version> <!-- Utiliza la versión más reciente del SDK -->
-    </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.12.119</version> <!-- Utiliza la versión más reciente del SDK -->
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>  
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+            <version>1.6.1</version> <!-- Reemplaza esto con la versión más reciente disponible -->
+        </dependency>
     </dependencies>
+    
 
 
     <build>
         <plugins>
             <plugin>
+                
+                <!--
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>-->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                
                 <configuration>
                     <excludes>
                         <exclude>

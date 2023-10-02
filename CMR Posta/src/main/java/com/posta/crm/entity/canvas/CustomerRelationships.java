@@ -18,12 +18,14 @@ public class CustomerRelationships {
     private Long id;
     
    
-    @Column(length = 2500)
+
+    @Column(length = 3000)
     private String captacion;
     
-    @Column(length = 2500)
+    @Column(length = 3000)
     private String fidelizacion;
     
-    @Column(length = 2500)
+    @Column(length = 3000)
+
     private String estimulacion;
 }

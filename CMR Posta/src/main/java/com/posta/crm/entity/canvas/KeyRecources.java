@@ -18,16 +18,18 @@ public class KeyRecources {
     private Long id;
     
    
-    @Column(length = 2500)
+
+    @Column(length = 3000)
     private String recursosHumanos;
     
-    @Column(length = 2500)
+    @Column(length = 3000)
     private String recursosFisicos;
     
-    @Column(length = 2500)
+    @Column(length = 3000)
     private String recursosIntelectuales;
     
-    @Column(length = 2500)
+    @Column(length = 3000)
+
     private String recursosTecnologicos;
     
 }

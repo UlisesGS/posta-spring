@@ -18,19 +18,21 @@ public class Channels {
     private Long id;
     
     
-    @Column(length = 2500)
+
+    @Column(length = 3000)
     private String informacion;
     
-    @Column(length = 2500)
+    @Column(length = 3000)
     private String evaluacion;
     
-    @Column(length = 2500)
+    @Column(length = 3000)
     private String compra;
     
-    @Column(length = 2500)
+    @Column(length = 3000)
     private String entrega;
     
-    @Column(length = 2500)
+    @Column(length = 3000)
+
     private String postVenta;
     
 }

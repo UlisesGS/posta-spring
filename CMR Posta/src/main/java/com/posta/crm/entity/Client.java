@@ -27,11 +27,15 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Date;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Data
+@Getter
+@Setter
 public class Client {
 
     @Id
@@ -65,7 +69,7 @@ public class Client {
     @NotBlank
     private String address;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String remarks;
     private Boolean active;
     private String type;

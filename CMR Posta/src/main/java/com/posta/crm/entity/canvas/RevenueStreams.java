@@ -18,16 +18,15 @@ public class RevenueStreams {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotNull
+    @Column(length = 3000)
     private String capitalPorpio;
     
-    @NotNull
+    @Column(length = 3000)
     private String capitalPrestamo;
     
-    @NotBlank
-    @Column(length = 1000)
+    @Column(length = 3000)
     private String canalesPago;
     
-    @Column(length = 1000)
+    @Column(length = 3000)
     private String otros;
 }

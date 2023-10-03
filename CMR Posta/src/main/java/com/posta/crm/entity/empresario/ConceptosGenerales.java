@@ -15,6 +15,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import java.util.List;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -22,6 +24,8 @@ import lombok.Data;
  */
 @Entity
 @Data
+@Getter
+@Setter
 public class ConceptosGenerales {
     
     @Id
@@ -31,7 +35,7 @@ public class ConceptosGenerales {
     @Enumerated(value = EnumType.STRING)
     private DiagEmpr diagEmpr;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String observaciones;
     
     

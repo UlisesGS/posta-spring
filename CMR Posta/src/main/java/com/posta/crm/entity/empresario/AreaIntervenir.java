@@ -28,16 +28,16 @@ public class AreaIntervenir {
     private Long id;
     
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String objetivoEstrategico;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String actividadEstrategica;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String responsable;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String aliadosEstrategicos;
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "America/Bogota")
@@ -46,10 +46,10 @@ public class AreaIntervenir {
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "America/Bogota")
     private Date fechaCierre;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String cumplimiento;
     @Lob
-    @Column(length = 5000)
+    @Column(length = 2500)
     private String observaciones;
     
     

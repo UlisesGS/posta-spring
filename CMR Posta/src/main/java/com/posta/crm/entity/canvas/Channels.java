@@ -18,6 +18,7 @@ public class Channels {
     private Long id;
     
     
+
     @Column(length = 3000)
     private String informacion;
     
@@ -31,6 +32,7 @@ public class Channels {
     private String entrega;
     
     @Column(length = 3000)
+
     private String postVenta;
     
 }

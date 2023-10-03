@@ -17,6 +17,7 @@ public class CustomerSegments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+
     @Column(length = 3000)
     private String  demograficas;
     
@@ -27,6 +28,7 @@ public class CustomerSegments {
     private String  psicograficas;
     
     @Column(length = 3000)
+
     private String  comportanmiento;
     
     

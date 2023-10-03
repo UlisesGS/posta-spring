@@ -18,6 +18,7 @@ public class KeyActivities {
     private Long id;
     
    
+
     @Column(length = 3000)
     private String actividadPrincipal;
     
@@ -30,6 +31,7 @@ public class KeyActivities {
     @Column(length = 3000)
     private String postVenta;
     @Column(length = 3000)
+
     private String otros;
     
 }

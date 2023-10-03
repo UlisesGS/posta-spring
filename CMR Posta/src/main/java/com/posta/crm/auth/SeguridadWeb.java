@@ -41,6 +41,7 @@ public class SeguridadWeb {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(authRules -> authRules
+
                 .requestMatchers(HttpMethod.GET, "/users/byEmail/{email}").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
                 .requestMatchers(HttpMethod.GET, "/users").hasAnyRole("ADMIN", "ADVISER")
@@ -61,6 +62,7 @@ public class SeguridadWeb {
                 .requestMatchers("/calendario/**").hasAnyRole("ADMIN", "ADVISER")
                 .requestMatchers("/pdf/**").hasAnyRole("ADMIN", "ADVISER")
                 .anyRequest().authenticated())
+
                 .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
                 .addFilter(new JwtValidationFilter(authenticationConfiguration.getAuthenticationManager()))
                 .csrf(config -> config.disable())
@@ -79,7 +81,6 @@ public class SeguridadWeb {
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         config.setAllowCredentials(true);
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;

@@ -1,5 +1,6 @@
 package com.posta.crm.controller;
 
+import com.posta.crm.entity.Client;
 import com.posta.crm.entity.Process;
 import com.posta.crm.service.canvas.process.IProcessService;
 import io.swagger.annotations.Api;
@@ -93,5 +94,11 @@ public class ProcessControllers {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(processes);
+    }
+    @GetMapping("/usuario/{id}/page/{page}")
+    public ResponseEntity<?>buscarPorUsuario(@PathVariable Long id, @PathVariable Integer page){
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Process>procesos = processService.buscarPorUsuario(id,pageable);
+        return ResponseEntity.ok(procesos);
     }
 }

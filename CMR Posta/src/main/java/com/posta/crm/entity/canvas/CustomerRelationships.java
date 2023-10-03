@@ -18,6 +18,7 @@ public class CustomerRelationships {
     private Long id;
     
    
+
     @Column(length = 3000)
     private String captacion;
     
@@ -25,5 +26,6 @@ public class CustomerRelationships {
     private String fidelizacion;
     
     @Column(length = 3000)
+
     private String estimulacion;
 }

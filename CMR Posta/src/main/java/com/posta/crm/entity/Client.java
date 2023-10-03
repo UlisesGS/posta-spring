@@ -27,11 +27,15 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Date;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Data
+@Getter
+@Setter
 public class Client {
 
     @Id

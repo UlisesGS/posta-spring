@@ -29,7 +29,9 @@ public class KeyRecources {
     private String recursosIntelectuales;
     
     @Column(length = 3000)
-
     private String recursosTecnologicos;
+    
+    @Column(length = 3000)
+    private String otros;
     
 }

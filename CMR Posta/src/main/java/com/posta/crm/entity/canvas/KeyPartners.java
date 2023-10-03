@@ -30,5 +30,6 @@ public class KeyPartners {
     @Column(length = 3000)
     private String academia;
 
+    @Column(length = 3000)
     private String otros;
 }

@@ -11,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -18,6 +20,8 @@ import lombok.Data;
  */
 @Entity
 @Data
+@Getter
+@Setter
 public class AnalisisResultados {
     
     @Id

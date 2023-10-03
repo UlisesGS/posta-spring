@@ -35,12 +35,12 @@ import org.springframework.http.ResponseEntity;
 @RestController
 public class ImageController {
 
-    private static final String UPLOAD_DIR = "img/";
-    //private static final String UPLOAD_DIR = System.getenv("UPLOAD_DIR");
-//    private static final String BUCKET_NAME = "posta-app";
+    //private static final String UPLOAD_DIR = "img/";
+    private static final String UPLOAD_DIR = System.getenv("UPLOAD_DIR");
+// private static final String BUCKET_NAME = "posta-app";
     @Autowired
     private ProcessServiceImpl processServiceImpl;
-    
+
 //    @PostMapping("/uploadCompromiso/{id}")
 //public String uploadImage(@RequestParam("file") MultipartFile file, @PathVariable Long id) {
 //    System.out.println("Hola manola");
@@ -73,8 +73,6 @@ public class ImageController {
 //        return "Error al subir la imagen";
 //    }
 //}
-    
-
     @PostMapping("/uploadCompromiso/{id}")
     public String uploadImage(@RequestParam("file") MultipartFile file, @PathVariable Long id) {
         System.out.println("Hola manola");
@@ -123,7 +121,6 @@ public class ImageController {
 //
 //        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 //    }
-
     @GetMapping(value = "/imagenCompromiso/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImage(@PathVariable Long id) throws IOException {
         Process nuevoProceso = processServiceImpl.findById(id).get();
@@ -295,7 +292,6 @@ public class ImageController {
 //        String uniquePart = Instant.now().toEpochMilli() + "-" + UUID.randomUUID().toString();
 //        return uniquePart + extension;
 //    }
-    
     private String generateUniqueFileName(String originalFileName) {
         String extension = "";
         int dotIndex = originalFileName.lastIndexOf(".");
@@ -303,10 +299,10 @@ public class ImageController {
             extension = originalFileName.substring(dotIndex);
         }
         // Reemplazar espacios en blanco con guiones bajos
-    String sanitizedFileName = originalFileName.replaceAll("\\s", "_");
-    
-    String uniquePart = Instant.now().toEpochMilli() + "-" + UUID.randomUUID().toString();
-    return uniquePart + "-" + sanitizedFileName + extension;
+        String sanitizedFileName = originalFileName.replaceAll("\\s", "_");
+
+        String uniquePart = Instant.now().toEpochMilli() + "-" + UUID.randomUUID().toString();
+        return uniquePart + "-" + sanitizedFileName + extension;
     }
 
     private String detectContentType(String fileName) {

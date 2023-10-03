@@ -2,6 +2,7 @@ package com.posta.crm.controller;
 
 import com.posta.crm.entity.Actividades;
 import com.posta.crm.entity.Client;
+
 import com.posta.crm.entity.Municipio;
 import com.posta.crm.entity.SelfAssessment;
 import com.posta.crm.entity.canvas.CanvasModel;
@@ -284,6 +285,7 @@ public class ClientController {
     public ResponseEntity<?>buscarPorEstado(@PathVariable Boolean active){
         return ResponseEntity.ok(clienteService.buscarPorDesactivado(active));
     }
+
     @GetMapping("/usuario/{id}/page/{page}")
     public ResponseEntity<?>buscarPorUsuario(@PathVariable Long id, @PathVariable Integer page){
         Pageable pageable = PageRequest.of(page, 10);
@@ -303,5 +305,6 @@ public class ClientController {
         //return ResponseEntity.ok(reversedClients);
 
     }
+
 
 }

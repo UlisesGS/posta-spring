@@ -60,7 +60,7 @@ public class SeguridadWeb {
                 .requestMatchers("/users/**").hasRole("ADMIN")
                 .requestMatchers("/mensaje/**").hasAnyRole("ADMIN", "ADVISER")
                 .requestMatchers("/calendario/**").hasAnyRole("ADMIN", "ADVISER")
-                .requestMatchers("/pdf/**").hasAnyRole("ADMIN", "ADVISER")
+                .requestMatchers("/pdf/**").permitAll()
                 .anyRequest().authenticated())
 
                 .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
@@ -76,7 +76,6 @@ public class SeguridadWeb {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(Arrays.asList("http://crm-posta.s3-website-us-east-1.amazonaws.com"));
-        //config.setAllowedOrigins(Arrays.asList("http://posta-app.s3-website.us-east-2.amazonaws.com"));
         config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));

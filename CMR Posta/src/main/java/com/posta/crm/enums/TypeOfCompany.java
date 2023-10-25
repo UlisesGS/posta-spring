@@ -6,6 +6,6 @@ public enum TypeOfCompany {
 
     PERSONA_NATURAL,
     PERSONA_JURIDICA,
-    REGIMEN_TRIBUTARIO;
+    REGIMEN_ESPECIAL;
     
 }

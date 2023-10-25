@@ -2533,8 +2533,8 @@ public class PDFCOntroller {
         }
     }
 
-    //Analisis Economi queda pendiente, sacar dudas y ver porquen no agrega imagnes cuando es horizontal
-    @GetMapping("/analisisEconomico/{id}")
+    
+    @GetMapping("/analisisEconomico/{id}")//
     public void generarPlanAccion(HttpServletResponse response, @PathVariable Long id) {
         
          try {
@@ -2560,7 +2560,7 @@ public class PDFCOntroller {
 
         try {
 // Crear una instancia del documento y del escritor
-        Document document = new Document(PageSize.A4.rotate()); // Orientación horizontal
+        Document document = new Document(PageSize.A4); //
         OutputStream outputStream = response.getOutputStream();
         PdfWriter writer = PdfWriter.getInstance(document, outputStream);
         document.setMargins(document.leftMargin(), document.rightMargin(), 100, 0);
@@ -2597,82 +2597,38 @@ public class PDFCOntroller {
             Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
             Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
             Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+            
+            
+            
+           // Crear una tabla con 3 columnas
+            PdfPTable table = new PdfPTable(2);
+          
 
-            // Crear una tabla con 7 columnas
-            PdfPTable table = new PdfPTable(7);
-            table.setWidthPercentage(100); // Ancho de tabla al 100% del ancho de página
-            BaseColor colorHeader = new BaseColor(255, 102, 102);
-            // Define una celda con estilo para los encabezados
+            // Agregar filas con 2 columnas de datos
+            
+                table.addCell("Mes 1");
+                table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes1());
+                table.addCell("Mes 2");
+                table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes2());
+                table.addCell("Mes 3");
+                table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes3());
+                table.addCell("Mes 4");
+                table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes4());
+                table.addCell("Mes 5");
+                table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes4());
+            document.add(table);
+            PdfPTable table1 = new PdfPTable(1);
+            // La última columna ocupa el espacio de las 5 filas
+            PdfPCell lastColumnCell = new PdfPCell(new Paragraph("Observaciones: " + processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getObservaciones()));           
+            lastColumnCell.setRowspan(5); // Fusionar 5 filas para la última columna
+            table1.addCell(lastColumnCell);
+
          
 
-            PdfPCell headerCell1 = new PdfPCell(new Phrase("INDICADOR", contentFont4));
-            headerCell1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            headerCell1.setBackgroundColor(colorHeader);
-            headerCell1.setPadding(5);
-            table.addCell(headerCell1);
-
-            PdfPCell headerCell2 = new PdfPCell(new Phrase("MES 1", contentFont4));
-            headerCell2.setHorizontalAlignment(Element.ALIGN_CENTER);
-            headerCell2.setBackgroundColor(colorHeader);
-            headerCell2.setPadding(5);
-            table.addCell(headerCell2);
-
-            PdfPCell headerCell3 = new PdfPCell(new Phrase("MES 2", contentFont4));
-            headerCell3.setHorizontalAlignment(Element.ALIGN_CENTER);
-            headerCell3.setBackgroundColor(colorHeader);
-            headerCell3.setPadding(5);
-            table.addCell(headerCell3);
-
-            PdfPCell headerCell4 = new PdfPCell(new Phrase("MES 3", contentFont4));
-            headerCell4.setHorizontalAlignment(Element.ALIGN_CENTER);
-            headerCell4.setBackgroundColor(colorHeader);
-            headerCell4.setPadding(5);
-            table.addCell(headerCell4);
-
-            PdfPCell headerCell5 = new PdfPCell(new Phrase("MES 4", contentFont4));
-            headerCell5.setHorizontalAlignment(Element.ALIGN_CENTER);
-            headerCell5.setBackgroundColor(colorHeader);
-            headerCell5.setPadding(5);
-            table.addCell(headerCell5);
-
-            PdfPCell headerCell6 = new PdfPCell(new Phrase("MES 5", contentFont4));
-            headerCell6.setHorizontalAlignment(Element.ALIGN_CENTER);
-            headerCell6.setBackgroundColor(colorHeader);
-            headerCell6.setPadding(5);
-            table.addCell(headerCell6);
-
-            PdfPCell headerCell7 = new PdfPCell(new Phrase("OBSERV.", contentFont4));
-            headerCell7.setHorizontalAlignment(Element.ALIGN_CENTER);
-            headerCell7.setBackgroundColor(colorHeader);
-            headerCell7.setPadding(5);
-            table.addCell(headerCell7);
-
-            // Agrega las filas a la tabla
-            String[] indicadores = {
-                "VENTAS EN EL MES",
-                "AUMENTO EN VENTAS",
-                "EMPLEOS FORMALES",
-                "EMPLEOS INFORMALES",
-                "EMPLEOS NUEVOS",
-                "EMPRESA EXPORTANDO (SI - NO)",
-                "VENTAS POR EXPORTACIÓN",
-                "DIVERSIFICACIÓN DE PRODUCTOS (SI - NO)",
-                "APERTURA DE NUEVOS MERCADOS (SI - NO)",
-                "ACCESO A OTRAS FUENTES DE FINANCIACIÓN  (SI - NO)"
-            };
-
-            for (String indicador : indicadores) {
-                table.addCell(new PdfPCell(new Phrase(indicador, contentFont4)));
-                table.addCell(new PdfPCell(new Phrase("", contentFont4)));
-                table.addCell(new PdfPCell(new Phrase("", contentFont4)));
-                table.addCell(new PdfPCell(new Phrase("", contentFont4)));
-                table.addCell(new PdfPCell(new Phrase("", contentFont4)));
-                table.addCell(new PdfPCell(new Phrase("", contentFont4)));
-                table.addCell(new PdfPCell(new Phrase("", contentFont4)));
-            }
+            
 
             // Agrega la tabla al documento
-            document.add(table);
+            document.add(table1);
 
             document.close();
             outputStream.flush();

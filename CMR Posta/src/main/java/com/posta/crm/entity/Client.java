@@ -6,6 +6,7 @@ import com.posta.crm.enums.Contracting;
 import com.posta.crm.enums.EthnicGroup;
 import com.posta.crm.enums.Gender;
 import com.posta.crm.enums.StudyLevel;
+import com.posta.crm.enums.TrueType;
 import com.posta.crm.enums.TypeOfCompany;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -102,12 +103,12 @@ public class Client {
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "America/Bogota")
     private Date fechaAlta;
     @Enumerated(value = EnumType.STRING)
-    private TypeOfCompany typeOfCompany;
+    private TypeOfCompany typeOfCompany;//Esto es regimen tributario
     
     @Column(nullable = true)
-    private Integer employeePartTime;
+    private Integer employeePartTime;//Informales
     @Column(nullable = true)
-    private Integer employeeFullTime;
+    private Integer employeeFullTime;//Formales
     private Boolean registroMercantil;
     private String numberMercantilRegistry;
     @ManyToOne
@@ -119,13 +120,8 @@ public class Client {
     private String paginaWeb;
     private String productoServicio;
     
-    
-    
-
-    
-   
-    
-    
+    @Enumerated(value = EnumType.STRING)
+    private TrueType trueTypeOfCom;//Esto es el tipo de compañia
     
     @PrePersist
     public void active() {

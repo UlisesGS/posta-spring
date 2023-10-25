@@ -34,6 +34,7 @@ public class KeyRecourcesServiceImpl implements IKeyRecourcesService{
             newKeyRecources.setRecursosHumanos(keyRecources.getRecursosHumanos());
             newKeyRecources.setRecursosIntelectuales(   keyRecources.getRecursosIntelectuales());
             newKeyRecources.setRecursosTecnologicos(keyRecources.getRecursosTecnologicos());
+            newKeyRecources.setOtros(keyRecources.getOtros());
             return keyRecourcesRepository.save(newKeyRecources);
         }
         

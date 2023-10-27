@@ -26,6 +26,9 @@ public interface ProcessRepository extends JpaRepository<Process,Long> {
     List<Process>findByEstado(String estado);
     @Query("select p from Process p where p.user.id = ?1")
     Page<Process> buscarPorUsuario(Long id, Pageable pageable);
+    
+    @Query("SELECT p FROM Process p WHERE p.client.id = ?1")
+List<Process> findProcessesByClientId(Long clientId);
 
 }
 

@@ -26,6 +26,5 @@ public class CustomerRelationships {
     private String fidelizacion;
     
     @Column(length = 3000)
-
     private String estimulacion;
 }

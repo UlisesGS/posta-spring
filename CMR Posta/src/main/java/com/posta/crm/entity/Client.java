@@ -41,7 +41,7 @@ public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    public Long id;
     @NotBlank
     private String name;
     @NotBlank

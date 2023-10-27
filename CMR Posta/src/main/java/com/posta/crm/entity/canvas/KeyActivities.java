@@ -30,8 +30,8 @@ public class KeyActivities {
     
     @Column(length = 3000)
     private String postVenta;
+    
     @Column(length = 3000)
-
     private String otros;
     
 }

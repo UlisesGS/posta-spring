@@ -21,18 +21,13 @@ public class Channels {
 
     @Column(length = 3000)
     private String informacion;
-    
     @Column(length = 3000)
     private String evaluacion;
-    
     @Column(length = 3000)
     private String compra;
-    
     @Column(length = 3000)
     private String entrega;
-    
     @Column(length = 3000)
-
     private String postVenta;
     
 }

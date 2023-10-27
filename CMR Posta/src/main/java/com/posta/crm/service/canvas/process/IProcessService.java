@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface IProcessService {
     public List<Process> findAll();
     public Optional<Process> findById(Long id);
+    public List<Process> findProcessesByClientId(Long clientId);
     public Process save(Process process);
     public List<Process>findAllUltimo();
     List<Process>findByNombreCliente(String termino);

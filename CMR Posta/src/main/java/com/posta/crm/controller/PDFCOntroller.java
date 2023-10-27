@@ -15,6 +15,7 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.html.simpleparser.HTMLWorker;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -22,15 +23,24 @@ import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.posta.crm.entity.Client;
 import com.posta.crm.entity.ProcessEmpresario;
+import com.posta.crm.entity.SelfAssessment;
+import com.posta.crm.entity.canvas.CanvasModel;
+import com.posta.crm.entity.canvas.CostComponent;
 import com.posta.crm.entity.empresario.ConceptosGenerales;
+import com.posta.crm.enums.Answer;
 import com.posta.crm.repository.ClientRepository;
+import com.posta.crm.repository.SelfAssessmentRepository;
+import com.posta.crm.repository.canvas.CanvasModelRepository;
 import com.posta.crm.repository.empresario.ProcessEmpresarioRepository;
+import com.posta.crm.service.canvas.process.IProcessService;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringReader;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -52,13 +62,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/pdf")
 @CrossOrigin(origins = "*")
 public class PDFCOntroller {
-    
-   
 
     @Autowired
     private ClientRepository clientRepository;
     @Autowired
     private ProcessEmpresarioRepository processEmpresarioRepository;
+    @Autowired
+    private IProcessService processService;
+    @Autowired
+    private SelfAssessmentRepository respoSelf;
+    @Autowired
+    private CanvasModelRepository repoCanva;
 
     @GetMapping("/generarPdf/{id}")
     public void generarPDF(HttpServletResponse response, @PathVariable Long id) {
@@ -2533,11 +2547,10 @@ public class PDFCOntroller {
         }
     }
 
-    
     @GetMapping("/analisisEconomico/{id}")//
     public void generarPlanAccion(HttpServletResponse response, @PathVariable Long id) {
-        
-         try {
+
+        try {
             // Inicializar las imágenes en el constructor
             String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
             headerImageIzq = Image.getInstance(imagePathIzq);
@@ -2560,14 +2573,14 @@ public class PDFCOntroller {
 
         try {
 // Crear una instancia del documento y del escritor
-        Document document = new Document(PageSize.A4); //
-        OutputStream outputStream = response.getOutputStream();
-        PdfWriter writer = PdfWriter.getInstance(document, outputStream);
-        document.setMargins(document.leftMargin(), document.rightMargin(), 100, 0);
+            Document document = new Document(PageSize.A4); //
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(document.leftMargin(), document.rightMargin(), 100, 0);
 
-        // Crear una instancia de la clase PdfHeaderEventHandler1 para manejar el encabezado
-        PdfHeaderEventHandler2 headerHandler = new PdfHeaderEventHandler2();
-        writer.setPageEvent(headerHandler);
+            // Crear una instancia de la clase PdfHeaderEventHandler1 para manejar el encabezado
+            PdfHeaderEventHandler2 headerHandler = new PdfHeaderEventHandler2();
+            writer.setPageEvent(headerHandler);
 
             // Abrir el documento para escribir el contenido
             document.open();
@@ -2597,41 +2610,1148 @@ public class PDFCOntroller {
             Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
             Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
             Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
-            
-            
-            
-           // Crear una tabla con 3 columnas
+
+            // Crear una tabla con 3 columnas
             PdfPTable table = new PdfPTable(2);
-          
 
             // Agregar filas con 2 columnas de datos
-            
-                table.addCell("Mes 1");
-                table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes1());
-                table.addCell("Mes 2");
-                table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes2());
-                table.addCell("Mes 3");
-                table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes3());
-                table.addCell("Mes 4");
-                table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes4());
-                table.addCell("Mes 5");
-                table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes4());
+            table.addCell("Mes 1");
+            table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes1());
+            table.addCell("Mes 2");
+            table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes2());
+            table.addCell("Mes 3");
+            table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes3());
+            table.addCell("Mes 4");
+            table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes4());
+            table.addCell("Mes 5");
+            table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes4());
             document.add(table);
             PdfPTable table1 = new PdfPTable(1);
             // La última columna ocupa el espacio de las 5 filas
-            PdfPCell lastColumnCell = new PdfPCell(new Paragraph("Observaciones: " + processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getObservaciones()));           
+            PdfPCell lastColumnCell = new PdfPCell(new Paragraph("Observaciones: " + processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getObservaciones()));
             lastColumnCell.setRowspan(5); // Fusionar 5 filas para la última columna
             table1.addCell(lastColumnCell);
-
-         
-
-            
 
             // Agrega la tabla al documento
             document.add(table1);
 
             document.close();
             outputStream.flush();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+
+    }
+
+    @GetMapping("/autoevaluacion/{id}")//
+    public void generarAutoevaluacion(HttpServletResponse response, @PathVariable Long id) {
+
+        try {
+            // Inicializar las imágenes en el constructor
+            String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+            headerImageIzq = Image.getInstance(imagePathIzq);
+            headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+
+            String imagePathDer = new File("RCP-Auto.jpg").getAbsolutePath();
+            headerImageDer = Image.getInstance(imagePathDer);
+            headerImageDer.scaleToFit(100, 100);
+
+            String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+            headerImageIzq3 = Image.getInstance(imagePathIzq3);
+            headerImageIzq3.scaleToFit(150, 150);
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+        }
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=autoevaluacion.pdf");
+
+        try {
+
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4); //
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(document.leftMargin(), document.rightMargin(), 100, 0);
+
+            // Crear una instancia de la clase PdfHeaderEventHandler1 para manejar el encabezado
+            PdfHeaderEventHandler3 headerHandler = new PdfHeaderEventHandler3();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+            Client client = clientRepository.findById(id).get();
+            SelfAssessment selfAssessment = respoSelf.findByClientId(client.id).get();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+
+            Paragraph title1 = new Paragraph("Autoevaluación", titleFont);
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+            document.add(new Paragraph("\n"));
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+            // Crear una tabla para la primera sección
+            BaseColor colorHeader = new BaseColor(204, 255, 255);
+            PdfPTable table1 = new PdfPTable(2);
+            table1.setTotalWidth(new float[]{0.85f, 0.15f}); // Establece el ancho total y las proporciones
+            PdfPCell cell1 = new PdfPCell(new Phrase("Para cada afirmación, indique la opción que mejor lo identifique. Para una mejor evaluación, debería contestar todas las preguntas.", contentFont4));
+            PdfPCell cell2 = new PdfPCell(new Phrase("Respuesta", contentFont4));
+            cell1.setBackgroundColor(colorHeader);
+            cell2.setBackgroundColor(colorHeader);
+
+// Alinea el contenido en el centro vertical de las celdas
+            cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+// Agrega las celdas a la tabla
+            table1.addCell(cell1);
+            table1.addCell(cell2);
+
+            //Array con las preguntas
+            String[] preguntas = {
+                "Soy persistente, perseverante.",
+                "Tengo capital o activos para invertir y estoy dispuesto a perder gran parte de mis ahorros.",
+                "Estoy preparado/a, si fuera necesario, a bajar mis estándares de vida hasta que mi negocio sea rentable.",
+                "Tengo ideas nuevas y diferentes.",
+                "Me adapto a los cambios.",
+                "Percibo los problemas como desafíos y oportunidades.",
+                "Me recupero rápido de contratiempos personales.",
+                "Soy positivo/a y seguro/a de mí mismo/a.",
+                "Me gusta tener el control.",
+                "Disfruto la competencia.",
+                "He estado involucrado/a en un negocio parecido al que quiero empezar.",
+                "Tengo amigos y familiares que me pueden ayudar a empezar.",
+                "Mi familia y esposa/o apoyan mi decisión y están preparados a soportar el estrés que tendré como consecuencia de mi empresa.",
+                "Tengo la resistencia física y la fortaleza emocional para manejar el estrés del trabajo, las horas extras, y el trabajo durante los fines de semana y feriados.",
+                "Soy organizado y me gusta planear con antelación.",
+                "Me llevo bien con toda clase de gente, desde banqueros hasta empleados.",
+                "Tengo buen juicio y seré capaz de emplear a la gente indicada para mi negocio.",
+                "Puedo manejar y supervisar empleados para obtener lo mejor de ellos.",
+                "Si descubro que no tengo las habilidades básicas o el capital necesario para iniciar mi negocio, estoy dispuesto/a retrasar mis planes hasta que lo adquiera.",
+                "Puedo convivir con gente que no me agrada.",
+                "Puedo reconocer, admitir y aprender de mis errores.",
+                "Soy bueno/a tomando decisiones.",
+                "Tengo la habilidad de observar el contexto en el que estoy y darme cuenta de lo que quiere la gente.",
+                "Soy buen vendedor/a y puedo vender mis ideas y servicios a otras personas.",
+                "Siempre busco formas de hacer las cosas de una mejor manera.",
+                "Soy una persona que nunca se da por vencida.",
+                "Hago que las cosas sucedan, en vez de esperar a que sucedan.",
+                "Busco ayuda, retroalimentación y crítica constructiva para mejorar como persona.",
+                "Soy bueno/a para escuchar.",
+                "Tengo un buen o muy buen historial de crédito."
+            };
+
+            // Añadir filas de datos de la primera sección
+            int a = 0;
+            for (Answer answer : selfAssessment.getSelfAssessment()) {
+                PdfPCell preguntaCell = new PdfPCell(new Phrase(preguntas[a], contentFont4));
+                PdfPCell answerCell = new PdfPCell(new Phrase(answer.toString(), contentFont4));
+
+                // Alinea el contenido en el centro vertical de las celdas
+                preguntaCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                answerCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                answerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+                table1.addCell(preguntaCell);
+                table1.addCell(answerCell);
+                a++;
+            }
+
+            // Añadir la tabla al documento
+            document.add(table1);
+
+            // Crear una tabla para la segunda sección
+            PdfPTable table2 = new PdfPTable(1);
+
+            String[] cellContents = {
+                "PUNTAJE: " + selfAssessment.getScore(),
+                "CALIFIQUE CADA RESPUESTA DE LA SIGUIENTE MANERA",
+                "3 puntos por cada \"SI\". 2 puntos por cada \"QUIZÁS\". 0 puntos por cada \"NO\".",
+                "SI USTED OBTUVO UNA PUNTUACION ENTRE:",
+                "58 y 71. Usted tiene potencial, pero necesita mayor esfuerzo y dedicación para sacar adelante sus proyectos.",
+                "72 y 90. Comience su negocio y programe una cita con un asesor del Centro. Usted tiene las condiciones para ser un buen emprendedor."
+            };
+
+            for (String cellContent : cellContents) {
+                PdfPCell cell = new PdfPCell(new Phrase(cellContent, contentFont4));
+
+                // Alinea el contenido en el centro vertical y horizontal de las celdas
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+                table2.addCell(cell);
+            }
+
+            // Añadir la segunda tabla al documento
+            document.add(table2);
+
+            document.close();
+
+            System.out.println("PDF creado exitosamente.");
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+
+    }
+
+    @GetMapping("/canvasClientes/{id}")//
+    public void canvasClientes(HttpServletResponse response, @PathVariable Long id) {
+        try {
+            // Inicializar las imágenes en el constructor
+            String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+            headerImageIzq = Image.getInstance(imagePathIzq);
+            headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+
+            String imagePathDer = new File("RCP-Auto.jpg").getAbsolutePath();
+            headerImageDer = Image.getInstance(imagePathDer);
+            headerImageDer.scaleToFit(100, 100);
+
+            String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+            headerImageIzq3 = Image.getInstance(imagePathIzq3);
+            headerImageIzq3.scaleToFit(150, 150);
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+        }
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=segmentoClientes.pdf");
+
+        try {
+
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4); //
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(document.leftMargin(), document.rightMargin(), 100, 0);
+
+            // Crear una instancia de la clase PdfHeaderEventHandler1 para manejar el encabezado
+            PdfHeaderEventHandler4 headerHandler = new PdfHeaderEventHandler4();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+
+            Client client = clientRepository.findById(id).get();
+            SelfAssessment selfAssessment = respoSelf.findByClientId(client.id).get();
+            CanvasModel canvas = repoCanva.findCanvasModelByClientId(client.id).get();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+
+            Paragraph title1 = new Paragraph("Segmento de Clientes", titleFont);
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+            document.add(new Paragraph("\n"));
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+
+            // Datos del formulario
+            String demograficas = canvas.getCustomerSegments().getDemograficas();
+            String geograficas = canvas.getCustomerSegments().getGeograficas();
+            String psicograficas = canvas.getCustomerSegments().getPsicograficas();
+            String comportamiento = canvas.getCustomerSegments().getComportanmiento();
+
+// Crear una tabla en el documento PDF
+            PdfPTable table = new PdfPTable(2);
+            float[] columnWidths = {25f, 75f}; // Establece las proporciones de ancho
+
+            table.setWidths(columnWidths);
+
+// Agregar celdas a la tabla con los datos del formulario
+            PdfPCell cell1 = new PdfPCell(new Phrase("Demograficas", contentFont3));
+            PdfPCell cell2 = new PdfPCell(new Phrase(demograficas, contentFont4));
+            PdfPCell cell3 = new PdfPCell(new Phrase("Geograficas", contentFont3));
+            PdfPCell cell4 = new PdfPCell(new Phrase(geograficas, contentFont4));
+            PdfPCell cell5 = new PdfPCell(new Phrase("Psicograficas", contentFont3));
+            PdfPCell cell6 = new PdfPCell(new Phrase(psicograficas, contentFont4));
+            PdfPCell cell7 = new PdfPCell(new Phrase("Comportamiento", contentFont3));
+            PdfPCell cell8 = new PdfPCell(new Phrase(comportamiento, contentFont4));
+
+            table.addCell(cell1);
+            table.addCell(cell2);
+            table.addCell(cell3);
+            table.addCell(cell4);
+            table.addCell(cell5);
+            table.addCell(cell6);
+            table.addCell(cell7);
+            table.addCell(cell8);
+
+// Agregar la tabla al documento
+            document.add(table);
+
+            document.close();
+
+            System.out.println("PDF creado exitosamente.");
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+
+    }
+
+    @GetMapping("/canvasValor/{id}")//
+    public void canvasValor(HttpServletResponse response, @PathVariable Long id) {
+        try {
+            // Inicializar las imágenes en el constructor
+            String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+            headerImageIzq = Image.getInstance(imagePathIzq);
+            headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+
+            String imagePathDer = new File("RCP-Auto.jpg").getAbsolutePath();
+            headerImageDer = Image.getInstance(imagePathDer);
+            headerImageDer.scaleToFit(100, 100);
+
+            String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+            headerImageIzq3 = Image.getInstance(imagePathIzq3);
+            headerImageIzq3.scaleToFit(150, 150);
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+        }
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=propuestaValor.pdf");
+
+        try {
+
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4); //
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(document.leftMargin(), document.rightMargin(), 100, 0);
+
+            // Crear una instancia de la clase PdfHeaderEventHandler1 para manejar el encabezado
+            PdfHeaderEventHandler4 headerHandler = new PdfHeaderEventHandler4();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+
+            Client client = clientRepository.findById(id).get();
+            SelfAssessment selfAssessment = respoSelf.findByClientId(client.id).get();
+            CanvasModel canvas = repoCanva.findCanvasModelByClientId(client.id).get();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+
+            Paragraph title1 = new Paragraph("Propuesta de Valor", titleFont);
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+            document.add(new Paragraph("\n"));
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+
+            // Datos del formulario
+            String propuesta = canvas.getValuePropositions().getProposition();
+
+// Crear una tabla en el documento PDF
+            PdfPTable table = new PdfPTable(2);
+            float[] columnWidths = {25f, 75f}; // Establece las proporciones de ancho
+
+            table.setWidths(columnWidths);
+
+// Agregar celdas a la tabla con los datos del formulario
+            PdfPCell cell1 = new PdfPCell(new Phrase("Propuesta", contentFont3));
+            PdfPCell cell2 = new PdfPCell(new Phrase(propuesta, contentFont4));
+
+            table.addCell(cell1);
+            table.addCell(cell2);
+
+// Agregar la tabla al documento
+            document.add(table);
+
+            document.close();
+
+            System.out.println("PDF creado exitosamente.");
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+
+    }
+
+    @GetMapping("/canvasCanales/{id}")//
+    public void canvasCanales(HttpServletResponse response, @PathVariable Long id) {
+        try {
+            // Inicializar las imágenes en el constructor
+            String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+            headerImageIzq = Image.getInstance(imagePathIzq);
+            headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+
+            String imagePathDer = new File("RCP-Auto.jpg").getAbsolutePath();
+            headerImageDer = Image.getInstance(imagePathDer);
+            headerImageDer.scaleToFit(100, 100);
+
+            String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+            headerImageIzq3 = Image.getInstance(imagePathIzq3);
+            headerImageIzq3.scaleToFit(150, 150);
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+        }
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=canales.pdf");
+
+        try {
+
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4); //
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(document.leftMargin(), document.rightMargin(), 100, 0);
+
+            // Crear una instancia de la clase PdfHeaderEventHandler1 para manejar el encabezado
+            PdfHeaderEventHandler4 headerHandler = new PdfHeaderEventHandler4();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+
+            Client client = clientRepository.findById(id).get();
+            SelfAssessment selfAssessment = respoSelf.findByClientId(client.id).get();
+            CanvasModel canvas = repoCanva.findCanvasModelByClientId(client.id).get();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+
+            Paragraph title1 = new Paragraph("Canales", titleFont);
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+            document.add(new Paragraph("\n"));
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+
+            // Datos del formulario
+            String informacion = canvas.getChannels().getInformacion();
+            String evaluacion = canvas.getChannels().getEvaluacion();
+            String compra = canvas.getChannels().getCompra();
+            String entrega = canvas.getChannels().getEntrega();
+            String postventa = canvas.getChannels().getPostVenta();
+            // Crear una tabla en el documento PDF
+            PdfPTable table = new PdfPTable(2);
+            float[] columnWidths = {25f, 75f}; // Establece las proporciones de ancho
+
+            table.setWidths(columnWidths);
+
+// Agregar celdas a la tabla con los datos del formulario
+            PdfPCell cell1 = new PdfPCell(new Phrase("Información", contentFont3));
+            PdfPCell cell2 = new PdfPCell(new Phrase(informacion, contentFont4));
+            PdfPCell cell3 = new PdfPCell(new Phrase("Evaluación", contentFont3));
+            PdfPCell cell4 = new PdfPCell(new Phrase(evaluacion, contentFont4));
+            PdfPCell cell5 = new PdfPCell(new Phrase("Compra", contentFont3));
+            PdfPCell cell6 = new PdfPCell(new Phrase(compra, contentFont4));
+            PdfPCell cell7 = new PdfPCell(new Phrase("Entrega", contentFont3));
+            PdfPCell cell8 = new PdfPCell(new Phrase(entrega, contentFont4));
+            PdfPCell cell9 = new PdfPCell(new Phrase("Postventa", contentFont3));
+            PdfPCell cell0 = new PdfPCell(new Phrase(postventa, contentFont4));
+
+            table.addCell(cell1);
+            table.addCell(cell2);
+            table.addCell(cell3);
+            table.addCell(cell4);
+            table.addCell(cell5);
+            table.addCell(cell6);
+            table.addCell(cell7);
+            table.addCell(cell8);
+            table.addCell(cell9);
+            table.addCell(cell0);
+
+// Agregar la tabla al documento
+            document.add(table);
+
+            document.close();
+
+            System.out.println("PDF creado exitosamente.");
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+
+    }
+
+    @GetMapping("/canvasRelaciones/{id}")//
+    public void canvasRelaciones(HttpServletResponse response, @PathVariable Long id) {
+        try {
+            // Inicializar las imágenes en el constructor
+            String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+            headerImageIzq = Image.getInstance(imagePathIzq);
+            headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+
+            String imagePathDer = new File("RCP-Auto.jpg").getAbsolutePath();
+            headerImageDer = Image.getInstance(imagePathDer);
+            headerImageDer.scaleToFit(100, 100);
+
+            String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+            headerImageIzq3 = Image.getInstance(imagePathIzq3);
+            headerImageIzq3.scaleToFit(150, 150);
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+        }
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=relaciones-con-clientes.pdf");
+
+        try {
+
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4); //
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(document.leftMargin(), document.rightMargin(), 100, 0);
+
+            // Crear una instancia de la clase PdfHeaderEventHandler1 para manejar el encabezado
+            PdfHeaderEventHandler4 headerHandler = new PdfHeaderEventHandler4();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+
+            Client client = clientRepository.findById(id).get();
+            SelfAssessment selfAssessment = respoSelf.findByClientId(client.id).get();
+            CanvasModel canvas = repoCanva.findCanvasModelByClientId(client.id).get();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+
+            Paragraph title1 = new Paragraph("Relaciones con los clientes", titleFont);
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+            document.add(new Paragraph("\n"));
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+
+            // Datos del formulario
+            String captacion = canvas.getCustomerRelationships().getCaptacion();
+            String estimulacion = canvas.getCustomerRelationships().getEstimulacion();
+            String fidelizacion = canvas.getCustomerRelationships().getFidelizacion();
+
+            // Crear una tabla en el documento PDF
+            PdfPTable table = new PdfPTable(2);
+            float[] columnWidths = {25f, 75f}; // Establece las proporciones de ancho
+
+            table.setWidths(columnWidths);
+
+// Agregar celdas a la tabla con los datos del formulario
+            PdfPCell cell1 = new PdfPCell(new Phrase("Captación", contentFont3));
+            PdfPCell cell2 = new PdfPCell(new Phrase(captacion, contentFont4));
+            PdfPCell cell3 = new PdfPCell(new Phrase("Estimulación", contentFont3));
+            PdfPCell cell4 = new PdfPCell(new Phrase(estimulacion, contentFont4));
+            PdfPCell cell5 = new PdfPCell(new Phrase("Fidelización", contentFont3));
+            PdfPCell cell6 = new PdfPCell(new Phrase(fidelizacion, contentFont4));
+
+            table.addCell(cell1);
+            table.addCell(cell2);
+            table.addCell(cell3);
+            table.addCell(cell4);
+            table.addCell(cell5);
+            table.addCell(cell6);
+
+// Agregar la tabla al documento
+            document.add(table);
+
+            document.close();
+
+            System.out.println("PDF creado exitosamente.");
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+
+    }
+
+    @GetMapping("/canvasRecursos/{id}")//
+    public void canvasRecursos(HttpServletResponse response, @PathVariable Long id) {
+        try {
+            // Inicializar las imágenes en el constructor
+            String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+            headerImageIzq = Image.getInstance(imagePathIzq);
+            headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+
+            String imagePathDer = new File("RCP-Auto.jpg").getAbsolutePath();
+            headerImageDer = Image.getInstance(imagePathDer);
+            headerImageDer.scaleToFit(100, 100);
+
+            String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+            headerImageIzq3 = Image.getInstance(imagePathIzq3);
+            headerImageIzq3.scaleToFit(150, 150);
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+        }
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=recursos-claves.pdf");
+
+        try {
+
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4); //
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(document.leftMargin(), document.rightMargin(), 100, 0);
+
+            // Crear una instancia de la clase PdfHeaderEventHandler1 para manejar el encabezado
+            PdfHeaderEventHandler4 headerHandler = new PdfHeaderEventHandler4();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+
+            Client client = clientRepository.findById(id).get();
+            SelfAssessment selfAssessment = respoSelf.findByClientId(client.id).get();
+            CanvasModel canvas = repoCanva.findCanvasModelByClientId(client.id).get();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+
+            Paragraph title1 = new Paragraph("Recursos Claves", titleFont);
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+            document.add(new Paragraph("\n"));
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+
+            // Datos del formulario
+            String humanos = canvas.getKeyRecources().getRecursosHumanos();
+            String fisicos = canvas.getKeyRecources().getRecursosFisicos();
+            String intelectuales = canvas.getKeyRecources().getRecursosIntelectuales();
+            String tecnologicos = canvas.getKeyRecources().getRecursosTecnologicos();
+            String otros = canvas.getKeyRecources().getOtros();
+            // Crear una tabla en el documento PDF
+            PdfPTable table = new PdfPTable(2);
+            float[] columnWidths = {25f, 75f}; // Establece las proporciones de ancho
+
+            table.setWidths(columnWidths);
+
+// Agregar celdas a la tabla con los datos del formulario
+            PdfPCell cell1 = new PdfPCell(new Phrase("Recursos Humanos", contentFont3));
+            PdfPCell cell2 = new PdfPCell(new Phrase(humanos, contentFont4));
+            PdfPCell cell3 = new PdfPCell(new Phrase("Recursos Físicos:", contentFont3));
+            PdfPCell cell4 = new PdfPCell(new Phrase(fisicos, contentFont4));
+            PdfPCell cell5 = new PdfPCell(new Phrase("Recursos Intelectuales", contentFont3));
+            PdfPCell cell6 = new PdfPCell(new Phrase(intelectuales, contentFont4));
+            PdfPCell cell7 = new PdfPCell(new Phrase("Recursos Tecnológicos", contentFont3));
+            PdfPCell cell8 = new PdfPCell(new Phrase(tecnologicos, contentFont4));
+            PdfPCell cell9 = new PdfPCell(new Phrase("Otros", contentFont3));
+            PdfPCell cell0 = new PdfPCell(new Phrase(otros, contentFont4));
+
+            table.addCell(cell1);
+            table.addCell(cell2);
+            table.addCell(cell3);
+            table.addCell(cell4);
+            table.addCell(cell5);
+            table.addCell(cell6);
+            table.addCell(cell7);
+            table.addCell(cell8);
+            table.addCell(cell9);
+            table.addCell(cell0);
+
+// Agregar la tabla al documento
+            document.add(table);
+
+            document.close();
+
+            System.out.println("PDF creado exitosamente.");
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+
+    }
+
+    @GetMapping("/canvasActividades/{id}")//
+    public void canvasActividades(HttpServletResponse response, @PathVariable Long id) {
+        try {
+            // Inicializar las imágenes en el constructor
+            String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+            headerImageIzq = Image.getInstance(imagePathIzq);
+            headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+
+            String imagePathDer = new File("RCP-Auto.jpg").getAbsolutePath();
+            headerImageDer = Image.getInstance(imagePathDer);
+            headerImageDer.scaleToFit(100, 100);
+
+            String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+            headerImageIzq3 = Image.getInstance(imagePathIzq3);
+            headerImageIzq3.scaleToFit(150, 150);
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+        }
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=actividades-claves.pdf");
+
+        try {
+
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4); //
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(document.leftMargin(), document.rightMargin(), 100, 0);
+
+            // Crear una instancia de la clase PdfHeaderEventHandler1 para manejar el encabezado
+            PdfHeaderEventHandler4 headerHandler = new PdfHeaderEventHandler4();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+
+            Client client = clientRepository.findById(id).get();
+            SelfAssessment selfAssessment = respoSelf.findByClientId(client.id).get();
+            CanvasModel canvas = repoCanva.findCanvasModelByClientId(client.id).get();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+
+            Paragraph title1 = new Paragraph("Actividades Claves", titleFont);
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+            document.add(new Paragraph("\n"));
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+
+            // Datos del formulario
+            String pricipal = canvas.getKeyActivities().getActividadPrincipal();
+            String servicio = canvas.getKeyActivities().getPrestacionServicio();
+            String marketing = canvas.getKeyActivities().getComunicacionMarketing();
+            String posVenta = canvas.getKeyActivities().getPostVenta();
+            String otros = canvas.getKeyActivities().getOtros();
+            // Crear una tabla en el documento PDF
+            PdfPTable table = new PdfPTable(2);
+            float[] columnWidths = {25f, 75f}; // Establece las proporciones de ancho
+
+            table.setWidths(columnWidths);
+
+// Agregar celdas a la tabla con los datos del formulario
+            PdfPCell cell1 = new PdfPCell(new Phrase("Actividad Principal", contentFont3));
+            PdfPCell cell2 = new PdfPCell(new Phrase(pricipal, contentFont4));
+            PdfPCell cell3 = new PdfPCell(new Phrase("Prestación del Servicio", contentFont3));
+            PdfPCell cell4 = new PdfPCell(new Phrase(servicio, contentFont4));
+            PdfPCell cell5 = new PdfPCell(new Phrase("Comunicación y Marketing", contentFont3));
+            PdfPCell cell6 = new PdfPCell(new Phrase(marketing, contentFont4));
+            PdfPCell cell7 = new PdfPCell(new Phrase("PostVenta", contentFont3));
+            PdfPCell cell8 = new PdfPCell(new Phrase(posVenta, contentFont4));
+            PdfPCell cell9 = new PdfPCell(new Phrase("Otros", contentFont3));
+            PdfPCell cell0 = new PdfPCell(new Phrase(otros, contentFont4));
+
+            table.addCell(cell1);
+            table.addCell(cell2);
+            table.addCell(cell3);
+            table.addCell(cell4);
+            table.addCell(cell5);
+            table.addCell(cell6);
+            table.addCell(cell7);
+            table.addCell(cell8);
+            table.addCell(cell9);
+            table.addCell(cell0);
+
+// Agregar la tabla al documento
+            document.add(table);
+
+            document.close();
+
+            System.out.println("PDF creado exitosamente.");
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+
+    }
+
+    @GetMapping("/canvasSocios/{id}")//
+    public void canvasSocios(HttpServletResponse response, @PathVariable Long id) {
+        try {
+            // Inicializar las imágenes en el constructor
+            String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+            headerImageIzq = Image.getInstance(imagePathIzq);
+            headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+
+            String imagePathDer = new File("RCP-Auto.jpg").getAbsolutePath();
+            headerImageDer = Image.getInstance(imagePathDer);
+            headerImageDer.scaleToFit(100, 100);
+
+            String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+            headerImageIzq3 = Image.getInstance(imagePathIzq3);
+            headerImageIzq3.scaleToFit(150, 150);
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+        }
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=socios-claves.pdf");
+
+        try {
+
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4); //
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(document.leftMargin(), document.rightMargin(), 100, 0);
+
+            // Crear una instancia de la clase PdfHeaderEventHandler1 para manejar el encabezado
+            PdfHeaderEventHandler4 headerHandler = new PdfHeaderEventHandler4();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+
+            Client client = clientRepository.findById(id).get();
+            SelfAssessment selfAssessment = respoSelf.findByClientId(client.id).get();
+            CanvasModel canvas = repoCanva.findCanvasModelByClientId(client.id).get();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+
+            Paragraph title1 = new Paragraph("Socios Claves", titleFont);
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+            document.add(new Paragraph("\n"));
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+
+            // Datos del formulario
+            String proveedores = canvas.getKeyPartners().getProveedores();
+            String publicas = canvas.getKeyPartners().getEntidadesPublicas();
+            String privadas = canvas.getKeyPartners().getEntidadesPrivadas();
+            String academia = canvas.getKeyPartners().getAcademia();
+            String otros = canvas.getKeyPartners().getOtros();
+            // Crear una tabla en el documento PDF
+            PdfPTable table = new PdfPTable(2);
+            float[] columnWidths = {25f, 75f}; // Establece las proporciones de ancho
+
+            table.setWidths(columnWidths);
+
+// Agregar celdas a la tabla con los datos del formulario
+            PdfPCell cell1 = new PdfPCell(new Phrase("Proveedores", contentFont3));
+            PdfPCell cell2 = new PdfPCell(new Phrase(proveedores, contentFont4));
+            PdfPCell cell3 = new PdfPCell(new Phrase("Entidades Públicas", contentFont3));
+            PdfPCell cell4 = new PdfPCell(new Phrase(publicas, contentFont4));
+            PdfPCell cell5 = new PdfPCell(new Phrase("Entidades Privadas", contentFont3));
+            PdfPCell cell6 = new PdfPCell(new Phrase(privadas, contentFont4));
+            PdfPCell cell7 = new PdfPCell(new Phrase("Academia", contentFont3));
+            PdfPCell cell8 = new PdfPCell(new Phrase(academia, contentFont4));
+            PdfPCell cell9 = new PdfPCell(new Phrase("Otros", contentFont3));
+            PdfPCell cell0 = new PdfPCell(new Phrase(otros, contentFont4));
+
+            table.addCell(cell1);
+            table.addCell(cell2);
+            table.addCell(cell3);
+            table.addCell(cell4);
+            table.addCell(cell5);
+            table.addCell(cell6);
+            table.addCell(cell7);
+            table.addCell(cell8);
+            table.addCell(cell9);
+            table.addCell(cell0);
+
+// Agregar la tabla al documento
+            document.add(table);
+
+            document.close();
+
+            System.out.println("PDF creado exitosamente.");
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+
+    }
+
+    @GetMapping("/canvasIngresos/{id}")//
+    public void canvasIngresos(HttpServletResponse response, @PathVariable Long id) {
+        try {
+            // Inicializar las imágenes en el constructor
+            String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+            headerImageIzq = Image.getInstance(imagePathIzq);
+            headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+
+            String imagePathDer = new File("RCP-Auto.jpg").getAbsolutePath();
+            headerImageDer = Image.getInstance(imagePathDer);
+            headerImageDer.scaleToFit(100, 100);
+
+            String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+            headerImageIzq3 = Image.getInstance(imagePathIzq3);
+            headerImageIzq3.scaleToFit(150, 150);
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+        }
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=ingresos.pdf");
+
+        try {
+
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4); //
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(document.leftMargin(), document.rightMargin(), 100, 0);
+
+            // Crear una instancia de la clase PdfHeaderEventHandler1 para manejar el encabezado
+            PdfHeaderEventHandler4 headerHandler = new PdfHeaderEventHandler4();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+
+            Client client = clientRepository.findById(id).get();
+            SelfAssessment selfAssessment = respoSelf.findByClientId(client.id).get();
+            CanvasModel canvas = repoCanva.findCanvasModelByClientId(client.id).get();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+
+            Paragraph title1 = new Paragraph("Ingresos", titleFont);
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+            document.add(new Paragraph("\n"));
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+
+            // Datos del formulario
+            String propio = canvas.getRevenueStreams().getCapitalPorpio();
+            String prestamo = canvas.getRevenueStreams().getCapitalPrestamo();
+            String pago = canvas.getRevenueStreams().getCanalesPago();
+            String otros = canvas.getRevenueStreams().getOtros();
+            // Crear una tabla en el documento PDF
+            PdfPTable table = new PdfPTable(2);
+            float[] columnWidths = {25f, 75f}; // Establece las proporciones de ancho
+
+            table.setWidths(columnWidths);
+
+// Agregar celdas a la tabla con los datos del formulario
+            PdfPCell cell1 = new PdfPCell(new Phrase("Capital Propio", contentFont3));
+            PdfPCell cell2 = new PdfPCell(new Phrase(propio, contentFont4));
+            PdfPCell cell3 = new PdfPCell(new Phrase("Capital Préstamo", contentFont3));
+            PdfPCell cell4 = new PdfPCell(new Phrase(prestamo, contentFont4));
+            PdfPCell cell5 = new PdfPCell(new Phrase("Canales de Pago", contentFont3));
+            PdfPCell cell6 = new PdfPCell(new Phrase(pago, contentFont4));
+            PdfPCell cell9 = new PdfPCell(new Phrase("Otros", contentFont3));
+            PdfPCell cell0 = new PdfPCell(new Phrase(otros, contentFont4));
+
+            table.addCell(cell1);
+            table.addCell(cell2);
+            table.addCell(cell3);
+            table.addCell(cell4);
+            table.addCell(cell5);
+            table.addCell(cell6);
+            table.addCell(cell9);
+            table.addCell(cell0);
+
+// Agregar la tabla al documento
+            document.add(table);
+
+            document.close();
+
+            System.out.println("PDF creado exitosamente.");
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            // Manejar errores aquí
+        }
+
+    }
+
+    @GetMapping("/canvasCostos/{id}")//
+    public void canvasCostos(HttpServletResponse response, @PathVariable Long id) {
+        try {
+            // Inicializar las imágenes en el constructor
+            String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+            headerImageIzq = Image.getInstance(imagePathIzq);
+            headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+
+            String imagePathDer = new File("RCP-Auto.jpg").getAbsolutePath();
+            headerImageDer = Image.getInstance(imagePathDer);
+            headerImageDer.scaleToFit(100, 100);
+
+            String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+            headerImageIzq3 = Image.getInstance(imagePathIzq3);
+            headerImageIzq3.scaleToFit(150, 150);
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+        }
+
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=estructura-costos.pdf");
+
+        try {
+
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4); //
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(document.leftMargin(), document.rightMargin(), 100, 0);
+
+            // Crear una instancia de la clase PdfHeaderEventHandler1 para manejar el encabezado
+            PdfHeaderEventHandler4 headerHandler = new PdfHeaderEventHandler4();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+
+            Client client = clientRepository.findById(id).get();
+            SelfAssessment selfAssessment = respoSelf.findByClientId(client.id).get();
+            CanvasModel canvas = repoCanva.findCanvasModelByClientId(client.id).get();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+
+            Paragraph title1 = new Paragraph("Estructura de Costos", titleFont);
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
+            String formattedDate = dateFormat.format(currentDate).toUpperCase();
+            document.add(new Paragraph("\n"));
+            // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            // Establecer el estilo de fuente para el contenido
+            Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
+            //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
+            Font contentFont1 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont2 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL);
+            Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
+            Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
+
+            // Crear una tabla en el documento PDF
+            String costoVariableTitle = "Costos Variables";
+            String costoFijoTitle = "Costos Fijos";
+            List<CostComponent> costosFijos = canvas.getCostStructure().getCostosFijos();
+            List<CostComponent> costosVariables = canvas.getCostStructure().getCostosVariables();
+
+            // Crear una tabla para el contenido de Costo Variable
+            PdfPTable table1 = new PdfPTable(2);
+            PdfPCell cell11 = new PdfPCell(new Paragraph(costoVariableTitle));
+            cell11.setColspan(2);
+            table1.addCell(cell11);
+
+            // Agregar filas con contenido de Costo Variable
+            for (CostComponent variables : costosVariables) {
+                table1.addCell(variables.getNameComponent() + " - $ " + variables.getAmount());
+                // Agregar la celda a la tabla, creará una nueva fila en cada iteración
+            }
+
+            // Crear una tabla para el contenido de Costo Fijo
+            PdfPTable table2 = new PdfPTable(2);
+            PdfPCell cell21 = new PdfPCell(new Paragraph(costoFijoTitle));
+            cell21.setColspan(2);
+            table2.addCell(cell21);
+
+            // Agregar filas con contenido de Costo Fijo
+            for (CostComponent fijos : costosFijos) {
+                table2.addCell(fijos.getNameComponent() + " - $ " + fijos.getAmount());
+                // Agregar la celda a la tabla, creará una nueva fila en cada iteración
+            }
+
+            // Agregar las tablas al documento PDF
+            document.add(table1);
+            document.add(table2);
+
+            document.close();
+
+            System.out.println("PDF creado exitosamente.");
         } catch (DocumentException | IOException e) {
             e.printStackTrace();
             // Manejar errores aquí
@@ -2764,55 +3884,141 @@ public class PDFCOntroller {
             }
         }
     }
-    
-     private static Image headerImageIzq;
+
+    private static Image headerImageIzq;
     private static Image headerImageDer;
     private static Image headerImageIzq3;
-    
+
     private static class PdfHeaderEventHandler2 extends PdfPageEventHelper {
 
-    @Override
-    public void onStartPage(PdfWriter writer, Document document) {
-        try {
-            // Obtener el número de página actual
-            int pageNumber = writer.getPageNumber();
+        @Override
+        public void onStartPage(PdfWriter writer, Document document) {
+            try {
+                // Obtener el número de página actual
+                int pageNumber = writer.getPageNumber();
 
-            // Obtener el contenido directo de la página
-            PdfContentByte content = writer.getDirectContent();
+                // Obtener el contenido directo de la página
+                PdfContentByte content = writer.getDirectContent();
 
-            // Definir las coordenadas y escalado de las imágenes
-            float imageX1 = 36;
-            float imageY1 = PageSize.A4.getHeight() - 20 - headerImageIzq.getScaledHeight();
-            float imageX2 = PageSize.A4.getWidth() - 136;
-            float imageY2 = PageSize.A4.getHeight() - 20 - headerImageDer.getScaledHeight();
-            float imageX3 = imageX2 - headerImageIzq3.getScaledWidth() - 10;
-            float imageY3 = imageY2 - 10;
+                // Definir las coordenadas y escalado de las imágenes
+                float imageX1 = 36;
+                float imageY1 = PageSize.A4.getHeight() - 20 - headerImageIzq.getScaledHeight();
+                float imageX2 = PageSize.A4.getWidth() - 136;
+                float imageY2 = PageSize.A4.getHeight() - 20 - headerImageDer.getScaledHeight();
+                float imageX3 = imageX2 - headerImageIzq3.getScaledWidth() - 10;
+                float imageY3 = imageY2 - 10;
 
-            // Agregar imagen en el encabezado
-            String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
-            Image headerImageIzq = Image.getInstance(imagePathIzq);
-            headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
-            headerImageIzq.setAbsolutePosition(imageX1, imageY1);
-            content.addImage(headerImageIzq);
+                // Agregar imagen en el encabezado
+                String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+                Image headerImageIzq = Image.getInstance(imagePathIzq);
+                headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+                headerImageIzq.setAbsolutePosition(imageX1, imageY1);
+                content.addImage(headerImageIzq);
 
-            String imagePathDer = new File("CodigoRCP-HerramientaDiagnostico.jpg").getAbsolutePath();
-            Image headerImageDer = Image.getInstance(imagePathDer);
-            headerImageDer.scaleToFit(100, 100);
-            headerImageDer.setAbsolutePosition(imageX2, imageY2);
-            content.addImage(headerImageDer);
+                String imagePathDer = new File("CodigoRCP-HerramientaDiagnostico.jpg").getAbsolutePath();
+                Image headerImageDer = Image.getInstance(imagePathDer);
+                headerImageDer.scaleToFit(100, 100);
+                headerImageDer.setAbsolutePosition(imageX2, imageY2);
+                content.addImage(headerImageDer);
 
-            String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
-            Image headerImageIzq3 = Image.getInstance(imagePathIzq3);
-            headerImageIzq3.scaleToFit(150, 150);
-            headerImageIzq3.setAbsolutePosition(imageX3, imageY3);
-            content.addImage(headerImageIzq3);
+                String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+                Image headerImageIzq3 = Image.getInstance(imagePathIzq3);
+                headerImageIzq3.scaleToFit(150, 150);
+                headerImageIzq3.setAbsolutePosition(imageX3, imageY3);
+                content.addImage(headerImageIzq3);
 
-        } catch (IOException | DocumentException e) {
-            e.printStackTrace();
+            } catch (IOException | DocumentException e) {
+                e.printStackTrace();
+            }
         }
     }
-}
 
-    
+    private static class PdfHeaderEventHandler3 extends PdfPageEventHelper {
+
+        @Override
+        public void onStartPage(PdfWriter writer, Document document) {
+            try {
+                // Obtener el número de página actual
+                int pageNumber = writer.getPageNumber();
+
+                // Obtener el contenido directo de la página
+                PdfContentByte content = writer.getDirectContent();
+
+                // Definir las coordenadas y escalado de las imágenes
+                float imageX1 = 36;
+                float imageY1 = PageSize.A4.getHeight() - 20 - headerImageIzq.getScaledHeight();
+                float imageX2 = PageSize.A4.getWidth() - 136;
+                float imageY2 = PageSize.A4.getHeight() - 20 - headerImageDer.getScaledHeight();
+                float imageX3 = imageX2 - headerImageIzq3.getScaledWidth() - 10;
+                float imageY3 = imageY2 - 10;
+
+                // Agregar imagen en el encabezado
+                String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+                Image headerImageIzq = Image.getInstance(imagePathIzq);
+                headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+                headerImageIzq.setAbsolutePosition(imageX1, imageY1);
+                content.addImage(headerImageIzq);
+
+                String imagePathDer = new File("RCP-Auto.jpg").getAbsolutePath();
+                Image headerImageDer = Image.getInstance(imagePathDer);
+                headerImageDer.scaleToFit(100, 100);
+                headerImageDer.setAbsolutePosition(imageX2, imageY2);
+                content.addImage(headerImageDer);
+
+                String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+                Image headerImageIzq3 = Image.getInstance(imagePathIzq3);
+                headerImageIzq3.scaleToFit(150, 150);
+                headerImageIzq3.setAbsolutePosition(imageX3, imageY3);
+                content.addImage(headerImageIzq3);
+
+            } catch (IOException | DocumentException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static class PdfHeaderEventHandler4 extends PdfPageEventHelper {
+
+        @Override
+        public void onStartPage(PdfWriter writer, Document document) {
+            try {
+                // Obtener el número de página actual
+                int pageNumber = writer.getPageNumber();
+
+                // Obtener el contenido directo de la página
+                PdfContentByte content = writer.getDirectContent();
+
+                // Definir las coordenadas y escalado de las imágenes
+                float imageX1 = 36;
+                float imageY1 = PageSize.A4.getHeight() - 20 - headerImageIzq.getScaledHeight();
+                float imageX2 = PageSize.A4.getWidth() - 136;
+                float imageY2 = PageSize.A4.getHeight() - 20 - headerImageDer.getScaledHeight();
+                float imageX3 = imageX2 - headerImageIzq3.getScaledWidth() - 10;
+                float imageY3 = imageY2 - 15;
+
+                // Agregar imagen en el encabezado
+                String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+                Image headerImageIzq = Image.getInstance(imagePathIzq);
+                headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+                headerImageIzq.setAbsolutePosition(imageX1, imageY1);
+                content.addImage(headerImageIzq);
+
+                String imagePathDer = new File("enBlanco.jpg").getAbsolutePath();
+                Image headerImageDer = Image.getInstance(imagePathDer);
+                headerImageDer.scaleToFit(100, 100);
+                headerImageDer.setAbsolutePosition(imageX2, imageY2);
+                content.addImage(headerImageDer);
+
+                String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+                Image headerImageIzq3 = Image.getInstance(imagePathIzq3);
+                headerImageIzq3.scaleToFit(150, 150);
+                headerImageIzq3.setAbsolutePosition(imageX3, imageY3);
+                content.addImage(headerImageIzq3);
+
+            } catch (IOException | DocumentException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }

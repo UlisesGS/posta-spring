@@ -43,6 +43,7 @@ public class SeguridadWeb {
         return http.authorizeHttpRequests(authRules -> authRules
 
                 .requestMatchers(HttpMethod.GET, "/users/byEmail/{email}").permitAll()
+                .requestMatchers("/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
                 .requestMatchers(HttpMethod.GET, "/users").hasAnyRole("ADMIN", "ADVISER")
                 .requestMatchers(HttpMethod.PUT, "/users").hasAnyRole("ADMIN", "ADVISER")
@@ -75,8 +76,8 @@ public class SeguridadWeb {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://crm-posta.s3-website-us-east-1.amazonaws.com"));
-        config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        config.setAllowedOrigins(Arrays.asList("http://crm-posta.s3-website-sa-east-1.amazonaws.com"));
+        //config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         config.setAllowCredentials(true);

@@ -86,30 +86,7 @@ public class ClientServiceImpl implements IClientService {
         return null;
     }
 
-//    public Entrepreneur update(Entrepreneur client, Long id) {
-//        Entrepreneur typeClient = (Entrepreneur) clientRepository.findById(id).get();
-//
-//        if (typeClient != null) {
-//            Entrepreneur updateClient = (Entrepreneur) typeClient;
-//            updateClient.setName(client.getName());
-//            updateClient.setLastName(client.getLastName());
-//            updateClient.setNIT(client.getNIT());
-//            updateClient.setGender(client.getGender());
-//            updateClient.setStudyLevel(client.getStudyLevel());
-//            updateClient.setEthnicGroup(client.getEthnicGroup());
-//            updateClient.setVictimPopulation(client.getVictimPopulation());
-//            updateClient.setDisability(client.getDisability());
-//            updateClient.setDisplacement(client.getDisplacement());
-//            updateClient.setPhone(client.getPhone());
-//            updateClient.setEmail(client.getEmail());
-//            updateClient.setAddress(client.getAddress());
-//            updateClient.setBusinessIdea(client.getBusinessIdea());
-//            updateClient.setProduct(client.getProduct());
-//             updateClient.setMunicipio(client.getMunicipio());
-//            return clientRepository.save(updateClient);
-//        }
-//        return null;
-//    }
+
 
     @Override
     public Page<Client> paginacion(Pageable pageable) {

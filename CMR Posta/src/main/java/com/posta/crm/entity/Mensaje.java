@@ -44,7 +44,12 @@ public class Mensaje {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm", timezone = "America/Bogota")
     private Date fehcaEnvio;
     
+    private Boolean condicion;
     
+    @PrePersist
+    protected void onCreate() {
+        this.condicion = true; // Inicializar la condición en true al momento de persistir
+    }
     
     
 }

@@ -2643,7 +2643,7 @@ public class PDFCOntroller {
         }
 
     }
-
+    
     @GetMapping("/autoevaluacion/{id}")//
     public void generarAutoevaluacion(HttpServletResponse response, @PathVariable Long id) {
 
@@ -3162,7 +3162,7 @@ public class PDFCOntroller {
 
             Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
 
-            Paragraph title1 = new Paragraph("Relaciones con los clientes", titleFont);
+            Paragraph title1 = new Paragraph("Relaciones con los Clientes", titleFont);
             title1.setAlignment(Element.ALIGN_CENTER);
             document.add(title1);
 

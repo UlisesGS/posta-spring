@@ -21,7 +21,7 @@ public interface ClientRepository extends JpaRepository<Client, Long>{
     public List<Client>findByRegdate();
     public Page<Client>findByActive(Boolean active, Pageable pageable);
     
-//    @Query("SELECT a FROM Client a ORDER BY a.regdate DESC")
+
     @Query("SELECT a FROM Client a WHERE a.active = true ORDER BY a.regdate DESC")
     public Page<Client>findByRegdate(Pageable pageable);
     

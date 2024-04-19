@@ -22,6 +22,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Data
+
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

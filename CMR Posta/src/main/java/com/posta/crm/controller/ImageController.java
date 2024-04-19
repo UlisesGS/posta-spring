@@ -55,7 +55,7 @@ public class ImageController {
             if (file.isEmpty()) {
                 return "Archivo vacío";
             }
-            
+
             // Crea el directorio de carga si no existe
             File uploadDir = new File(UPLOAD_DIR);
             if (!uploadDir.exists()) {
@@ -63,7 +63,10 @@ public class ImageController {
             }
 
             // Obtiene el nombre del archivo original
-            String fileName = file.getOriginalFilename();
+            String originalFileName = file.getOriginalFilename();
+
+            // Genera un nombre de archivo único
+            String fileName = generateUniqueFileName(originalFileName);
 
             // Guarda el archivo en el directorio de carga
             File destFile = new File(UPLOAD_DIR + fileName);
@@ -87,8 +90,11 @@ public class ImageController {
         }
     }
     
-     @GetMapping("/downloadCompromiso/{id}")
+
+
+    @GetMapping("/downloadCompromiso/{id}")
     public ResponseEntity<?> downloadFile(@PathVariable Long id) throws MalformedURLException {
+        System.out.println("Hola Manola");
         Process proceso = processServiceImpl.findById(id).orElse(null);
         if (proceso == null || proceso.getDocumentoCompromiso() == null) {
             return ResponseEntity.notFound().build();
@@ -99,11 +105,13 @@ public class ImageController {
         Resource resource;
         resource = new UrlResource(filePath.toUri());
 
-        // Configura la respuesta para descargar el archivo
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
-                .body(resource);
+        String contentType = detectContentType(fileName);
+
+    // Configura la respuesta para descargar el archivo con el tipo de contenido detectado
+    return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType(contentType))
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
+            .body(resource);
     }
 
     //Metodos Nuevos para la carga de imagenes/archivos
@@ -114,7 +122,7 @@ public class ImageController {
             if (file.isEmpty()) {
                 return "Archivo vacío";
             }
-            
+
             // Crea el directorio de carga si no existe
             File uploadDir = new File(UPLOAD_DIR);
             if (!uploadDir.exists()) {
@@ -122,7 +130,10 @@ public class ImageController {
             }
 
             // Obtiene el nombre del archivo original
-            String fileName = file.getOriginalFilename();
+            String originalFileName = file.getOriginalFilename();
+
+            // Genera un nombre de archivo único
+            String fileName = generateUniqueFileName(originalFileName);
 
             // Guarda el archivo en el directorio de carga
             File destFile = new File(UPLOAD_DIR + fileName);
@@ -145,8 +156,8 @@ public class ImageController {
             return "Error al cargar el archivo";
         }
     }
-    
-     @GetMapping("/imagenEncuesta/{id}")
+
+    @GetMapping("/imagenEncuesta/{id}")
     public ResponseEntity<?> downloadSatisfaccion(@PathVariable Long id) throws MalformedURLException {
         Process proceso = processServiceImpl.findById(id).orElse(null);
         if (proceso == null || proceso.getDocumentoCompromiso() == null) {
@@ -158,14 +169,15 @@ public class ImageController {
         Resource resource;
         resource = new UrlResource(filePath.toUri());
 
-        // Configura la respuesta para descargar el archivo
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
-                .body(resource);
+        String contentType = detectContentType(fileName);
+
+    // Configura la respuesta para descargar el archivo con el tipo de contenido detectado
+    return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType(contentType))
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
+            .body(resource);
     }
-    
-    
+
     //Metodos Nuevos para la carga de imagenes/archivos
     @PostMapping("/uploadCierre/{id}")
     public String uploadCierre(@RequestParam("file") MultipartFile file, @PathVariable Long id) {
@@ -174,7 +186,7 @@ public class ImageController {
             if (file.isEmpty()) {
                 return "Archivo vacío";
             }
-            
+
             // Crea el directorio de carga si no existe
             File uploadDir = new File(UPLOAD_DIR);
             if (!uploadDir.exists()) {
@@ -182,7 +194,10 @@ public class ImageController {
             }
 
             // Obtiene el nombre del archivo original
-            String fileName = file.getOriginalFilename();
+            String originalFileName = file.getOriginalFilename();
+
+            // Genera un nombre de archivo único
+            String fileName = generateUniqueFileName(originalFileName);
 
             // Guarda el archivo en el directorio de carga
             File destFile = new File(UPLOAD_DIR + fileName);
@@ -205,8 +220,8 @@ public class ImageController {
             return "Error al cargar el archivo";
         }
     }
-    
-     @GetMapping("/imagenCierre/{id}")
+
+    @GetMapping("/imagenCierre/{id}")
     public ResponseEntity<?> imagenCierre(@PathVariable Long id) throws MalformedURLException {
         Process proceso = processServiceImpl.findById(id).orElse(null);
         if (proceso == null || proceso.getDocumentoCompromiso() == null) {
@@ -218,13 +233,15 @@ public class ImageController {
         Resource resource;
         resource = new UrlResource(filePath.toUri());
 
-        // Configura la respuesta para descargar el archivo
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
-                .body(resource);
+        String contentType = detectContentType(fileName);
+
+    // Configura la respuesta para descargar el archivo con el tipo de contenido detectado
+    return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType(contentType))
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
+            .body(resource);
     }
-    
+
     //Metodos Nuevos para la carga de imagenes/archivos
     @PostMapping("/uploadImpacto/{id}")
     public String uploadImpacto(@RequestParam("file") MultipartFile file, @PathVariable Long id) {
@@ -233,7 +250,7 @@ public class ImageController {
             if (file.isEmpty()) {
                 return "Archivo vacío";
             }
-            
+
             // Crea el directorio de carga si no existe
             File uploadDir = new File(UPLOAD_DIR);
             if (!uploadDir.exists()) {
@@ -241,7 +258,10 @@ public class ImageController {
             }
 
             // Obtiene el nombre del archivo original
-            String fileName = file.getOriginalFilename();
+            String originalFileName = file.getOriginalFilename();
+
+            // Genera un nombre de archivo único
+            String fileName = generateUniqueFileName(originalFileName);
 
             // Guarda el archivo en el directorio de carga
             File destFile = new File(UPLOAD_DIR + fileName);
@@ -264,8 +284,8 @@ public class ImageController {
             return "Error al cargar el archivo";
         }
     }
-    
-     @GetMapping("/imagenImpacto/{id}")
+
+    @GetMapping("/imagenImpacto/{id}")
     public ResponseEntity<?> imagenImpacto(@PathVariable Long id) throws MalformedURLException {
         Process proceso = processServiceImpl.findById(id).orElse(null);
         if (proceso == null || proceso.getDocumentoCompromiso() == null) {
@@ -277,16 +297,15 @@ public class ImageController {
         Resource resource;
         resource = new UrlResource(filePath.toUri());
 
-        // Configura la respuesta para descargar el archivo
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
-                .body(resource);
+        String contentType = detectContentType(fileName);
+
+    // Configura la respuesta para descargar el archivo con el tipo de contenido detectado
+    return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType(contentType))
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
+            .body(resource);
     }
-    
-    
-    
-    
+
     private String generateUniqueFileName(String originalFileName) {
         String extension = "";
         int dotIndex = originalFileName.lastIndexOf(".");

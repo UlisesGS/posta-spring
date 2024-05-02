@@ -296,6 +296,29 @@ public class ProcessEmpresarioController {
             areaIntervenir.setObservaciones(planDeAccion.getTalentoHumano().getObservaciones());
             planDeAccionUpdate.setTalentoHumano(areaIntervenirRepository.save(areaIntervenir));
 
+            // registro marcas
+            areaIntervenir= areaIntervenirRepository.findById(planDeAccion.getRegistroMarcas().getId()).get();
+            areaIntervenir.setCumplimiento(planDeAccion.getRegistroMarcas().getCumplimiento());
+            areaIntervenir.setObjetivoEstrategico(planDeAccion.getRegistroMarcas().getObjetivoEstrategico());
+            areaIntervenir.setActividadEstrategica(planDeAccion.getRegistroMarcas().getActividadEstrategica());
+            areaIntervenir.setResponsable(planDeAccion.getRegistroMarcas().getResponsable());
+            areaIntervenir.setAliadosEstrategicos(planDeAccion.getRegistroMarcas().getAliadosEstrategicos());
+            areaIntervenir.setFechaInicio(planDeAccion.getRegistroMarcas().getFechaInicio());
+            areaIntervenir.setFechaCierre(planDeAccion.getRegistroMarcas().getFechaCierre());
+            areaIntervenir.setObservaciones(planDeAccion.getRegistroMarcas().getObservaciones());
+            planDeAccionUpdate.setRegistroMarcas(areaIntervenirRepository.save(areaIntervenir));
+            
+            // no contemplado
+            areaIntervenir= areaIntervenirRepository.findById(planDeAccion.getNoContemplados().getId()).get();
+            areaIntervenir.setCumplimiento(planDeAccion.getNoContemplados().getCumplimiento());
+            areaIntervenir.setObjetivoEstrategico(planDeAccion.getNoContemplados().getObjetivoEstrategico());
+            areaIntervenir.setActividadEstrategica(planDeAccion.getNoContemplados().getActividadEstrategica());
+            areaIntervenir.setResponsable(planDeAccion.getNoContemplados().getResponsable());
+            areaIntervenir.setAliadosEstrategicos(planDeAccion.getNoContemplados().getAliadosEstrategicos());
+            areaIntervenir.setFechaInicio(planDeAccion.getNoContemplados().getFechaInicio());
+            areaIntervenir.setFechaCierre(planDeAccion.getNoContemplados().getFechaCierre());
+            areaIntervenir.setObservaciones(planDeAccion.getNoContemplados().getObservaciones());
+            planDeAccionUpdate.setNoContemplados(areaIntervenirRepository.save(areaIntervenir));
 
 
         return ResponseEntity.status(HttpStatus.CREATED).body(planDeAccionRepository.save(planDeAccionUpdate));

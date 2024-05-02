@@ -12,9 +12,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Data
+@Getter
+@Setter
 public class EstructuraMercado {
 
     @Id
@@ -49,7 +53,7 @@ public class EstructuraMercado {
     public void calculos(){
         this.unidadHoraHombre=(0.99*this.cantidad)/this.horasOperario;
         this.capacidadInstaladaPorOperario=this.horasOperario*this.unidadHoraHombre;
-        this.capacidadInstaladaUnidades=this.capacidadInstaladaPorOperario*this.tiempoDecicacion;
+        this.capacidadInstaladaUnidades=this.capacidadInstaladaPorOperario*this.tiempoDecicacion/100;
         this.precioTotal=this.precioUnitario*this.cantidad;
     }
 }

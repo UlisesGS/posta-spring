@@ -31,53 +31,54 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/mensaje")
 @CrossOrigin(origins = "*")
 public class MensajeControllador {
-    
+
     @Autowired
     private MensajeServiceImpl mensajeServiceImpl;
 
-    
     //Metodos POST
     @PostMapping("/save")
     public ResponseEntity<?> crearMensaje(@RequestBody Mensaje mensaje) {
-        
+
         mensajeServiceImpl.save(mensaje);
         return new ResponseEntity<>(mensaje, HttpStatus.CREATED);
     }
-    
+
     //Metodos GET
     @GetMapping("/all")
-    public ResponseEntity<?>findAll(){
-        List<Mensaje>todos=mensajeServiceImpl.findAll();
+    public ResponseEntity<?> findAll() {
+        List<Mensaje> todos = mensajeServiceImpl.findAll();
         if (todos.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(todos);
     }
-        @GetMapping("/porId/{id}")
-    public ResponseEntity<?>findAll(@PathVariable Long id){
-        Mensaje encontrado=mensajeServiceImpl.findById(id).get();
+
+    @GetMapping("/porId/{id}")
+    public ResponseEntity<?> findAll(@PathVariable Long id) {
+        Mensaje encontrado = mensajeServiceImpl.findById(id).get();
         if (encontrado != null) {
             return ResponseEntity.ok(encontrado);
         }
         return ResponseEntity.notFound().build();
     }
+
     @GetMapping("/porUser/{id}")
-    public ResponseEntity<?>findAllUser(@PathVariable Long id){
-        List<Mensaje>todosUser=mensajeServiceImpl.findByRemitenteId(id);
+    public ResponseEntity<?> findAllUser(@PathVariable Long id) {
+        List<Mensaje> todosUser = mensajeServiceImpl.findByRemitenteId(id);
         if (todosUser != null) {
             return ResponseEntity.ok(todosUser);
         }
         return ResponseEntity.notFound().build();
     }
-    
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> activateDeactivate(@PathVariable Long id) {
         Optional<Mensaje> find = mensajeServiceImpl.findById(id);
         if (find.isPresent()) {
             Mensaje mensaje = find.get();
             mensaje.setCondicion(false);
-                mensajeServiceImpl.save(mensaje);
-                return ResponseEntity.ok(mensaje);
+            mensajeServiceImpl.save(mensaje);
+            return ResponseEntity.ok(mensaje);
         }
         return ResponseEntity.notFound().build();
     }

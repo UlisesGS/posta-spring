@@ -28,4 +28,8 @@ public class PlanDeAccion {
     private AreaIntervenir produccionOperaciones;
     @OneToOne
     private AreaIntervenir talentoHumano;
+    @OneToOne
+    private AreaIntervenir registroMarcas;
+    @OneToOne
+    private AreaIntervenir noContemplados;
 }

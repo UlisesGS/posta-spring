@@ -60,6 +60,8 @@ public class ProcessEmpresarioServiceImpl implements IProcessEmpresarioService {
             areaIntervenirRepository.save(planAccionUpdate.getMercadeoVentas());
             areaIntervenirRepository.save(planAccionUpdate.getProduccionOperaciones());
             areaIntervenirRepository.save(planAccionUpdate.getTalentoHumano());
+            areaIntervenirRepository.save(planAccionUpdate.getRegistroMarcas());
+            areaIntervenirRepository.save(planAccionUpdate.getNoContemplados());
             planDeAccionRepository.save(planAccionUpdate);
         } else {
             processUpdate.setDiagnosticoEmpresarial(diagnosticoEmpresarialUpdate);

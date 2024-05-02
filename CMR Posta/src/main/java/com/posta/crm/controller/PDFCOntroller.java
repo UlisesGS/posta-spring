@@ -74,6 +74,7 @@ public class PDFCOntroller {
     @Autowired
     private CanvasModelRepository repoCanva;
 
+    //Datos del Cliente
     @GetMapping("/generarPdf/{id}")
     public void generarPDF(HttpServletResponse response, @PathVariable Long id) {
         // Establecer el tipo de contenido de la respuesta como PDF
@@ -221,6 +222,7 @@ public class PDFCOntroller {
         }
     }
 
+    //Informe de Diagnostico
     @GetMapping("/informe/{id}")
     public void generarInforme(HttpServletResponse response, @PathVariable Long id) {
         // Establecer el tipo de contenido de la respuesta como PDF
@@ -522,6 +524,7 @@ public class PDFCOntroller {
         }
     }
 
+    //Analisis de Resultados
     @GetMapping("/diagnostico/{id}")
     public void generarDiagnostico(HttpServletResponse response, @PathVariable Long id) {
 
@@ -550,9 +553,6 @@ public class PDFCOntroller {
             PdfWriter writer = PdfWriter.getInstance(document, outputStream);
             document.setMargins(document.leftMargin(), document.rightMargin(), 100, 100);
 
-            // Crear una instancia de la clase PdfFooterEventHandler para manejar el pie de página
-            PdfFooterEventHandler footerHandler = new PdfFooterEventHandler();
-            writer.setPageEvent(footerHandler);
             // Crear una instancia de la clase PdfHeaderEventHandler para manejar el encabezado
             PdfHeaderEventHandler1 headerHandler = new PdfHeaderEventHandler1();
             writer.setPageEvent(headerHandler);
@@ -805,6 +805,7 @@ public class PDFCOntroller {
         }
     }
 
+    //Aca empieza Diagnostico Empresarial
     @GetMapping("/conceptos/{id}")
     public void generarConceptos(HttpServletResponse response, @PathVariable Long id) {
         String[] preguntas = {
@@ -2546,11 +2547,14 @@ public class PDFCOntroller {
             // Manejar errores aquí
         }
     }
+    //Aca termina diagnostico Empresarial
 
+    //Analisis de Economico
     @GetMapping("/analisisEconomico/{id}")//
     public void generarPlanAccion(HttpServletResponse response, @PathVariable Long id) {
 
         try {
+
             // Inicializar las imágenes en el constructor
             String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
             headerImageIzq = Image.getInstance(imagePathIzq);
@@ -2603,6 +2607,19 @@ public class PDFCOntroller {
             document.add(title1);
             document.add(new Paragraph("\n"));
             // Aquí deberías obtener los datos de tu base de datos, si los necesitas
+            String[] datos = {
+                "Ventas del Mes",
+                "Aumento de Ventas",
+                "Empleos Formales",
+                "Empleos Informales",
+                "Empleos Nuevos",
+                "Empresa Exportando",
+                "Ventas por Exportacion",
+                "Diversificación de Productos",
+                "Apertura de Nuevos Mercados",
+                "Acceso a Otras Fuentes"
+            };
+
             // Establecer el estilo de fuente para el contenido
             Font contentFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD);
             //Font atributos = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.DARK_GRAY);
@@ -2611,29 +2628,777 @@ public class PDFCOntroller {
             Font contentFont3 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.BOLD);
             Font contentFont4 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, Font.NORMAL);
 
-            // Crear una tabla con 3 columnas
-            PdfPTable table = new PdfPTable(2);
+            
+            
+            
+            for (int i = 0; i < 1; i++) {
+                PdfPTable table = new PdfPTable(2);
+            table.setWidths(new float[]{10f, 90f});
+             BaseColor colorHeader = new BaseColor(220, 220, 220);
 
-            // Agregar filas con 2 columnas de datos
-            table.addCell("Mes 1");
-            table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes1());
-            table.addCell("Mes 2");
-            table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes2());
-            table.addCell("Mes 3");
-            table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes3());
-            table.addCell("Mes 4");
-            table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes4());
-            table.addCell("Mes 5");
-            table.addCell(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes4());
+            // Encabezado de la tabla (ocupa 2 columnas)
+            PdfPCell headerCell = new PdfPCell(new Phrase(datos[0]));
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell.setBackgroundColor(colorHeader);
+            headerCell.setColspan(2);
+            table.addCell(headerCell);
+
+            // Filas del contenido
+            PdfPCell cell1_1 = new PdfPCell(new Phrase("Mes 1", contentFont4));
+            cell1_1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1.setColspan(1);
+            table.addCell(cell1_1);
+            PdfPCell cell1_2 = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes1(), contentFont4));
+            cell1_2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2.setColspan(1);
+            table.addCell(cell1_2);
+
+            PdfPCell cell1_1a = new PdfPCell(new Phrase("Mes 2", contentFont4));
+            cell1_1a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1a.setColspan(1);
+            table.addCell(cell1_1a);
+            PdfPCell cell1_2a = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes2(), contentFont4));
+            cell1_2a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2a.setColspan(1);
+            table.addCell(cell1_2a);
+            
+            PdfPCell cell1_1b = new PdfPCell(new Phrase("Mes 3", contentFont4));
+            cell1_1b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1b.setColspan(1);
+            table.addCell(cell1_1b);
+            PdfPCell cell1_2b = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes3(), contentFont4));
+            cell1_2b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2b.setColspan(1);
+            table.addCell(cell1_2b);
+            
+            PdfPCell cell1_1c = new PdfPCell(new Phrase("Mes 4", contentFont4));
+            cell1_1c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1c.setColspan(1);
+            table.addCell(cell1_1c);
+            PdfPCell cell1_2c = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes4(), contentFont4));
+            cell1_2c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2c.setColspan(1);
+            table.addCell(cell1_2c);
+            
+            PdfPCell cell1_1d = new PdfPCell(new Phrase("Mes 5", contentFont4));
+            cell1_1d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1d.setColspan(1);
+            table.addCell(cell1_1d);
+            PdfPCell cell1_2d = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getMes5(), contentFont4));
+            cell1_2d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2d.setColspan(1);
+            table.addCell(cell1_2d);
+            
+            PdfPCell cell1_2e1 = new PdfPCell(new Phrase("Observaciones", contentFont4));
+            cell1_2e1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2e1.setBackgroundColor(colorHeader);
+            cell1_2e1.setColspan(2);
+            table.addCell(cell1_2e1);
+            
+            PdfPCell cell1_2e = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getObservaciones(), contentFont4));
+            cell1_2e.setHorizontalAlignment(Element.ALIGN_CENTER);
+            
+            cell1_2e.setColspan(2);
+            table.addCell(cell1_2e);
+            
+            
+            
             document.add(table);
-            PdfPTable table1 = new PdfPTable(1);
-            // La última columna ocupa el espacio de las 5 filas
-            PdfPCell lastColumnCell = new PdfPCell(new Paragraph("Observaciones: " + processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentasMes().getObservaciones()));
-            lastColumnCell.setRowspan(5); // Fusionar 5 filas para la última columna
-            table1.addCell(lastColumnCell);
+            }
+            
+            document.add(Chunk.NEWLINE);
+            
+            for (int i = 0; i < 1; i++) {
+                PdfPTable table = new PdfPTable(2);
+            table.setWidths(new float[]{10f, 90f});
+             BaseColor colorHeader = new BaseColor(220, 220, 220);
 
-            // Agrega la tabla al documento
-            document.add(table1);
+            // Encabezado de la tabla (ocupa 2 columnas)
+            PdfPCell headerCell = new PdfPCell(new Phrase(datos[1]));
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell.setBackgroundColor(colorHeader);
+            headerCell.setColspan(2);
+            table.addCell(headerCell);
+
+            // Filas del contenido
+            PdfPCell cell1_1 = new PdfPCell(new Phrase("Mes 1", contentFont4));
+            cell1_1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1.setColspan(1);
+            table.addCell(cell1_1);
+            PdfPCell cell1_2 = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAumentoVentas().getMes1(), contentFont4));
+            cell1_2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2.setColspan(1);
+            table.addCell(cell1_2);
+
+            PdfPCell cell1_1a = new PdfPCell(new Phrase("Mes 2", contentFont4));
+            cell1_1a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1a.setColspan(1);
+            table.addCell(cell1_1a);
+            PdfPCell cell1_2a = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAumentoVentas().getMes2(), contentFont4));
+            cell1_2a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2a.setColspan(1);
+            table.addCell(cell1_2a);
+            
+            PdfPCell cell1_1b = new PdfPCell(new Phrase("Mes 3", contentFont4));
+            cell1_1b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1b.setColspan(1);
+            table.addCell(cell1_1b);
+            PdfPCell cell1_2b = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAumentoVentas().getMes3(), contentFont4));
+            cell1_2b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2b.setColspan(1);
+            table.addCell(cell1_2b);
+            
+            PdfPCell cell1_1c = new PdfPCell(new Phrase("Mes 4", contentFont4));
+            cell1_1c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1c.setColspan(1);
+            table.addCell(cell1_1c);
+            PdfPCell cell1_2c = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAumentoVentas().getMes4(), contentFont4));
+            cell1_2c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2c.setColspan(1);
+            table.addCell(cell1_2c);
+            
+            PdfPCell cell1_1d = new PdfPCell(new Phrase("Mes 5", contentFont4));
+            cell1_1d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1d.setColspan(1);
+            table.addCell(cell1_1d);
+            PdfPCell cell1_2d = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAumentoVentas().getMes5(), contentFont4));
+            cell1_2d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2d.setColspan(1);
+            table.addCell(cell1_2d);
+            
+            PdfPCell cell1_2e1 = new PdfPCell(new Phrase("Observaciones", contentFont4));
+            cell1_2e1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2e1.setBackgroundColor(colorHeader);
+            cell1_2e1.setColspan(2);
+            table.addCell(cell1_2e1);
+            
+            PdfPCell cell1_2e = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAumentoVentas().getObservaciones(), contentFont4));
+            cell1_2e.setHorizontalAlignment(Element.ALIGN_CENTER);
+            
+            cell1_2e.setColspan(2);
+            table.addCell(cell1_2e);
+            
+            
+            
+            document.add(table);
+            }
+            
+            document.add(Chunk.NEWLINE);
+            
+            for (int i = 0; i < 1; i++) {
+                PdfPTable table = new PdfPTable(2);
+            table.setWidths(new float[]{10f, 90f});
+             BaseColor colorHeader = new BaseColor(220, 220, 220);
+
+            // Encabezado de la tabla (ocupa 2 columnas)
+            PdfPCell headerCell = new PdfPCell(new Phrase(datos[2]));
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell.setBackgroundColor(colorHeader);
+            headerCell.setColspan(2);
+            table.addCell(headerCell);
+
+            // Filas del contenido
+            PdfPCell cell1_1 = new PdfPCell(new Phrase("Mes 1", contentFont4));
+            cell1_1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1.setColspan(1);
+            table.addCell(cell1_1);
+            PdfPCell cell1_2 = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosFormales().getMes1(), contentFont4));
+            cell1_2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2.setColspan(1);
+            table.addCell(cell1_2);
+
+            PdfPCell cell1_1a = new PdfPCell(new Phrase("Mes 2", contentFont4));
+            cell1_1a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1a.setColspan(1);
+            table.addCell(cell1_1a);
+            PdfPCell cell1_2a = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosFormales().getMes2(), contentFont4));
+            cell1_2a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2a.setColspan(1);
+            table.addCell(cell1_2a);
+            
+            PdfPCell cell1_1b = new PdfPCell(new Phrase("Mes 3", contentFont4));
+            cell1_1b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1b.setColspan(1);
+            table.addCell(cell1_1b);
+            PdfPCell cell1_2b = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosFormales().getMes3(), contentFont4));
+            cell1_2b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2b.setColspan(1);
+            table.addCell(cell1_2b);
+            
+            PdfPCell cell1_1c = new PdfPCell(new Phrase("Mes 4", contentFont4));
+            cell1_1c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1c.setColspan(1);
+            table.addCell(cell1_1c);
+            PdfPCell cell1_2c = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosFormales().getMes4(), contentFont4));
+            cell1_2c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2c.setColspan(1);
+            table.addCell(cell1_2c);
+            
+            PdfPCell cell1_1d = new PdfPCell(new Phrase("Mes 5", contentFont4));
+            cell1_1d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1d.setColspan(1);
+            table.addCell(cell1_1d);
+            PdfPCell cell1_2d = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosFormales().getMes5(), contentFont4));
+            cell1_2d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2d.setColspan(1);
+            table.addCell(cell1_2d);
+            
+            PdfPCell cell1_2e1 = new PdfPCell(new Phrase("Observaciones", contentFont4));
+            cell1_2e1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2e1.setBackgroundColor(colorHeader);
+            cell1_2e1.setColspan(2);
+            table.addCell(cell1_2e1);
+            
+            PdfPCell cell1_2e = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosFormales().getObservaciones(), contentFont4));
+            cell1_2e.setHorizontalAlignment(Element.ALIGN_CENTER);
+            
+            cell1_2e.setColspan(2);
+            table.addCell(cell1_2e);
+            
+            
+            
+            document.add(table);
+            }
+            
+            document.add(Chunk.NEWLINE);
+            
+            for (int i = 0; i < 1; i++) {
+                PdfPTable table = new PdfPTable(2);
+            table.setWidths(new float[]{10f, 90f});
+             BaseColor colorHeader = new BaseColor(220, 220, 220);
+
+            // Encabezado de la tabla (ocupa 2 columnas)
+            PdfPCell headerCell = new PdfPCell(new Phrase(datos[3]));
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell.setBackgroundColor(colorHeader);
+            headerCell.setColspan(2);
+            table.addCell(headerCell);
+
+            // Filas del contenido
+            PdfPCell cell1_1 = new PdfPCell(new Phrase("Mes 1", contentFont4));
+            cell1_1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1.setColspan(1);
+            table.addCell(cell1_1);
+            PdfPCell cell1_2 = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosInformales().getMes1(), contentFont4));
+            cell1_2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2.setColspan(1);
+            table.addCell(cell1_2);
+
+            PdfPCell cell1_1a = new PdfPCell(new Phrase("Mes 2", contentFont4));
+            cell1_1a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1a.setColspan(1);
+            table.addCell(cell1_1a);
+            PdfPCell cell1_2a = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosInformales().getMes2(), contentFont4));
+            cell1_2a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2a.setColspan(1);
+            table.addCell(cell1_2a);
+            
+            PdfPCell cell1_1b = new PdfPCell(new Phrase("Mes 3", contentFont4));
+            cell1_1b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1b.setColspan(1);
+            table.addCell(cell1_1b);
+            PdfPCell cell1_2b = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosInformales().getMes3(), contentFont4));
+            cell1_2b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2b.setColspan(1);
+            table.addCell(cell1_2b);
+            
+            PdfPCell cell1_1c = new PdfPCell(new Phrase("Mes 4", contentFont4));
+            cell1_1c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1c.setColspan(1);
+            table.addCell(cell1_1c);
+            PdfPCell cell1_2c = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosInformales().getMes4(), contentFont4));
+            cell1_2c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2c.setColspan(1);
+            table.addCell(cell1_2c);
+            
+            PdfPCell cell1_1d = new PdfPCell(new Phrase("Mes 5", contentFont4));
+            cell1_1d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1d.setColspan(1);
+            table.addCell(cell1_1d);
+            PdfPCell cell1_2d = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosInformales().getMes5(), contentFont4));
+            cell1_2d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2d.setColspan(1);
+            table.addCell(cell1_2d);
+            
+            PdfPCell cell1_2e1 = new PdfPCell(new Phrase("Observaciones", contentFont4));
+            cell1_2e1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2e1.setBackgroundColor(colorHeader);
+            cell1_2e1.setColspan(2);
+            table.addCell(cell1_2e1);
+            
+            PdfPCell cell1_2e = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosInformales().getObservaciones(), contentFont4));
+            cell1_2e.setHorizontalAlignment(Element.ALIGN_CENTER);
+            
+            cell1_2e.setColspan(2);
+            table.addCell(cell1_2e);
+            
+            
+            
+            document.add(table);
+            }
+            
+            document.add(Chunk.NEWLINE);
+            
+            for (int i = 0; i < 1; i++) {
+                PdfPTable table = new PdfPTable(2);
+            table.setWidths(new float[]{10f, 90f});
+             BaseColor colorHeader = new BaseColor(220, 220, 220);
+
+            // Encabezado de la tabla (ocupa 2 columnas)
+            PdfPCell headerCell = new PdfPCell(new Phrase(datos[4]));
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell.setBackgroundColor(colorHeader);
+            headerCell.setColspan(2);
+            table.addCell(headerCell);
+
+            // Filas del contenido
+            PdfPCell cell1_1 = new PdfPCell(new Phrase("Mes 1", contentFont4));
+            cell1_1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1.setColspan(1);
+            table.addCell(cell1_1);
+            PdfPCell cell1_2 = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosNuevos().getMes1(), contentFont4));
+            cell1_2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2.setColspan(1);
+            table.addCell(cell1_2);
+
+            PdfPCell cell1_1a = new PdfPCell(new Phrase("Mes 2", contentFont4));
+            cell1_1a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1a.setColspan(1);
+            table.addCell(cell1_1a);
+            PdfPCell cell1_2a = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosNuevos().getMes2(), contentFont4));
+            cell1_2a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2a.setColspan(1);
+            table.addCell(cell1_2a);
+            
+            PdfPCell cell1_1b = new PdfPCell(new Phrase("Mes 3", contentFont4));
+            cell1_1b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1b.setColspan(1);
+            table.addCell(cell1_1b);
+            PdfPCell cell1_2b = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosNuevos().getMes3(), contentFont4));
+            cell1_2b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2b.setColspan(1);
+            table.addCell(cell1_2b);
+            
+            PdfPCell cell1_1c = new PdfPCell(new Phrase("Mes 4", contentFont4));
+            cell1_1c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1c.setColspan(1);
+            table.addCell(cell1_1c);
+            PdfPCell cell1_2c = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosNuevos().getMes4(), contentFont4));
+            cell1_2c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2c.setColspan(1);
+            table.addCell(cell1_2c);
+            
+            PdfPCell cell1_1d = new PdfPCell(new Phrase("Mes 5", contentFont4));
+            cell1_1d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1d.setColspan(1);
+            table.addCell(cell1_1d);
+            PdfPCell cell1_2d = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosNuevos().getMes5(), contentFont4));
+            cell1_2d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2d.setColspan(1);
+            table.addCell(cell1_2d);
+            
+            PdfPCell cell1_2e1 = new PdfPCell(new Phrase("Observaciones", contentFont4));
+            cell1_2e1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2e1.setBackgroundColor(colorHeader);
+            cell1_2e1.setColspan(2);
+            table.addCell(cell1_2e1);
+            
+            PdfPCell cell1_2e = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpleosNuevos().getObservaciones(), contentFont4));
+            cell1_2e.setHorizontalAlignment(Element.ALIGN_CENTER);
+            
+            cell1_2e.setColspan(2);
+            table.addCell(cell1_2e);
+            
+            
+            
+            document.add(table);
+            }
+            
+            document.add(Chunk.NEWLINE);
+            
+            for (int i = 0; i < 1; i++) {
+                PdfPTable table = new PdfPTable(2);
+            table.setWidths(new float[]{10f, 90f});
+             BaseColor colorHeader = new BaseColor(220, 220, 220);
+
+            // Encabezado de la tabla (ocupa 2 columnas)
+            PdfPCell headerCell = new PdfPCell(new Phrase(datos[5]));
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell.setBackgroundColor(colorHeader);
+            headerCell.setColspan(2);
+            table.addCell(headerCell);
+
+            // Filas del contenido
+            PdfPCell cell1_1 = new PdfPCell(new Phrase("Mes 1", contentFont4));
+            cell1_1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1.setColspan(1);
+            table.addCell(cell1_1);
+            PdfPCell cell1_2 = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpresaExportando().getMes1(), contentFont4));
+            cell1_2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2.setColspan(1);
+            table.addCell(cell1_2);
+
+            PdfPCell cell1_1a = new PdfPCell(new Phrase("Mes 2", contentFont4));
+            cell1_1a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1a.setColspan(1);
+            table.addCell(cell1_1a);
+            PdfPCell cell1_2a = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpresaExportando().getMes2(), contentFont4));
+            cell1_2a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2a.setColspan(1);
+            table.addCell(cell1_2a);
+            
+            PdfPCell cell1_1b = new PdfPCell(new Phrase("Mes 3", contentFont4));
+            cell1_1b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1b.setColspan(1);
+            table.addCell(cell1_1b);
+            PdfPCell cell1_2b = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpresaExportando().getMes3(), contentFont4));
+            cell1_2b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2b.setColspan(1);
+            table.addCell(cell1_2b);
+            
+            PdfPCell cell1_1c = new PdfPCell(new Phrase("Mes 4", contentFont4));
+            cell1_1c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1c.setColspan(1);
+            table.addCell(cell1_1c);
+            PdfPCell cell1_2c = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpresaExportando().getMes4(), contentFont4));
+            cell1_2c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2c.setColspan(1);
+            table.addCell(cell1_2c);
+            
+            PdfPCell cell1_1d = new PdfPCell(new Phrase("Mes 5", contentFont4));
+            cell1_1d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1d.setColspan(1);
+            table.addCell(cell1_1d);
+            PdfPCell cell1_2d = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpresaExportando().getMes5(), contentFont4));
+            cell1_2d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2d.setColspan(1);
+            table.addCell(cell1_2d);
+            
+            PdfPCell cell1_2e1 = new PdfPCell(new Phrase("Observaciones", contentFont4));
+            cell1_2e1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2e1.setBackgroundColor(colorHeader);
+            cell1_2e1.setColspan(2);
+            table.addCell(cell1_2e1);
+            
+            PdfPCell cell1_2e = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getEmpresaExportando().getObservaciones(), contentFont4));
+            cell1_2e.setHorizontalAlignment(Element.ALIGN_CENTER);
+            
+            cell1_2e.setColspan(2);
+            table.addCell(cell1_2e);
+            
+            
+            
+            document.add(table);
+            }
+            
+            document.add(Chunk.NEWLINE);
+            
+            for (int i = 0; i < 1; i++) {
+                PdfPTable table = new PdfPTable(2);
+            table.setWidths(new float[]{10f, 90f});
+             BaseColor colorHeader = new BaseColor(220, 220, 220);
+
+            // Encabezado de la tabla (ocupa 2 columnas)
+            PdfPCell headerCell = new PdfPCell(new Phrase(datos[6]));
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell.setBackgroundColor(colorHeader);
+            headerCell.setColspan(2);
+            table.addCell(headerCell);
+
+            // Filas del contenido
+            PdfPCell cell1_1 = new PdfPCell(new Phrase("Mes 1", contentFont4));
+            cell1_1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1.setColspan(1);
+            table.addCell(cell1_1);
+            PdfPCell cell1_2 = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentassExportacion().getMes1(), contentFont4));
+            cell1_2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2.setColspan(1);
+            table.addCell(cell1_2);
+
+            PdfPCell cell1_1a = new PdfPCell(new Phrase("Mes 2", contentFont4));
+            cell1_1a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1a.setColspan(1);
+            table.addCell(cell1_1a);
+            PdfPCell cell1_2a = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentassExportacion().getMes2(), contentFont4));
+            cell1_2a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2a.setColspan(1);
+            table.addCell(cell1_2a);
+            
+            PdfPCell cell1_1b = new PdfPCell(new Phrase("Mes 3", contentFont4));
+            cell1_1b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1b.setColspan(1);
+            table.addCell(cell1_1b);
+            PdfPCell cell1_2b = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentassExportacion().getMes3(), contentFont4));
+            cell1_2b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2b.setColspan(1);
+            table.addCell(cell1_2b);
+            
+            PdfPCell cell1_1c = new PdfPCell(new Phrase("Mes 4", contentFont4));
+            cell1_1c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1c.setColspan(1);
+            table.addCell(cell1_1c);
+            PdfPCell cell1_2c = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentassExportacion().getMes4(), contentFont4));
+            cell1_2c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2c.setColspan(1);
+            table.addCell(cell1_2c);
+            
+            PdfPCell cell1_1d = new PdfPCell(new Phrase("Mes 5", contentFont4));
+            cell1_1d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1d.setColspan(1);
+            table.addCell(cell1_1d);
+            PdfPCell cell1_2d = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentassExportacion().getMes5(), contentFont4));
+            cell1_2d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2d.setColspan(1);
+            table.addCell(cell1_2d);
+            
+            PdfPCell cell1_2e1 = new PdfPCell(new Phrase("Observaciones", contentFont4));
+            cell1_2e1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2e1.setBackgroundColor(colorHeader);
+            cell1_2e1.setColspan(2);
+            table.addCell(cell1_2e1);
+            
+            PdfPCell cell1_2e = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getVentassExportacion().getObservaciones(), contentFont4));
+            cell1_2e.setHorizontalAlignment(Element.ALIGN_CENTER);
+            
+            cell1_2e.setColspan(2);
+            table.addCell(cell1_2e);
+            
+            
+            
+            document.add(table);
+            }
+            
+            document.add(Chunk.NEWLINE);
+            
+            for (int i = 0; i < 1; i++) {
+                PdfPTable table = new PdfPTable(2);
+            table.setWidths(new float[]{10f, 90f});
+             BaseColor colorHeader = new BaseColor(220, 220, 220);
+
+            // Encabezado de la tabla (ocupa 2 columnas)
+            PdfPCell headerCell = new PdfPCell(new Phrase(datos[7]));
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell.setBackgroundColor(colorHeader);
+            headerCell.setColspan(2);
+            table.addCell(headerCell);
+
+            // Filas del contenido
+            PdfPCell cell1_1 = new PdfPCell(new Phrase("Mes 1", contentFont4));
+            cell1_1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1.setColspan(1);
+            table.addCell(cell1_1);
+            PdfPCell cell1_2 = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getDiversificacionProductos().getMes1(), contentFont4));
+            cell1_2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2.setColspan(1);
+            table.addCell(cell1_2);
+
+            PdfPCell cell1_1a = new PdfPCell(new Phrase("Mes 2", contentFont4));
+            cell1_1a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1a.setColspan(1);
+            table.addCell(cell1_1a);
+            PdfPCell cell1_2a = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getDiversificacionProductos().getMes2(), contentFont4));
+            cell1_2a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2a.setColspan(1);
+            table.addCell(cell1_2a);
+            
+            PdfPCell cell1_1b = new PdfPCell(new Phrase("Mes 3", contentFont4));
+            cell1_1b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1b.setColspan(1);
+            table.addCell(cell1_1b);
+            PdfPCell cell1_2b = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getDiversificacionProductos().getMes3(), contentFont4));
+            cell1_2b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2b.setColspan(1);
+            table.addCell(cell1_2b);
+            
+            PdfPCell cell1_1c = new PdfPCell(new Phrase("Mes 4", contentFont4));
+            cell1_1c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1c.setColspan(1);
+            table.addCell(cell1_1c);
+            PdfPCell cell1_2c = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getDiversificacionProductos().getMes4(), contentFont4));
+            cell1_2c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2c.setColspan(1);
+            table.addCell(cell1_2c);
+            
+            PdfPCell cell1_1d = new PdfPCell(new Phrase("Mes 5", contentFont4));
+            cell1_1d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1d.setColspan(1);
+            table.addCell(cell1_1d);
+            PdfPCell cell1_2d = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getDiversificacionProductos().getMes5(), contentFont4));
+            cell1_2d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2d.setColspan(1);
+            table.addCell(cell1_2d);
+            
+            PdfPCell cell1_2e1 = new PdfPCell(new Phrase("Observaciones", contentFont4));
+            cell1_2e1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2e1.setBackgroundColor(colorHeader);
+            cell1_2e1.setColspan(2);
+            table.addCell(cell1_2e1);
+            
+            PdfPCell cell1_2e = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getDiversificacionProductos().getObservaciones(), contentFont4));
+            cell1_2e.setHorizontalAlignment(Element.ALIGN_CENTER);
+            
+            cell1_2e.setColspan(2);
+            table.addCell(cell1_2e);
+            
+            
+            
+            document.add(table);
+            }
+            
+            document.add(Chunk.NEWLINE);
+            
+            for (int i = 0; i < 1; i++) {
+                PdfPTable table = new PdfPTable(2);
+            table.setWidths(new float[]{10f, 90f});
+             BaseColor colorHeader = new BaseColor(220, 220, 220);
+
+            // Encabezado de la tabla (ocupa 2 columnas)
+            PdfPCell headerCell = new PdfPCell(new Phrase(datos[8]));
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell.setBackgroundColor(colorHeader);
+            headerCell.setColspan(2);
+            table.addCell(headerCell);
+
+            // Filas del contenido
+            PdfPCell cell1_1 = new PdfPCell(new Phrase("Mes 1", contentFont4));
+            cell1_1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1.setColspan(1);
+            table.addCell(cell1_1);
+            PdfPCell cell1_2 = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAperturaNuevosMercados().getMes1(), contentFont4));
+            cell1_2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2.setColspan(1);
+            table.addCell(cell1_2);
+
+            PdfPCell cell1_1a = new PdfPCell(new Phrase("Mes 2", contentFont4));
+            cell1_1a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1a.setColspan(1);
+            table.addCell(cell1_1a);
+            PdfPCell cell1_2a = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAperturaNuevosMercados().getMes2(), contentFont4));
+            cell1_2a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2a.setColspan(1);
+            table.addCell(cell1_2a);
+            
+            PdfPCell cell1_1b = new PdfPCell(new Phrase("Mes 3", contentFont4));
+            cell1_1b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1b.setColspan(1);
+            table.addCell(cell1_1b);
+            PdfPCell cell1_2b = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAperturaNuevosMercados().getMes3(), contentFont4));
+            cell1_2b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2b.setColspan(1);
+            table.addCell(cell1_2b);
+            
+            PdfPCell cell1_1c = new PdfPCell(new Phrase("Mes 4", contentFont4));
+            cell1_1c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1c.setColspan(1);
+            table.addCell(cell1_1c);
+            PdfPCell cell1_2c = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAperturaNuevosMercados().getMes4(), contentFont4));
+            cell1_2c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2c.setColspan(1);
+            table.addCell(cell1_2c);
+            
+            PdfPCell cell1_1d = new PdfPCell(new Phrase("Mes 5", contentFont4));
+            cell1_1d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1d.setColspan(1);
+            table.addCell(cell1_1d);
+            PdfPCell cell1_2d = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAperturaNuevosMercados().getMes5(), contentFont4));
+            cell1_2d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2d.setColspan(1);
+            table.addCell(cell1_2d);
+            
+            PdfPCell cell1_2e1 = new PdfPCell(new Phrase("Observaciones", contentFont4));
+            cell1_2e1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2e1.setBackgroundColor(colorHeader);
+            cell1_2e1.setColspan(2);
+            table.addCell(cell1_2e1);
+            
+            PdfPCell cell1_2e = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAperturaNuevosMercados().getObservaciones(), contentFont4));
+            cell1_2e.setHorizontalAlignment(Element.ALIGN_CENTER);
+            
+            cell1_2e.setColspan(2);
+            table.addCell(cell1_2e);
+            
+            
+            
+            document.add(table);
+            }
+            
+            document.add(Chunk.NEWLINE);
+            
+            for (int i = 0; i < 1; i++) {
+                PdfPTable table = new PdfPTable(2);
+            table.setWidths(new float[]{10f, 90f});
+             BaseColor colorHeader = new BaseColor(220, 220, 220);
+
+            // Encabezado de la tabla (ocupa 2 columnas)
+            PdfPCell headerCell = new PdfPCell(new Phrase(datos[9]));
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell.setBackgroundColor(colorHeader);
+            headerCell.setColspan(2);
+            table.addCell(headerCell);
+
+            // Filas del contenido
+            PdfPCell cell1_1 = new PdfPCell(new Phrase("Mes 1", contentFont4));
+            cell1_1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1.setColspan(1);
+            table.addCell(cell1_1);
+            PdfPCell cell1_2 = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAccesoOtrasFuentes().getMes1(), contentFont4));
+            cell1_2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2.setColspan(1);
+            table.addCell(cell1_2);
+
+            PdfPCell cell1_1a = new PdfPCell(new Phrase("Mes 2", contentFont4));
+            cell1_1a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1a.setColspan(1);
+            table.addCell(cell1_1a);
+            PdfPCell cell1_2a = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAccesoOtrasFuentes().getMes2(), contentFont4));
+            cell1_2a.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2a.setColspan(1);
+            table.addCell(cell1_2a);
+            
+            PdfPCell cell1_1b = new PdfPCell(new Phrase("Mes 3", contentFont4));
+            cell1_1b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1b.setColspan(1);
+            table.addCell(cell1_1b);
+            PdfPCell cell1_2b = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAccesoOtrasFuentes().getMes3(), contentFont4));
+            cell1_2b.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2b.setColspan(1);
+            table.addCell(cell1_2b);
+            
+            PdfPCell cell1_1c = new PdfPCell(new Phrase("Mes 4", contentFont4));
+            cell1_1c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1c.setColspan(1);
+            table.addCell(cell1_1c);
+            PdfPCell cell1_2c = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAccesoOtrasFuentes().getMes4(), contentFont4));
+            cell1_2c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2c.setColspan(1);
+            table.addCell(cell1_2c);
+            
+            PdfPCell cell1_1d = new PdfPCell(new Phrase("Mes 5", contentFont4));
+            cell1_1d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_1d.setColspan(1);
+            table.addCell(cell1_1d);
+            PdfPCell cell1_2d = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAccesoOtrasFuentes().getMes5(), contentFont4));
+            cell1_2d.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2d.setColspan(1);
+            table.addCell(cell1_2d);
+            
+            PdfPCell cell1_2e1 = new PdfPCell(new Phrase("Observaciones", contentFont4));
+            cell1_2e1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1_2e1.setBackgroundColor(colorHeader);
+            cell1_2e1.setColspan(2);
+            table.addCell(cell1_2e1);
+            
+            PdfPCell cell1_2e = new PdfPCell(new Phrase(processEmpresario.getDiagnosticoEmpresarial().getAnalisisEconomico().getAccesoOtrasFuentes().getObservaciones(), contentFont4));
+            cell1_2e.setHorizontalAlignment(Element.ALIGN_CENTER);
+            
+            cell1_2e.setColspan(2);
+            table.addCell(cell1_2e);
+            
+            
+            
+            document.add(table);
+            }
+            
 
             document.close();
             outputStream.flush();
@@ -2643,7 +3408,8 @@ public class PDFCOntroller {
         }
 
     }
-    
+
+    //Autoevaluacion
     @GetMapping("/autoevaluacion/{id}")//
     public void generarAutoevaluacion(HttpServletResponse response, @PathVariable Long id) {
 
@@ -2810,6 +3576,7 @@ public class PDFCOntroller {
 
     }
 
+    //Aca Empieza Canvas
     @GetMapping("/canvasClientes/{id}")//
     public void canvasClientes(HttpServletResponse response, @PathVariable Long id) {
         try {
@@ -3755,6 +4522,50 @@ public class PDFCOntroller {
         } catch (DocumentException | IOException e) {
             e.printStackTrace();
             // Manejar errores aquí
+        }
+
+    }
+    //Aca temrina Canvas
+
+    //Aca estamos probando asesorias.
+    @GetMapping("asesorias/{id}")
+    public void asesorias(HttpServletResponse response, @PathVariable Long id) throws DocumentException {
+        try {
+            // Inicializar las imágenes en el constructor
+            String imagePathIzq = new File("ImagenCamaraComercioIzquierda.jpg").getAbsolutePath();
+            headerImageIzq = Image.getInstance(imagePathIzq);
+            headerImageIzq.scaleToFit(150, headerImageIzq.getHeight());
+
+            String imagePathDer = new File("RCP-Auto.jpg").getAbsolutePath();
+            headerImageDer = Image.getInstance(imagePathDer);
+            headerImageDer.scaleToFit(100, 100);
+
+            String imagePathIzq3 = new File("ImagenCDE_Empresarial.jpg").getAbsolutePath();
+            headerImageIzq3 = Image.getInstance(imagePathIzq3);
+            headerImageIzq3.scaleToFit(150, 150);
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+        }
+        // Establecer el tipo de contenido de la respuesta como PDF
+        response.setContentType("application/pdf");
+        // Establecer el encabezado para indicar la descarga del archivo PDF
+        response.setHeader("Content-Disposition", "attachment; filename=estructura-costos.pdf");
+
+        try {
+            // Crear una instancia del documento y del escritor
+            Document document = new Document(PageSize.A4); //
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            document.setMargins(document.leftMargin(), document.rightMargin(), 100, 0);
+
+            // Crear una instancia de la clase PdfHeaderEventHandler1 para manejar el encabezado
+            PdfHeaderEventHandler4 headerHandler = new PdfHeaderEventHandler4();
+            writer.setPageEvent(headerHandler);
+
+            // Abrir el documento para escribir el contenido
+            document.open();
+
+        } catch (Exception e) {
         }
 
     }
